@@ -3,9 +3,11 @@
 from flask import Flask, render_template, request, jsonify
 import joblib
 import pandas as pd
+from flask_cors import CORS
 
 # Create the Flask application instance
 app = Flask(__name__, static_folder='docs', template_folder='docs')
+CORS(app, origins="https://johang727.github.io")
 
 # Load the trained model when the application starts
 # This is more efficient than loading it for every request
