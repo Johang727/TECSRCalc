@@ -1,0 +1,62 @@
+# This script was created by AI
+
+from flask import Flask, render_template, request, jsonify
+import joblib
+import pandas as pd
+
+# Create the Flask application instance
+app = Flask(__name__, static_folder='docs', template_folder='docs')
+
+# Load the trained model when the application starts
+# This is more efficient than loading it for every request
+MODEL_PATH = 'model.pkl'
+
+
+try:
+    model = joblib.load(MODEL_PATH)
+    print("Trained model loaded successfully.")
+except FileNotFoundError:
+    print(f"Error: Model file '{MODEL_PATH}' not found. Please run train_model.py first.")
+    model = None
+
+@app.route('/')
+def home():
+    """Serves the main web page (index.html)."""
+    return render_template('index.html')
+
+@app.route('/predict', methods=['POST'])
+def predict():
+    """Handles the prediction request from the web page."""
+    # Check if the model was loaded successfully
+    if model is None:
+        return jsonify({'error': 'Model not available. Please contact the administrator.'}), 500
+
+    # Get the data sent from the web page
+    data = request.get_json(force=True)
+    dpm = data.get('dpm')
+    apm = data.get('apm')
+
+    # Basic input validation
+    if dpm is None or apm is None:
+        return jsonify({'error': 'Missing DPM or APM values.'}), 400
+    try:
+        dpm = float(dpm)
+        apm = float(apm)
+    except ValueError:
+        return jsonify({'error': 'Invalid input. Please provide numbers.'}), 400
+
+    # Create a pandas DataFrame for the prediction
+    # The model expects the data in this format
+    input_data = pd.DataFrame([[dpm, apm]], columns=['DPM', 'APM'])
+
+    # Make the prediction
+    prediction = model.predict(input_data)
+    predicted_sr = round(prediction[0], 2)
+
+    # Return the prediction as a JSON response
+    return jsonify({'predicted_sr': predicted_sr})
+
+if __name__ == '__main__':
+    # Make sure the app runs in development mode
+    app.run(debug=True)
+
