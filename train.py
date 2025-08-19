@@ -4,8 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 import joblib
-
-
+import datetime
 
 dataFolder = "data/"
 
@@ -43,6 +42,16 @@ r2 = r2_score(y_test, y_pred)
 print(f"Mean Squared Error: {mse:.2f}")
 print(f"R-squared: {r2:.2f}")
 
+timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+metrics = {
+    'model': model,
+    'mse': mse,
+    'r2': r2,
+    'timestamp': timestamp
+}
+
 print("Saving model...")
-joblib.dump(model, "model.pkl")
+joblib.dump(metrics, "model.pkl")
 print("Saved as \"model.pkl\"")

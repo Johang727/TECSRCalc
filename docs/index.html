@@ -137,6 +137,27 @@
                 resultContainer.innerText = "Failed to get prediction. Check the console for details.";
             }
         }
+
+        async function getMetrics() {
+            const metricsContainer = document.getElementById('metrics-content');
+            try {
+                const response = await fetch(`${API_URL}/metrics`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    metricsContainer.innerText = `Error: ${data.error}`;
+                } else {
+                    metricsContainer.innerHTML = `
+                        <p><strong>R²:</strong> ${data.r2}</p>
+                        <p><strong>MSE:</strong> ${data.mse}</p>
+                        <p><strong>Last Update:</strong> ${data.timestamp}</p>
+                    `;
+                }
+            } catch (error) {
+                console.error("Metrics fetch failed:", error);
+                metricsContainer.innerText = "Failed to load metrics.";
+            }
+        }
     </script>
 </body>
 </html>

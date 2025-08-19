@@ -15,7 +15,11 @@ MODEL_PATH = 'model.pkl'
 
 
 try:
-    model = joblib.load(MODEL_PATH)
+    model_mets = joblib.load(MODEL_PATH)
+    model = model_mets['model']
+    mse = model_mets['mse']
+    r2 = model_mets['r2']
+    timestamp = model_mets['timestamp']
     print("Trained model loaded successfully.")
 except FileNotFoundError:
     print(f"Error: Model file '{MODEL_PATH}' not found. Please run train_model.py first.")
@@ -57,6 +61,18 @@ def predict():
 
     # Return the prediction as a JSON response
     return jsonify({'predicted_sr': predicted_sr})
+
+@app.route('/metrics')
+def metrics():
+    """Serves the model performance metrics."""
+    if model is None:
+        return jsonify({'error': 'Metrics not available.'})
+    
+    return jsonify({
+        'mse': round(mse, 2),
+        'r2': round(r2, 2),
+        'timestamp': timestamp
+    })
 
 if __name__ == '__main__':
     # Make sure the app runs in development mode
