@@ -155,7 +155,7 @@
                 if (data.error) {
                     resultContainer.innerText = `Error: ${data.error}`;
                 } else {
-                    resultContainer.innerText = `SR: ${data.predicted_sr}`;
+                    resultContainer.innerText = `SR: ${data.sr} ± ${data.std}`;
                 }
 
             } catch (error) {

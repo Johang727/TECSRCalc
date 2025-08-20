@@ -3,6 +3,7 @@ import joblib
 import pandas as pd
 from flask_cors import CORS
 import datetime
+import numpy as np
 
 # Create the Flask application instance
 app = Flask(__name__, static_folder='docs', template_folder='docs')
@@ -54,20 +55,24 @@ def predict():
         apm = float(apm)
         excel_start = datetime.date(1900, 1, 1)
         today = datetime.date.today()
-        date_int = (today - excel_start).days + 2
+        dateInt = (today - excel_start).days + 2
     except ValueError:
         return jsonify({'error': 'Invalid input. Please provide numbers.'}), 400
 
     # Create a pandas DataFrame for the prediction
     # The model expects the data in this format
-    input_data = pd.DataFrame([[date_int, dpm, apm]], columns=['Date','DPM', 'APM'])
+    inData = pd.DataFrame([[dateInt, dpm, apm]], columns=['Date','DPM', 'APM'])
 
-    # Make the prediction
-    prediction = model.predict(input_data)
-    predicted_sr = round(prediction[0])
+    # to add an uncertainty after the SR
+    tp = [tree.predict(inData) for tree in model.estimators]
 
-    # Return the prediction as a JSON response
-    return jsonify({'predicted_sr': predicted_sr})
+    means = np.mean(tp); std = np.std(tp)
+
+
+    return jsonify({
+        'sr': round(means),
+        'std': round(std)
+        })
 
 @app.route('/metrics')
 def metrics():
