@@ -64,7 +64,7 @@ def predict():
     inData = pd.DataFrame([[dateInt, dpm, apm]], columns=['Date','DPM', 'APM'])
 
     # to add an uncertainty after the SR
-    tp = [tree.predict(inData) for tree in model.estimator]
+    tp = [tree.predict(inData) for tree in model.estimators_]
 
     means = np.mean(tp); std = np.std(tp)
 
