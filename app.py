@@ -1,5 +1,3 @@
-# This script was created by AI
-
 from flask import Flask, render_template, request, jsonify
 import joblib
 import pandas as pd
@@ -16,28 +14,32 @@ MODEL_PATH = 'model.pkl'
 
 
 try:
+    # fetch and store variables from the packaged model
+    print("Attempting to load model...")
     model_mets = joblib.load(MODEL_PATH)
     model = model_mets['model']
     mse = model_mets['mse']
     r2 = model_mets['r2']
     size = model_mets['size']
     timestamp = model_mets['timestamp']
-    print("Trained model loaded successfully.")
+    print("Model loaded successfully!")
 except FileNotFoundError:
-    print(f"Error: Model file '{MODEL_PATH}' not found. Please run train_model.py first.")
+    print(f"Error: Model file '{MODEL_PATH}' not found!")
     model = None
 
 @app.route('/')
 def home():
-    """Serves the main web page (index.html)."""
+    # sets the home page
     return render_template('index.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    """Handles the prediction request from the web page."""
+    # Handles prediction, renamed calculation later, since I liked that name better after testing
     # Check if the model was loaded successfully
     if model is None:
-        return jsonify({'error': 'Model not available. Please contact the administrator.'}), 500
+        return jsonify({'error': 'Model file not found!'}), 500
+    # From what I understand 500 errors are server-side; 400 are client-side
+    # TODO, have it redirect to a new page with contact information
 
     # Get the data sent from the web page
     data = request.get_json(force=True)
@@ -69,9 +71,8 @@ def predict():
 
 @app.route('/metrics')
 def metrics():
-    """Serves the model performance metrics."""
     if model is None:
-        return jsonify({'error': 'Metrics not available.'})
+        return jsonify({'error': 'Model file not found!'}), 500
     
     return jsonify({
         'mse': round(mse, 2),
@@ -81,6 +82,6 @@ def metrics():
     })
 
 if __name__ == '__main__':
-    # Make sure the app runs in development mode
+    # only runs when run locally
     app.run(debug=True)
 

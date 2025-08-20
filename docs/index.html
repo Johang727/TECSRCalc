@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SR Predictor</title>
+    <title>SR Calculator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,6 +13,7 @@
             min-height: 100vh;
             margin: 0;
             background-color: #f0f2f5;
+            flex-direction: column;
         }
 
         .container {
@@ -82,9 +83,8 @@
         }
         
         .metrics-container {
-            margin-top: 2rem;
             font-size: 0.9rem;
-            color: #666;
+            color: #555;
             text-align: left;
             border-top: 1px solid #eee;
             padding-top: 1.5rem;
@@ -105,10 +105,16 @@
         <button onclick="getPrediction()">Calculate SR</button>
         <div id="result-container"></div>
         <div class="metrics-container">
-            <h3>Statistics</h3>
+            <h2>Statistics</h2>
             <div id="metrics-content">Loading...</div>
         </div>
     </div>
+
+    <p style="text-align: center; color: #555; margin-top: 10px;">
+        <i>Backend is hosted on Render, please be patient when calculating for the first time!</i>
+    </p>
+
+
 
     <script>
         const API_URL = 'https://tecsrcalc.onrender.com';
@@ -143,12 +149,12 @@
                 if (data.error) {
                     resultContainer.innerText = `Error: ${data.error}`;
                 } else {
-                    resultContainer.innerText = `Calculated SR: ${data.predicted_sr}`;
+                    resultContainer.innerText = `SR: ${data.predicted_sr}`;
                 }
 
             } catch (error) {
                 console.error("Calculation failed:", error);
-                resultContainer.innerText = "Failed to get SR. Check the console for details.";
+                resultContainer.innerText = "Failed to calculate SR! Check the console for details.";
             }
         }
 
@@ -170,7 +176,7 @@
                 }
             } catch (error) {
                 console.error("Metrics fetch failed:", error);
-                metricsContainer.innerText = "Failed to load metrics.";
+                metricsContainer.innerText = "Failed to load metrics!";
             }
         }
 
