@@ -12,7 +12,9 @@ dataFolder = "data/"
 
 dfList = []
 
+flareon:int = 136
 
+testSize:float = 0.3
 
 for fn in os.listdir(dataFolder):
     if fn.endswith(".csv"):
@@ -29,20 +31,20 @@ print("\nTraining started...")
 x = masterDF[["Date", "DPM", "APM"]]
 y = masterDF["SR"]
 
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size=testSize, random_state=flareon)
 
-print("Training set size:", len(x_train))
-print("Testing set size:", len(x_test))
+print("Training set size:", len(xTrain))
+print("Testing set size:", len(xTest))
 
-model = RandomForestRegressor(n_estimators=100, random_state=42)
+model = RandomForestRegressor(n_estimators=100, random_state=flareon)
 
-model.fit(x_train, y_train)
+model.fit(xTrain, yTrain)
 
 
-y_pred = model.predict(x_test)
+yPred = model.predict(xTest)
 
-mse = mean_squared_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
+mse = mean_squared_error(yTest, yPred)
+r2 = r2_score(yTest, yPred)
 
 print(f"Mean Squared Error: {mse:.2f}")
 print(f"R-squared: {r2:.2f}")
@@ -54,7 +56,7 @@ metrics = {
     'model': model,
     'mse': mse,
     'r2': r2,
-    'size': len(x_train),
+    'size': len(xTrain),
     'timestamp': timestamp
 }
 
