@@ -24,7 +24,7 @@ try:
     timestamp = model_mets['timestamp']
     print("Model loaded successfully!")
 except FileNotFoundError:
-    print(f"Error: Model file '{MODEL_PATH}' not found!")
+    print(f"Error: Model file \"{MODEL_PATH}\" not found!")
     model = None
 
 @app.route('/')
