@@ -6,6 +6,8 @@ from sklearn.metrics import mean_squared_error, r2_score
 import joblib
 import datetime
 
+print("Merging CSV files together...")
+
 dataFolder = "data/"
 
 dfList = []
@@ -20,8 +22,9 @@ masterDF = pd.concat(dfList, ignore_index=True)
 
 print(f"Length: {len(masterDF)}")
 
+print("\nTraining started...")
 
-x = masterDF[["DPM", "APM"]]
+x = masterDF[["Date", "DPM", "APM"]]
 y = masterDF["SR"]
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
@@ -49,6 +52,7 @@ metrics = {
     'model': model,
     'mse': mse,
     'r2': r2,
+    'size': len(x_train),
     'timestamp': timestamp
 }
 

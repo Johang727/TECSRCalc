@@ -52,7 +52,7 @@
         }
 
         input[type="number"]:focus {
-            border-color: #007bff;
+            border-color: #ff6600;
             outline: none;
         }
 
@@ -61,7 +61,7 @@
             padding: 0.75rem;
             border: none;
             border-radius: 8px;
-            background-color: #007bff;
+            background-color: #ff6600;
             color: white;
             font-size: 1.1rem;
             font-weight: bold;
@@ -70,7 +70,7 @@
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #ce5200;
         }
 
         #result-container {
@@ -93,7 +93,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>SR Predictor</h1>
+        <h1>SR Calculator</h1>
         <div class="input-group">
             <label for="dpm">DPM (Drops Per Minute)</label>
             <input type="number" id="dpm" placeholder="72.7">
@@ -102,10 +102,10 @@
             <label for="apm">APM (Attack Per Minute)</label>
             <input type="number" id="apm" placeholder="e.g., 69.0">
         </div>
-        <button onclick="getPrediction()">Predict SR</button>
+        <button onclick="getPrediction()">Calculate SR</button>
         <div id="result-container"></div>
         <div class="metrics-container">
-            <h3>Model Performance</h3>
+            <h3>Statistics</h3>
             <div id="metrics-content">Loading...</div>
         </div>
     </div>
@@ -123,7 +123,7 @@
                 return;
             }
 
-            resultContainer.innerText = "Predicting...";
+            resultContainer.innerText = "Calculating... First run might take a while...";
 
             try {
                 const response = await fetch(`${API_URL}/predict`, {
@@ -143,12 +143,12 @@
                 if (data.error) {
                     resultContainer.innerText = `Error: ${data.error}`;
                 } else {
-                    resultContainer.innerText = `Predicted SR: ${data.predicted_sr}`;
+                    resultContainer.innerText = `Calculated SR: ${data.predicted_sr}`;
                 }
 
             } catch (error) {
-                console.error("Prediction failed:", error);
-                resultContainer.innerText = "Failed to get prediction. Check the console for details.";
+                console.error("Calculation failed:", error);
+                resultContainer.innerText = "Failed to get SR. Check the console for details.";
             }
         }
 
@@ -162,6 +162,7 @@
                     metricsContainer.innerText = `Error: ${data.error}`;
                 } else {
                     metricsContainer.innerHTML = `
+                        <p><strong>Training Data Amount:</strong> ${data.size}</p>
                         <p><strong>R-squared (R²):</strong> ${data.r2}</p>
                         <p><strong>Mean Squared Error (MSE):</strong> ${data.mse}</p>
                         <p><strong>Last Updated:</strong> ${data.timestamp}</p>

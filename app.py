@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, jsonify
 import joblib
 import pandas as pd
 from flask_cors import CORS
+import datetime
 
 # Create the Flask application instance
 app = Flask(__name__, static_folder='docs', template_folder='docs')
@@ -19,6 +20,7 @@ try:
     model = model_mets['model']
     mse = model_mets['mse']
     r2 = model_mets['r2']
+    size = model_mets['size']
     timestamp = model_mets['timestamp']
     print("Trained model loaded successfully.")
 except FileNotFoundError:
@@ -48,12 +50,15 @@ def predict():
     try:
         dpm = float(dpm)
         apm = float(apm)
+        excel_start = datetime.date(1900, 1, 1)
+        today = datetime.date.today()
+        date_int = (today - excel_start).days + 2
     except ValueError:
         return jsonify({'error': 'Invalid input. Please provide numbers.'}), 400
 
     # Create a pandas DataFrame for the prediction
     # The model expects the data in this format
-    input_data = pd.DataFrame([[dpm, apm]], columns=['DPM', 'APM'])
+    input_data = pd.DataFrame([[date_int, dpm, apm]], columns=['Date','DPM', 'APM'])
 
     # Make the prediction
     prediction = model.predict(input_data)
@@ -71,6 +76,7 @@ def metrics():
     return jsonify({
         'mse': round(mse, 2),
         'r2': round(r2, 2),
+        'size': size,
         'timestamp': timestamp
     })
 
