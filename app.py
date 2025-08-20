@@ -64,7 +64,7 @@ def predict():
 
     # Make the prediction
     prediction = model.predict(input_data)
-    predicted_sr = round(prediction[0], 2)
+    predicted_sr = round(prediction[0])
 
     # Return the prediction as a JSON response
     return jsonify({'predicted_sr': predicted_sr})
