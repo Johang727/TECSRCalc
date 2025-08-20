@@ -12,21 +12,12 @@ dataFolder = "data/"
 
 dfList = []
 
-excelStart = datetime.date(1900, 1, 1)
 
 
 for fn in os.listdir(dataFolder):
     if fn.endswith(".csv"):
         fp = os.path.join(dataFolder, fn)
-        # We now explicitly parse the 'Date' column and handle potential errors
-        df = pd.read_csv(fp, sep=";", parse_dates=['Date'])
-        # If pandas fails, we'll try to convert it manually with the correct format
-        df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y', errors='coerce').fillna(
-            pd.to_datetime(df['Date'], format='%m/%d/%Y', errors='coerce'))
-        
-        # Convert to number of days since Excel's epoch, then add 2
-        df['Date'] = (df['Date'].dt.date - excelStart).dt.days + 2
-
+        df = pd.read_csv(fp, sep=";")
         dfList.append(df)
 
 masterDF = pd.concat(dfList, ignore_index=True)
