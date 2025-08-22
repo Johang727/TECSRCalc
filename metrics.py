@@ -38,11 +38,11 @@ for meow in rd[:secStart+1]:
     metrics.append(meow)
 
 # insert the metrics
-metrics.append(f"\nMSE: **{mse:.2f}**\n")
-metrics.append(f"R2: **{r2:.2f}**\n")
-metrics.append(f"Training Data: **{size}**\n")
-metrics.append(f"Testing Data: **{tSize}**\n")
-metrics.append(f"Timestamp: **{ts}**\n")
+metrics.append(f"\n - MSE: **{mse:.2f}**\n")
+metrics.append(f" - R2: **{r2:.2f}**\n")
+metrics.append(f" - Training Data: **{size}**\n")
+metrics.append(f" - Testing Data: **{tSize}**\n")
+metrics.append(f" - Timestamp: **{ts}**\n")
 
 metrics.append("\n<!--END_SECTION:metrics-->\n")
 
