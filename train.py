@@ -57,6 +57,7 @@ metrics = {
     'mse': mse,
     'r2': r2,
     'size': len(xTrain),
+    'testSize': len(xTest),
     'timestamp': timestamp
 }
 

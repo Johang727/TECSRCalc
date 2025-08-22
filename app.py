@@ -11,7 +11,7 @@ CORS(app, origins="https://johang727.github.io")
 
 # Load the trained model when the application starts
 # This is more efficient than loading it for every request
-MODEL_PATH = 'model.pkl'
+MODEL_PATH:str = 'model.pkl'
 
 
 try:
