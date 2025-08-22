@@ -4,4 +4,3 @@ joblib
 flask
 gunicorn
 flask-cors
-numpy==1.24.4
