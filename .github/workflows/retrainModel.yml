@@ -28,10 +28,13 @@ jobs:
             - name: Retrain Script
               run: python train.py
 
-            - name: Commit and Push Update
+            - name: Update README.md
+              run: python metrics.py
+
+            - name: Commit and Push Updated Files
               run: |
                 git config --global user.name 'github-actions[bot]'
                 git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-                git add model.pkl
-                git commit -m "Model Auto-Retraining" || echo "No changes to commit."
+                git add model.pkl README.md
+                git commit -m "Retrain and Update Metrics" || echo "No changes to commit."
                 git push
