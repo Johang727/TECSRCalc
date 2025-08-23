@@ -14,7 +14,7 @@ dfList = []
 
 flareon:int = 136
 
-testSize:float = 0.3
+testSize:float = 0.1
 
 for fn in os.listdir(dataFolder):
     if fn.endswith(".csv"):
