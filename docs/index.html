@@ -1,193 +1,137 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SR Calculator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            background-color: #f0f2f5;
-            flex-direction: column;
-        }
-
-        .container {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
-
-        h1 {
-            color: #000;
-            margin-bottom: 1.5rem;
-        }
-
-        .input-group {
-            margin-bottom: 1rem;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-            color: #000;
-        }
-
-        input[type="number"] {
-            width: 95%;
-            padding: 0.75rem;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        input[type="number"]:focus {
-            border-color: #ff6600;
-            outline: none;
-        }
-
-        button {
-            width: 100%;
-            padding: 0.75rem;
-            border: none;
-            border-radius: 8px;
-            background-color: #ff6600;
-            color: white;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-bottom: 1.5rem;
-        }
-
-        button:hover {
-            background-color: #ce5200;
-        }
-
-        #result-container {
-            margin-top: 1.5;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #000;
-            min-height: 25px;
-        }
-        
-        .metrics-container {
-            font-size: 0.9rem;
-            color: #000;
-            text-align: left;
-            border-top: 1px solid #eee;
-            padding-top: 1.5rem;
-        }
-    </style>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="Content-Language" content="en-us">
+<title>SR Calculator</title>
+<!--mstheme--><link rel="stylesheet" type="text/css" href="_themes/slate/slat1011.css"><meta name="Microsoft Theme" content="slate 1011">
+<meta name="Microsoft Border" content="tlb, default">
 </head>
+
 <body>
-    <div class="container">
-        <h1>SR Calculator</h1>
-        <div class="input-group">
-            <label for="dpm">DPM (Drops Per Minute)</label>
-            <input type="number" id="dpm" placeholder="136">
-        </div>
-        <div class="input-group">
-            <label for="apm">APM (Attack Per Minute)</label>
-            <input type="number" id="apm" placeholder="72.7">
-        </div>
-        <button onclick="getPrediction()">Calculate SR</button>
-        <div id="result-container"></div>
-        <div class="metrics-container">
-            <h2>Statistics</h2>
-            <div id="metrics-content">Loading...</div>
-        </div>
-    </div>
+<p>&nbsp;</p>
+    
+<!--msnavigation--><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>
 
-    <p style="text-align: center; color: #777;">
-        <i>Backend is hosted on Render, please be patient when calculating for the first time!</i>
-    </p>
 
-    <footer style="text-align: center; color: #996900; font-size: 0.9rem;">
-        <p>
-            Created by Johang727 | 
-            <a href="https://github.com/Johang727/TECSRCalc" target="_blank" style="color: #007bff; text-decoration: none;">GitHub </a>
-        </p>
-    </footer>
+</td></tr><!--msnavigation--></table><!--msnavigation--><table dir="ltr" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td valign="top" width="1%">
 
-    <script>
-        const API_URL = 'https://tecsrcalc.onrender.com';
 
-        async function getPrediction() {
-            const dpm = document.getElementById('dpm').value;
-            const apm = document.getElementById('apm').value;
-            const resultContainer = document.getElementById('result-container');
+</td><td valign="top" width="24"></td><!--msnavigation--><td valign="top">
 
-            if (dpm === "" || apm === "") {
-                resultContainer.innerText = "Please enter both DPM and APM.";
-                return;
-            }
+<div align="center">
+    <center>
+    <table border="0" width="100%" cellpadding="5">
+        <tr>
+            <td width="330" style="border-style: none; border-width: medium" align="left" valign="top">
+            <b><font size="5">SR Calculator:</font></b><p><b>DPM :</b> <input type="text" id="dpm" name="Subject" size="40"></p>
+            <p><b>APM :</b> <input type="text" id="apm" name="Subject0" size="40"><br>
+&nbsp;</p>
+            <p>
+            <input type="button" value="Calculate SR!" name="calcSR" onclick="getPrediction()">
+            <p><b>SR: <span id="result-container">Yet to run!</span></b></td>
+            <td width="10" style="border-style: none; border-width: medium">
+            </td>
+            <td width="330" style="border-style: none; border-width: medium" align="left" valign="top">
+            <b><font size="5">Statistics: </font></b>
+            <p id="metrics-content">Loading...</p>
+            </td>
+        </tr>
+    </table>
+    </center></div>
+<div align="center">
+    <center></center></div>
 
-            resultContainer.innerText = "Calculating... First run might take a while...";
 
-            try {
-                const response = await fetch(`${API_URL}/predict`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ dpm, apm })
-                });
 
-                if (!response.ok) {
-                    throw new Error(`Server error: ${response.status}`);
-                }
+<script>
+    const API_URL = 'https://tecsrcalc.onrender.com';
 
-                const data = await response.json();
-                
-                if (data.error) {
-                    resultContainer.innerText = `Error: ${data.error}`;
-                } else {
-                    resultContainer.innerText = `SR: ${data.sr} ± ${data.std}`;
-                }
+    async function getPrediction() {
+        const dpm = document.getElementById('dpm').value;
+        const apm = document.getElementById('apm').value;
+        const resultContainer = document.getElementById('result-container');
 
-            } catch (error) {
-                console.error("Calculation failed:", error);
-                resultContainer.innerText = "Failed to calculate SR! Check the console for details.";
-            }
+        if (dpm === "" || apm === "") {
+            resultContainer.innerText = "Please enter both DPM and APM.";
+            return;
         }
 
-        async function getMetrics() {
-            const metricsContainer = document.getElementById('metrics-content');
-            try {
-                const response = await fetch(`${API_URL}/metrics`);
-                const data = await response.json();
-                
-                if (data.error) {
-                    metricsContainer.innerText = `Error: ${data.error}`;
-                } else {
-                    metricsContainer.innerHTML = `
-                        <p><strong>Training Data Amount:</strong> ${data.size}</p>
-                        <p><strong>R²:</strong> ${data.r2}</p>
-                        <p><strong>MSE:</strong> ${data.mse}</p>
-                        <p><strong>Last Updated:</strong> ${data.timestamp}</p>
-                    `;
-                }
-            } catch (error) {
-                console.error("Metrics fetch failed:", error);
-                metricsContainer.innerText = "Failed to load metrics!";
-            }
-        }
+        resultContainer.innerText = "Calculating... First run might take a while...";
 
-        // Call the function to get metrics when the page loads
-        document.addEventListener('DOMContentLoaded', getMetrics);
-    </script>
-</body>
+        try {
+            const response = await fetch(`${API_URL}/predict`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ dpm, apm })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            if (data.error) {
+                resultContainer.innerText = `Error: ${data.error}`;
+            } else {
+                resultContainer.innerHTML = `${data.predicted_sr} &plusmn; ${data.uncertainty}`;
+            }
+
+        } catch (error) {
+            console.error("Calculation failed:", error);
+            resultContainer.innerText = "Failed to calculate SR! Check the console for details.";
+        }
+    }
+
+    async function getMetrics() {
+        const metricsContainer = document.getElementById('metrics-content');
+        try {
+            const response = await fetch(`${API_URL}/metrics`);
+            const data = await response.json();
+            
+            if (data.error) {
+                metricsContainer.innerText = `Error: ${data.error}`;
+            } else {
+                // Build the SR distribution list
+                let distributionHtml = '<ul>';
+                for (const bin in data.srCounts) {
+                    distributionHtml += `<li><b>${bin}:</b> ${data.srCounts[bin]}</li>`;
+                }
+                distributionHtml += '</ul>';
+
+                metricsContainer.innerHTML = `
+					<p><b>Last Updated:</b> ${data.timestamp}</p>
+                    <p><b>R²:</b> ${data.r2}</p>
+                    <p><b>MSE:</b> ${data.mse}</p>
+					<p><b>Data Size:</b> ${data.size}</p>
+                    <h3>SR Distribution in Training Data:</h3>
+                    ${distributionHtml}
+                `;
+            }
+        } catch (error) {
+            console.error("Metrics fetch failed:", error);
+            metricsContainer.innerText = "Failed to load metrics!";
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', getMetrics);
+</script>
+
+<p align="left"><small><small>Render hosts the backend for this website so please be patient on first run!</small></small></p>
+
+
+<!--msnavigation--></td></tr><!--msnavigation--></table><!--msnavigation--><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>
+
+
+<p>&nbsp;</p>
+<hr align="left">
+<img src="images/paws.jpg" alt="Made with my own two front paws :3">
+<p align="left"><small>
+<nobr>Home</nobr> ||  <nobr><A HREF="about.html" TARGET="" STYLE="text-decoration: none;">About</A></nobr>
+</small></p>
+</td></tr><!--msnavigation--></table></body>
+
 </html>

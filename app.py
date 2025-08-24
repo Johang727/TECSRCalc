@@ -23,6 +23,7 @@ try:
     r2 = model_mets['r2']
     size = model_mets['size']
     timestamp = model_mets['timestamp']
+    srCounts = model_mets['srCounts']
     print("Model loaded successfully!")
 except FileNotFoundError:
     print(f"Error: Model file \"{MODEL_PATH}\" not found!")
@@ -83,7 +84,8 @@ def metrics():
         'mse': round(mse, 2),
         'r2': round(r2, 2),
         'size': size,
-        'timestamp': timestamp
+        'timestamp': timestamp,
+        'srCounts': srCounts
     })
 
 if __name__ == '__main__':
