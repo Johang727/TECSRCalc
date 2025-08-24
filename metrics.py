@@ -1,4 +1,5 @@
 import joblib
+import sys 
 
 metrics = [] # this will be the output txt file
 
@@ -12,16 +13,19 @@ try:
     size = model_mets['size']
     tSize = model_mets['testSize']
     ts = model_mets['timestamp']
+    srCounts = model_mets['srCounts']
 except FileNotFoundError: 
     print(f"Error: Model file \"{MODEL_PATH}\" not found!")
+    sys.exit(1)
 
 try:
     with open("README.md", "r") as readme:
         rd = readme.readlines()
 except FileNotFoundError:
     print(f"Error: README.md not found!")
+    sys.exit(1)
 
-print(rd)
+#print(rd)
 
 secStart = rd.index("<!--START_SECTION:metrics-->\n")
 secEnd = rd.index("<!--END_SECTION:metrics-->\n")
@@ -38,11 +42,34 @@ for meow in rd[:secStart+1]:
     metrics.append(meow)
 
 # insert the metrics
+metrics.append(f" - Timestamp: **{ts}**\n")
 metrics.append(f"\n - MSE: **{mse:.2f}**\n")
 metrics.append(f" - R2: **{r2:.2f}**\n")
-metrics.append(f" - Training Data: **{size}**\n")
-metrics.append(f" - Testing Data: **{tSize}**\n")
-metrics.append(f" - Timestamp: **{ts}**\n")
+
+metrics.append(f" - **Data:** \n")
+metrics.append(f"      - <1K SR: **{srCounts.get("<1K SR")}**\n")
+metrics.append(f"      - 1 - 2K SR: **{srCounts.get("1-2K SR")}**\n")
+metrics.append(f"      - 2 - 3K SR: **{srCounts.get("2-3K SR")}**\n")
+metrics.append(f"      - 3 - 4K SR: **{srCounts.get("3-4K SR")}**\n")
+metrics.append(f"      - 4 - 5K SR: **{srCounts.get("4-5K SR")}**\n")
+metrics.append(f"      - 5 - 6K SR: **{srCounts.get("5-6K SR")}**\n")
+metrics.append(f"      - 6 - 7K SR: **{srCounts.get("6-7K SR")}**\n")
+metrics.append(f"      - 7 - 8K SR: **{srCounts.get("7-8K SR")}**\n")
+metrics.append(f"      - 8 - 9K SR: **{srCounts.get("8-9K SR")}**\n")
+metrics.append(f"      - 9 - 10K SR: **{srCounts.get("9-10K SR")}**\n")
+metrics.append(f"      - 10 - 11K SR: **{srCounts.get("10-11K SR")}**\n")
+metrics.append(f"      - 11 - 12K SR: **{srCounts.get("11-12K SR")}**\n")
+metrics.append(f"      - 12 - 13K SR: **{srCounts.get("12-13K SR")}**\n")
+metrics.append(f"      - 13 - 14K SR: **{srCounts.get("13-14K SR")}**\n")
+metrics.append(f"      - 14 - 15K SR: **{srCounts.get("14-15K SR")}**\n")
+metrics.append(f"      - 15 - 16K SR: **{srCounts.get("15-16K SR")}**\n")
+metrics.append(f"      - 16 - 17K SR: **{srCounts.get("16-17K SR")}**\n")
+metrics.append(f"      - 17K+ SR: **{srCounts.get(">17K SR")}**\n")
+metrics.append("----\n")
+metrics.append(f"      - Training Data: **{size}**\n")
+metrics.append(f"      - Testing Data: **{tSize}**\n")
+metrics.append(f"      - All Data: **{size+tSize}**\n")
+
 
 metrics.append("\n<!--END_SECTION:metrics-->\n")
 
