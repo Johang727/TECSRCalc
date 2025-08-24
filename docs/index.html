@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 <meta http-equiv="Content-Language" content="en-us">
 <title>SR Calculator</title>
-<!--mstheme--><link rel="stylesheet" type="text/css" href="_themes/slate/slat1011.css"><meta name="Microsoft Theme" content="slate 1011">
+<!--mstheme--><link rel="stylesheet" type="text/css" href="themes/slate/slat1011.css"><meta name="Microsoft Theme" content="slate 1011">
 <meta name="Microsoft Border" content="tlb, default">
 </head>
 
@@ -77,7 +77,7 @@
             if (data.error) {
                 resultContainer.innerText = `Error: ${data.error}`;
             } else {
-                resultContainer.innerHTML = `${data.predicted_sr} &plusmn; ${data.uncertainty}`;
+                resultContainer.innerHTML = `${data.sr} &plusmn; ${data.std}`;
             }
 
         } catch (error) {
