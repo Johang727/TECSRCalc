@@ -23,7 +23,7 @@ try:
     RF_mse = model_mets['RF_mse']
     RF_r2 = model_mets['RF_r2']
 
-    LFmodel = model_mets['LRmodel']
+    LRmodel = model_mets['LRmodel']
     LR_mse = model_mets['LR_mse']
     LR_r2 = model_mets['LR_r2']
 
@@ -44,7 +44,7 @@ def home():
 def predict():
     # Handles prediction, renamed calculation later, since I liked that name better after testing
     # Check if the model was loaded successfully
-    if model is None:
+    if RFmodel is None and LRmodel:
         return jsonify({'error': 'Model file not found!'}), 500
     # From what I understand 500 errors are server-side; 400 are client-side
     # TODO, have it redirect to a new page with contact information
@@ -73,7 +73,7 @@ def predict():
     # Switch models to one that's better at extrapolating
     if (dpm >= 155 and apm >= 140) or (dpm <= 35 and apm <= 10):
         modelUsed = "Linear"
-        calc = LFmodel.predict(inData)
+        calc = LRmodel.predict(inData)
         std = 0 # there's no way to get uncertainty for a linear 
     else:
         modelUsed = "Random Forest"
@@ -90,7 +90,7 @@ def predict():
 
 @app.route('/metrics')
 def metrics():
-    if model is None:
+    if RFmodel is None and LRmodel:
         return jsonify({'error': 'Model file not found!'}), 500
     
     return jsonify({
