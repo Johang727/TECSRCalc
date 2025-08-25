@@ -4,10 +4,16 @@ import pandas as pd
 from flask_cors import CORS
 import datetime
 import numpy as np
+import re
+import os
 
 # Create the Flask application instance
 app = Flask(__name__, static_folder='docs', template_folder='docs')
-CORS(app, origins="https://johang727.github.io")
+
+if os.environ.get("RENDER", "false") == "true":
+    CORS(app, origins="https://johang727.github.io")
+else:
+    CORS(app)
 
 # Load the trained model when the application starts
 # This is more efficient than loading it for every request
@@ -100,19 +106,25 @@ def predict():
         })
 
 @app.route('/metrics')
-def metrics():
-    if RFmodel is None and LRmodel:
-        return jsonify({'error': 'Model file not found!'}), 500
+def getMetrics():
+    try:
+        with open("README.md", "r") as readme:
+            rd = readme.read()
+    except FileNotFoundError:
+        return "README.md not found!", 404
     
-    return jsonify({
-        'RF_mse': round(RF_mse, 2),
-        'RF_r2': round(RF_r2, 2),
-        'LR_mse': round(LR_mse, 2),
-        'LR_r2': round(LR_r2, 2),
-        'size': size,
-        'timestamp': timestamp,
-        'srCounts': srCounts
-    })
+    secStart = "<!--START_SECTION:metrics-->"
+    secEnd = "<!--END_SECTION:metrics-->"
+
+    match = re.search(f"{secStart}(.*?){secEnd}", rd, re.DOTALL)
+
+    if match:
+        section = match.group(1).strip()
+        return section, 200, {"Content-Type": "text/plain"}
+    else:
+        return "Metrics not found!", 404
+
+
 
 if __name__ == '__main__':
     # only runs when run locally

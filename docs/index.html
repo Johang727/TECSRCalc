@@ -56,6 +56,7 @@
 
 <script>
     const API_URL = 'https://tecsrcalc.onrender.com';
+    //const API_URL = ''
 
     async function getPrediction() {
         const dpm = document.getElementById('dpm').value;
@@ -89,7 +90,7 @@
                 resultContainer.innerText = `Error: ${data.error}`;
             } else {
                 resultContainer.innerHTML = `${data.sr}`;
-                modelContainer.innerHTML = `${data.model}`  
+                modelContainer.innerHTML = `${data.model}`;
             }
 
         } catch (error) {
@@ -102,41 +103,18 @@
         const metricsContainer = document.getElementById('metrics-content');
         try {
             const response = await fetch(`${API_URL}/metrics`);
-            const data = await response.json();
-            
-            if (data.error) {
-                metricsContainer.innerText = `Error: ${data.error}`;
-            } else {
-                // Build the SR distribution list
-                let distributionHtml = '<ul>';
-                for (const bin in data.srCounts) {
-                    distributionHtml += `<li><b>${bin}:</b> ${data.srCounts[bin]}</li>`;
-                }
-                distributionHtml += '</ul>';
+            const data = await response.text();
 
-                metricsContainer.innerHTML = `
-					<p><b>Last Updated:</b> ${data.timestamp}</p>
-                    <p>&nbsp;</p>
-                    <p><b>Random Forest:</b></p>
-                    <p><b>R²:</b> ${data.RF_r2}</p>
-                    <p><b>MSE:</b> ${data.RF_mse}</p>
-                    <p>&nbsp;</p>
-                    <p><b>Linear:</b></p>
-                    <p><b>R²:</b> ${data.LR_r2}</p>
-                    <p><b>MSE:</b> ${data.LR_mse}</p>
-                    <p>&nbsp;</p>
-					<p><b>Data Size:</b> ${data.size}</p>
-                    <h3>SR Distribution in Training Data:</h3>
-                    ${distributionHtml}
-                `;
+            if (response.ok) {
+                metricsContainer.innerHTML = `<pre>${data}</pre>`;
+            } else {
+                metricsContainer.innerHTML = `Error ${data}`;
             }
         } catch (error) {
             console.error("Metrics fetch failed:", error);
             metricsContainer.innerText = "Failed to load metrics!";
         }
     }
-
-    document.addEventListener('DOMContentLoaded', getMetrics);
 </script>
 
 <p align="left"><small><small>Render hosts the backend for this website so please be patient on first run!</small></small></p>
