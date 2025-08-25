@@ -73,7 +73,7 @@ def predict():
     # Switch models to one that's better at extrapolating
     if (dpm >= 155 and apm >= 140) or (dpm <= 35 and apm <= 10):
         modelUsed = "Linear"
-        calc = LRmodel.predict(inData)
+        calc = LRmodel.predict(inData)[0]
         std = 0 # there's no way to get uncertainty for a linear 
     else:
         modelUsed = "Random Forest"
