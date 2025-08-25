@@ -26,8 +26,16 @@
             <td width="330" style="border-style: none; border-width: medium" align="left" valign="top">
             <b><font size="5">SR Calculator:</font></b><p><b>DPM :</b> <input type="text" id="dpm" name="Subject" size="40"></p>
             <p><b>APM :</b> <input type="text" id="apm" name="Subject0" size="40"><br>
-&nbsp;</p>
-            <p>
+            
+            <p><b>Model :</b> 
+                <select name="Model" id="modelSelect">
+                    <option value="Auto">Auto (Default)</option>
+                    <option value="RandomForest">Random Forest</option>
+                    <option value="Linear">Linear</option>
+                </select>
+            </p>
+
+            <p>&nbsp;</p>
             <input type="button" value="Calculate SR!" name="calcSR" onclick="getPrediction()">
             <p><b>SR: <span id="result-container">Yet to run!</span></b>
             <p><b>Model Used: <span id="model-container">Yet to run!</span></b></td>
@@ -80,7 +88,7 @@
             if (data.error) {
                 resultContainer.innerText = `Error: ${data.error}`;
             } else {
-                resultContainer.innerHTML = `${data.sr} &plusmn; ${data.std}`;
+                resultContainer.innerHTML = `${data.sr}`;
                 modelContainer.innerHTML = `${data.model}`  
             }
 
@@ -116,8 +124,8 @@
                     <p><b>Linear:</b></p>
                     <p><b>R²:</b> ${data.LR_r2}</p>
                     <p><b>MSE:</b> ${data.LR_mse}</p>
-					<p><b>Data Size:</b> ${data.size}</p>
                     <p>&nbsp;</p>
+					<p><b>Data Size:</b> ${data.size}</p>
                     <h3>SR Distribution in Training Data:</h3>
                     ${distributionHtml}
                 `;
@@ -139,7 +147,7 @@
 
 <p>&nbsp;</p>
 <hr align="left">
-<img src="images/paws.jpg" alt="Made with my own two front paws :3">
+<img src="images/paws.jpg" alt="Made with my own two front paws :3" title="Made with my own two front paws! :3">
 <p align="left"><small>
 <nobr>Home</nobr> ||  <nobr><A HREF="about.html" TARGET="" STYLE="text-decoration: none;">About</A></nobr>
 </small></p>

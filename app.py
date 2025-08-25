@@ -53,6 +53,7 @@ def predict():
     data = request.get_json(force=True)
     dpm = data.get('dpm')
     apm = data.get('apm')
+    modelChoice = data.get('modelSelect')
 
     # Basic input validation
     if dpm is None or apm is None:
@@ -70,21 +71,31 @@ def predict():
     # The model expects the data in this format
     inData = pd.DataFrame([[dateInt, dpm, apm]], columns=['Date','DPM', 'APM'])
 
+    useLR = False
+
     # Switch models to one that's better at extrapolating
-    if (dpm >= 155 and apm >= 140) or (dpm <= 35 and apm <= 10):
+    if modelChoice == "Linear":
+        useLR = True
+    elif modelChoice == "RandomForest":
+        useLR = False
+    else:
+        if (dpm >= 155 or apm >= 140) or (dpm <= 35 or apm <= 10):
+            useLR = True
+        else:
+            useLR = False
+
+    if useLR:
         modelUsed = "Linear"
-        calc = LRmodel.predict(inData)[0]
-        std = 0 # there's no way to get uncertainty for a linear 
+        calc = round(LRmodel.predict(inData)[0])
     else:
         modelUsed = "Random Forest"
         # to add an uncertainty after the SR
         tp = [tree.predict(inData) for tree in RFmodel.estimators_]
-        calc = np.mean(tp); std = np.std(tp)
+        calc = f"{round(np.mean(tp))} ± {round(np.std(tp))}"
 
 
     return jsonify({
-        'sr': round(calc),
-        'std': round(std),
+        'sr': calc,
         'model':modelUsed
         })
 
