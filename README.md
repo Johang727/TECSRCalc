@@ -1,9 +1,15 @@
 <!--START_SECTION:metrics-->
 ## Statistics:
- - Timestamp: **2025-08-23 22:16:52**
+ - Timestamp: **2025-08-25 13:10:02**
 
+Random Forest Model:
  - MSE: **591912.68**
- - R2: **0.94**
+ - R2: **0.9445**
+
+Linear Model:
+ - MSE: **1063111.91**
+ - R2: **0.9003**
+
 ## Data:
  - <1K SR: **0**
  - 1 - 2K SR: **7**

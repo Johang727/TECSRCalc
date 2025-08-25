@@ -18,9 +18,15 @@ try:
     # fetch and store variables from the packaged model
     print("Attempting to load model...")
     model_mets = joblib.load(MODEL_PATH)
-    model = model_mets['model']
-    mse = model_mets['mse']
-    r2 = model_mets['r2']
+
+    RFmodel = model_mets['RFmodel']
+    RF_mse = model_mets['RF_mse']
+    RF_r2 = model_mets['RF_r2']
+
+    LFmodel = model_mets['LRmodel']
+    LR_mse = model_mets['LR_mse']
+    LR_r2 = model_mets['LR_r2']
+
     size = model_mets['size']
     timestamp = model_mets['timestamp']
     srCounts = model_mets['srCounts']
@@ -64,15 +70,22 @@ def predict():
     # The model expects the data in this format
     inData = pd.DataFrame([[dateInt, dpm, apm]], columns=['Date','DPM', 'APM'])
 
-    # to add an uncertainty after the SR
-    tp = [tree.predict(inData) for tree in model.estimators_]
-
-    means = np.mean(tp); std = np.std(tp)
+    # Switch models to one that's better at extrapolating
+    if (dpm >= 155 and apm >= 140) or (dpm <= 35 and apm <= 10):
+        modelUsed = "Linear"
+        calc = LFmodel.predict(inData)
+        std = 0 # there's no way to get uncertainty for a linear 
+    else:
+        modelUsed = "Random Forest"
+        # to add an uncertainty after the SR
+        tp = [tree.predict(inData) for tree in RFmodel.estimators_]
+        calc = np.mean(tp); std = np.std(tp)
 
 
     return jsonify({
-        'sr': round(means),
-        'std': round(std)
+        'sr': round(calc),
+        'std': round(std),
+        'model':modelUsed
         })
 
 @app.route('/metrics')
@@ -81,8 +94,10 @@ def metrics():
         return jsonify({'error': 'Model file not found!'}), 500
     
     return jsonify({
-        'mse': round(mse, 2),
-        'r2': round(r2, 2),
+        'RF_mse': round(RF_mse, 2),
+        'RF_r2': round(RF_r2, 2),
+        'LR_mse': round(LR_mse, 2),
+        'LR_r2': round(LR_r2, 2),
         'size': size,
         'timestamp': timestamp,
         'srCounts': srCounts

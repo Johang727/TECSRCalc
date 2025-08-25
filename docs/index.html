@@ -29,7 +29,9 @@
 &nbsp;</p>
             <p>
             <input type="button" value="Calculate SR!" name="calcSR" onclick="getPrediction()">
-            <p><b>SR: <span id="result-container">Yet to run!</span></b></td>
+            <p><b>SR: <span id="result-container">Yet to run!</span></b>
+            <p><b>Model Used: <span id="model-container">Yet to run!</span></b></td>
+
             <td width="10" style="border-style: none; border-width: medium">
             </td>
             <td width="330" style="border-style: none; border-width: medium" align="left" valign="top">
@@ -51,6 +53,7 @@
         const dpm = document.getElementById('dpm').value;
         const apm = document.getElementById('apm').value;
         const resultContainer = document.getElementById('result-container');
+        const modelContainer = document.getElementById('model-container');
 
         if (dpm === "" || apm === "") {
             resultContainer.innerText = "Please enter both DPM and APM.";
@@ -78,6 +81,7 @@
                 resultContainer.innerText = `Error: ${data.error}`;
             } else {
                 resultContainer.innerHTML = `${data.sr} &plusmn; ${data.std}`;
+                modelContainer.innerHTML = `${data.modelUsed}`  
             }
 
         } catch (error) {
@@ -104,9 +108,16 @@
 
                 metricsContainer.innerHTML = `
 					<p><b>Last Updated:</b> ${data.timestamp}</p>
-                    <p><b>R²:</b> ${data.r2}</p>
-                    <p><b>MSE:</b> ${data.mse}</p>
+                    <p>&nbsp;</p>
+                    <p><b>Random Forest:</b></p>
+                    <p><b>R²:</b> ${data.RF_r2}</p>
+                    <p><b>MSE:</b> ${data.RF_mse}</p>
+                    <p>&nbsp;</p>
+                    <p><b>Linear:</b></p>
+                    <p><b>R²:</b> ${data.LR_r2}</p>
+                    <p><b>MSE:</b> ${data.LR_mse}</p>
 					<p><b>Data Size:</b> ${data.size}</p>
+                    <p>&nbsp;</p>
                     <h3>SR Distribution in Training Data:</h3>
                     ${distributionHtml}
                 `;

@@ -2,6 +2,7 @@ import pandas as pd
 import os
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error, r2_score
 import joblib
 import datetime
@@ -71,26 +72,43 @@ print(f"  Mean SR: {np.mean(yTest):.2f}\n")
 print("Training set size:", len(xTrain))
 print("Testing set size:", len(xTest))
 
-model = RandomForestRegressor(n_estimators=treeAmount, random_state=flareon)
+rfmodel = RandomForestRegressor(n_estimators=treeAmount, random_state=flareon)
 
-model.fit(xTrain, yTrain)
+rfmodel.fit(xTrain, yTrain)
+
+lrmodel = LinearRegression()
+
+lrmodel.fit(xTrain, yTrain)
+
+yPred = rfmodel.predict(xTest)
 
 
-yPred = model.predict(xTest)
+mse0 = mean_squared_error(yTest, yPred)
+r20 = r2_score(yTest, yPred)
 
-mse = mean_squared_error(yTest, yPred)
-r2 = r2_score(yTest, yPred)
+print("\nTesting Random Forest\n")
+print(f"Mean Squared Error: {mse0:.2f}")
+print(f"R-squared: {r20:.4f}")
 
-print(f"Mean Squared Error: {mse:.2f}")
-print(f"R-squared: {r2:.4f}")
+yPred = lrmodel.predict(xTest)
+
+mse1 = mean_squared_error(yTest, yPred)
+r21 = r2_score(yTest, yPred)
+
+print("\nTesting Linear\n")
+print(f"Mean Squared Error: {mse1:.2f}")
+print(f"R-squared: {r21:.4f}")
 
 timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 
 metrics = {
-    'model': model,
-    'mse': mse,
-    'r2': r2,
+    'RFmodel': rfmodel,
+    'RF_mse': mse0,
+    'RF_r2': r20,
+    'LRmodel': lrmodel,
+    'LR_mse': mse1,
+    'LR_r2': r21,
     'size': len(xTrain),
     'testSize': len(xTest),
     'timestamp': timestamp,
