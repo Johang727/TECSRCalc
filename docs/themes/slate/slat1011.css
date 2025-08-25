@@ -30,37 +30,37 @@ UL UL UL{
 list-style-image:url(bull3_slate.gif);
 }
 .mstheme-bannertxt{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-size:5;
 color:#FFFFFF;
 }
 .mstheme-horiz-navtxt{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-size:2;
 color:#FFFFFF;
 }
 .mstheme-vert-navtxt{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-size:2;
 color:#FFFFFF;
 }
 .mstheme-navtxthome{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-size:1;
 color:#FFFFFF;
 }
 .mstheme-navtxtup{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-size:1;
 color:#FFFFFF;
 }
 .mstheme-navtxtprev{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-size:1;
 color:#FFFFFF;
 }
 .mstheme-navtxtnext{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-size:1;
 color:#FFFFFF;
 }
@@ -132,40 +132,40 @@ navbutton-background-color:#131313;
 top-bar-button:url(top_bar_button_slate.gif);
 }
 .mstheme-topbar-font{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 }
 body{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 background-image:url(background_slate.gif);
 }
 h1{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:bold;
 font-style:normal;
 }
 h2{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:normal;
 font-style:normal;
 }
 h3{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:normal;
 font-style:normal;
 }
 h4{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:normal;
 font-style:normal;
 }
 h5{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:normal;
 font-style:normal;
 }
 h6{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:normal;
 font-style:normal;
 }
@@ -179,42 +179,42 @@ font-family:Arial,Helvetica,sans-serif;
 font-style:normal;
 }
 label, .MSTHEME-LABEL{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-style:normal;
 }
 TEXTAREA{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-style:normal
 }
 FIELDSET{
 border-style:solid;
 border-width:1pt;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-style:normal;
 }
 LEGEND{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-style:normal;
 }
 SELECT{
 border-style:solid;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-style:normal
 }
 TABLE{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-style:normal;
 }
 CAPTION{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-style:normal;
 }
 TH{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-style:bold;
 }
 MARQUEE{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-main{
 border-color:#757575;
@@ -226,22 +226,22 @@ background-repeat:repeat-x;
 }
 .ms-banner{
 color:#757575;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-banner a:link{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 font-weight:normal;
 text-decoration:none;
 }
 .ms-banner a:visited{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 font-weight:normal;
 text-decoration:none;
 }
 .ms-nav td{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:normal;
 color:#FFFFFF;
 }
@@ -250,7 +250,7 @@ border-color:#111111;
 }
 .ms-nav a{
 text-decoration:none;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:normal;
 color:#B6B04D;
 }
@@ -262,16 +262,16 @@ color:#FEC803;
 color:#B6B04D;
 }
 .ms-viewselect a:link{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#B6B04D;
 }
 .ms-titlearea{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 }
 .ms-pagetitle{
 color:#FFFFFF;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:bold;
 }
 .ms-pagetitle a{
@@ -292,11 +292,11 @@ font-weight:normal;
 color:#969696;
 }
 .ms-formbody{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 }
 .ms-formdescription{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#797979;
 }
 .ms-selected{
@@ -311,18 +311,18 @@ height:16px;
 }
 .ms-descriptiontext{
 color:#FFFFFF;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-descriptiontext a{
 color:#B6B04D;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-separator{
 color:#FFFFFF;
 }
 .ms-authoringcontrols{
 background-color:#111111;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 }
 .ms-alternating{
@@ -338,7 +338,7 @@ background-color:#111111;
 }
 .ms-sectionheader{
 color:#FFFFFF;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:bold;
 }
 .ms-sectionline{
@@ -348,10 +348,10 @@ background-color:#343434;
 background-color:#343434;
 }
 .ms-propertysheet{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-propertysheet th{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 font-weight:bold;
 }
@@ -371,7 +371,7 @@ color:#707849;
 text-decoration:underline;
 }
 .ms-itemheader a{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:bold;
 color:#FFFFFF;
 text-decoration:none;
@@ -388,19 +388,19 @@ color:#FFFFFF;
 text-decoration:underline;
 }
 .ms-vh{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#B6B04D;
 text-decoration:none;
 font-weight:normal;
 }
 .ms-vb{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 height:18px;
 vertical-align:top;
 }
 .ms-homepagetitle{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 font-weight:bold;
 text-decoration:none;
@@ -411,14 +411,14 @@ color:#B6B04D;
 }
 .ms-addnew{
 font-weight:normal;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 text-decoration:none;
 }
 .ms-cal{
 border-collapse:collapse;
 table-layout:fixed;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 cursor:default;
 }
 .ms-caltop{
@@ -434,7 +434,7 @@ border:none;
 text-align:center;
 background-color:#FFFFFF;
 color:#131313;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 padding:2px;
 }
 .ms-caldow{
@@ -481,7 +481,7 @@ background-color:#797979;
 color:#FFFFFF;
 }
 .ms-caldowdown{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:bold;
 color:#FFFFFF;
 text-align:center;
@@ -497,7 +497,7 @@ display:none;
 background:#FFFFFF;
 }
 .ms-datepicker{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 background-color:#131313;
 color:#FFFFFF;
 border:2 outset activeborder;
@@ -549,7 +549,7 @@ IMG.ms-button{
 cursor:hand;
 }
 .ms-toolbar, .ms-toolbar a:visited{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 text-decoration:none;
 color:#B6B04D;
 }
@@ -574,12 +574,12 @@ border:1px solid #575757;
 background-color:#757575;
 }
 .ms-gridT1{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 text-align:center;
 color:#969696;
 }
 select{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 hr{
 color:#494949;
@@ -601,16 +601,16 @@ height:19px;
 }
 .ms-gridtext{
 cursor:default;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 height:19px;
 }
 .ms-formbody{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 vertical-align:top;
 }
 table.ms-form th{
 color:#FFFFFF;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:normal;
 vertical-align:top;
 }
@@ -619,31 +619,31 @@ width:100%;
 vertical-align:top;
 }
 .ms-formrecurrence{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:normal;
 vertical-align:top;
 }
 .ms-long{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 width:386px;
 }
 .ms-banner a:link{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 font-weight:bold;
 text-decoration:none;
 }
 .ms-banner a:visited{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 font-weight:bold;
 text-decoration:none;
 }
 .ms-nav td, .ms-nav .ms-SPZoneLabel, .ms-input{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-nav th{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:normal;
 color:#FFFFFF;
 }
@@ -700,7 +700,7 @@ background-color:#343434;
 border-color:#757575;
 }
 .ms-pagetitle{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-pagetitle a{
 text-decoration:none;
@@ -710,7 +710,7 @@ text-decoration:underline;
 }
 .ms-pagecaption{
 color:#FFFFFF;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-selectedtitle{
 background-color:#111111;
@@ -732,7 +732,7 @@ height:16px;
 }
 .ms-alerttext{
 color:#DB6751;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-sectionheader a{
 color:#FFFFFF;
@@ -747,19 +747,19 @@ color:#FFFFFF;
 text-decoration:none;
 }
 .ms-discussiontitle{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 font-weight:bold;
 }
 .ms-vh2{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#B6B04D;
 text-decoration:none;
 font-weight:normal;
 vertical-align:top;
 }
 .ms-vh-icon{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#B6B04D;
 text-decoration:none;
 font-weight:normal;
@@ -767,7 +767,7 @@ vertical-align:top;
 width:22px;
 }
 .ms-vh-icon-empty{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#B6B04D;
 text-decoration:none;
 font-weight:normal;
@@ -775,40 +775,40 @@ vertical-align:top;
 width:0px;
 }
 .ms-vh-left{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#B6B04D;
 text-decoration:none;
 font-weight:normal;
 }
 .ms-vh-left-icon{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#B6B04D;
 text-decoration:none;
 font-weight:normal;
 width:22px;
 }
 .ms-vh-left-icon-empty{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#B6B04D;
 text-decoration:none;
 font-weight:normal;
 width:0px;
 }
 .ms-vh-right{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#B6B04D;
 text-decoration:none;
 font-weight:normal;
 }
 .ms-vh-right-icon{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#B6B04D;
 text-decoration:none;
 font-weight:normal;
 width:22px;
 }
 .ms-vh-right-icon-empty{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#B6B04D;
 text-decoration:none;
 font-weight:normal;
@@ -822,7 +822,7 @@ text-decoration:none;
 text-decoration:underline;
 }
 .ms-vhImage{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#ABABAB;
 text-decoration:none;
 font-weight:normal;
@@ -830,7 +830,7 @@ vertical-align:top;
 width:18pt;
 }
 .ms-gb{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 height:18px;
 color:#FFFFFF;
 background-color:#111111;
@@ -842,7 +842,7 @@ font-size:0.68em;
 background-color:#111111;
 }
 .ms-vb, .ms-vb2, .ms-GRFont, .ms-vb-user{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 vertical-align:top;
 }
 .ms-vb a, .ms-vb2 a, .ms-GRStatusText a, .ms-vb-user a{
@@ -876,19 +876,19 @@ padding-bottom:0px;
 }
 .ms-addnew{
 font-weight:normal;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#B6B04D;
 text-decoration:none;
 }
 .ms-error{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:normal;
 color:#FF0000;
 }
 .ms-vcal{
 border-collapse:separate;
 table-layout:fixed;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 cursor:default;
 }
 .ms-Dcal{
@@ -896,7 +896,7 @@ border-collapse:collapse;
 border-left:1px solid #343434;
 border-right:1px solid #343434;
 table-layout:fixed;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 cursor:default;
 }
 .ms-calDmidHour{
@@ -978,7 +978,7 @@ color:#FFFFFF;
 }
 .ms-Vapptsingle a, .ms-Vappt a{
 text-decoration:none;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:normal;
 color:#B6B04D;
 overflow:hidden;
@@ -994,7 +994,7 @@ color:#FFFFFF;
 padding:0px;
 text-align:center;
 vertical-align:top;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:normal;
 height:12px;
 overflow:hidden;
@@ -1003,7 +1003,7 @@ color:#FFFFFF;
 }
 .ms-Vevt a{
 text-decoration:none;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:normal;
 color:#FFFFFF;
 }
@@ -1099,7 +1099,7 @@ cursor:move;
 .ms-imglibmenu{
 background-color:#757575;
 cursor:hand;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#B6B04D;
 }
 .ms-imglibmenutext{
@@ -1123,15 +1123,15 @@ table.ms-imglibPreviewTable{
 display:none;
 }
 .UserShadedRegion{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 background-color:#111111;
 }
 .UserCaption{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 background-color:#111111;
 }
 .UserConfiguration{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 background-color:#111111;
 }
 .UserDottedLine{
@@ -1143,18 +1143,18 @@ background-image:url(dot_slate.gif);
 background-repeat:repeat-x;
 }
 .UserButton, .UserInput, .UserSelect{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#000000;
 }
 .UserNotification{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 padding:4px;
 COLOR:#727272;
 }
 .UserToolBarTextArea{
 padding-bottom:5px;
 font-weight:normal;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .UserToolbarTextArea A:link{
 COLOR:#B6B04D;
@@ -1170,7 +1170,7 @@ TEXT-DECORATION:underline;
 }
 .UserToolbarDisabledLink{
 COLOR:#000000;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 padding:4px;
 }
 .UserToolbarImage{
@@ -1182,7 +1182,7 @@ text-align:center;
 .UserToolBarImageArea{
 padding-bottom:5px;
 font-weight:normal;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .UserToolbarSelectedImage{
 border-right:medium none;
@@ -1196,7 +1196,7 @@ text-align:center;
 .UserGenericHeader{
 font-weight:bold;
 color:#FFFFFF;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .UserGeneric{
 padding:8px 5px 7px 5px;
@@ -1246,14 +1246,14 @@ background-repeat:repeat-x;
 background-color:transparent;
 }
 .UserCellSelected{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 padding:1px 4px 2px 4px;
 background-color:#131313;
 border:solid 1px #859928;
 color:#FFFFFF;
 }
 .UserCell{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 padding:2px 5px 3px 5px;
 color:#FFFFFF;
 }
@@ -1284,7 +1284,7 @@ background-color:#9C9A9C;
 .ms-ToolPaneTitle{
 color:#FFFFFF;
 font-weight:bold;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 padding-top:3px;
 padding-bottom:3px;
 background-color:#9C9A9C;
@@ -1292,12 +1292,12 @@ background-color:#9C9A9C;
 .ms-ToolPaneFooter{
 background-color:#9C9A9C;
 padding:5px;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 }
 .ms-ToolPaneError{
 color:#db6751;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 padding:2px;
 }
 .ms-ToolPaneInfo{
@@ -1306,7 +1306,7 @@ padding-top:5px;
 padding-bottom:0px;
 padding-left:5px;
 color:#FFFFFF;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 background-color:#404340;
 }
 .ms-ToolPartSpacing{
@@ -1321,13 +1321,13 @@ background-color:#343434;
 .ms-TPTitle{
 color:#FFFFFF;
 font-weight:bold;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 padding-top:2px;
 padding-bottom:2px;
 }
 .ms-TPBody{
 color:#FFFFFF;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-TPBody a:link, .ms-TPBody a:visited, .ms-TPBody a:hover{
 color:#B6B04D;
@@ -1338,10 +1338,10 @@ cursor:hand;
 }
 .ms-TPInput{
 color:#000000;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-CategoryTitle{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 font-weight:bold;
 text-decoration:none;
 }
@@ -1364,12 +1364,12 @@ border:#FFFFFF 3px solid;
 }
 .ms-SPZoneLabel{
 color:#949494;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 padding:0;
 }
 .ms-SPError{
 color:#DB6751;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 padding-right:2px;
 padding-top:2px;
 padding-bottom:2px;
@@ -1378,7 +1378,7 @@ border-bottom:#404340 2px solid;
 }
 .ms-SPZoneCaption{
 color:#949494;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-WPDesign{
 background-color:#404340;
@@ -1388,7 +1388,7 @@ background-color:#404340;
 }
 .ms-WPTitle{
 font-weight:bold;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#FFFFFF;
 padding-top:2px;
 padding-bottom:2px;
@@ -1407,7 +1407,7 @@ cursor:hand;
 border:#7294AF 3px dashed;
 }
 .ms-WPBody{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-WPBody table, .ms-TPBody table{
 }
@@ -1423,7 +1423,7 @@ text-decoration:underline;
 font-weight:bold;
 }
 .ms-WPBody td{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-WPBody h1, .ms-TPBody h1{
 font-weight:bold;
@@ -1458,7 +1458,7 @@ border:solid 1px #343434;
 background-color:#404340;
 }
 .ms-SPLink{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 color:#b6b04d;
 }
 .ms-SPLink a:link, .ms-SPLink a:visited{
@@ -1466,7 +1466,7 @@ color:#b6b04d;
 text-decoration:none;
 }
 .ms-SPButton{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-PartSpacingVertical, .ms-PartSpacingHorizontal{
 padding-top:10px;
@@ -1478,11 +1478,11 @@ background-repeat:repeat-x;
 }
 .ms-PageHeaderDate{
 color:#FFFFFF;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-PageHeaderGreeting{
 color:#FFFFFF;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-rtApplyBackground{
 background-color:#797979;
@@ -1497,14 +1497,14 @@ font:normal 8pt Verdana,Arial,Helvetica,sans-serif;
 }
 .ms-subsmanageheader{
 background-color:#111111;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 text-decoration:none;
 font-weight:bold;
 vertical-align:top;
 }
 .ms-subsmanagecell{
 color:#FFFFFF;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 height:18px;
 vertical-align:top;
 }
@@ -1540,7 +1540,7 @@ background-color:#111111;
 .ms-smallheader{
 font-weight:bold;
 color:#FFFFFF;
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 }
 .ms-smallsectionline{
 padding-left:0;
@@ -1550,7 +1550,7 @@ padding-bottom:0;
 border-bottom:1px solid #757575;
 }
 .ms-tabselected{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 background-color:#343434;
 border-right:#343434 2px solid;
 border-left:#343434 2px solid;
@@ -1564,7 +1564,7 @@ padding-right:10px;
 color:#FFFFFF;
 }
 .ms-tabinactive{
-font-family:Verdana,Arial,Helvetica,sans-serif;
+font-family: 'Space Mono', monospace;
 background-color:#4B4B4B;
 border-right:#4B4B4B 2px solid;
 border-left:#4B4B4B 2px solid;
