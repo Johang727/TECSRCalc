@@ -1,14 +1,14 @@
 <!--START_SECTION:metrics-->
 ## Statistics:
- - Timestamp: **2025-08-25 13:10:02**
+ - Timestamp: **2025-08-26 02:55:54**
 
 Random Forest Model:
- - MSE: **591912.68**
- - R2: **0.9445**
+ - MSE: **951846.09**
+ - R2: **0.8872**
 
 Linear Model:
- - MSE: **1063111.91**
- - R2: **0.9003**
+ - MSE: **1428654.98**
+ - R2: **0.8307**
 
 ## Data:
  - <1K SR: **0**
@@ -19,19 +19,19 @@ Linear Model:
  - 5 - 6K SR: **31**
  - 6 - 7K SR: **59**
  - 7 - 8K SR: **49**
- - 8 - 9K SR: **118**
+ - 8 - 9K SR: **125**
  - 9 - 10K SR: **116**
  - 10 - 11K SR: **342**
  - 11 - 12K SR: **49**
  - 12 - 13K SR: **27**
- - 13 - 14K SR: **24**
- - 14 - 15K SR: **12**
+ - 13 - 14K SR: **31**
+ - 14 - 15K SR: **16**
  - 15 - 16K SR: **0**
- - 16 - 17K SR: **21**
- - 17K+ SR: **7**
+ - 16 - 17K SR: **22**
+ - 17K+ SR: **17**
  - 
- - Training Data: **870**
- - Testing Data: **97**
- - All Data: **967**
+ - Training Data: **896**
+ - Testing Data: **100**
+ - All Data: **996**
 
 <!--END_SECTION:metrics-->
