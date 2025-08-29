@@ -63,6 +63,22 @@ metrics.append(f"\n## Data:\n")
 
 allData:int = size+tSize
 
+def make_graph(percent: float):
+    """
+    Make text progress bar.
+    Length of the progress bar is 25 characters.
+
+    :param percent: Completion percent of the progress bar.
+    :return: The string progress bar representation.
+
+    Taken from https://github.com/anmol098/waka-readme-stats
+    """
+    barLength:int = 25
+    done_block, empty_block = "█", "░"
+    percent_quart = round(percent / (100/barLength))
+    return f"{done_block * percent_quart}{empty_block * (barLength - percent_quart)}"
+
+
 srList:list[int] = [srCounts.get('<1K SR'), srCounts.get('1-2K SR'), srCounts.get('2-3K SR'),
                     srCounts.get('3-4K SR'), srCounts.get('4-5K SR'), srCounts.get('5-6K SR'),
                     srCounts.get('6-7K SR'), srCounts.get('7-8K SR'), srCounts.get('8-9K SR'),
@@ -72,11 +88,24 @@ srList:list[int] = [srCounts.get('<1K SR'), srCounts.get('1-2K SR'), srCounts.ge
 
 srPercent:list[float] = [round((x/allData)*100) for x in srList]
 
+srLabelList:list[str] = ['<1K SR\t\t\t\t', '1 - 2K SR\t\t\t', '2 - 3K SR\t\t\t', '3 - 4K SR\t\t\t',
+                        '4 - 5K SR\t\t\t', '5 - 6K SR\t\t\t', '6 - 7K SR\t\t\t',
+                        '7 - 8K SR\t\t\t', '8 - 9K SR\t\t\t', '9 - 10K SR\t\t\t', '10 - 11K SR\t\t\t',
+                        '11 - 12K SR\t\t\t','12 - 13K SR\t\t\t', '13 - 14K SR\t\t\t','14 - 15K SR\t\t\t',
+                        '15 - 16K SR\t\t\t','16 - 17K SR\t\t\t','17K+ SR\t\t\t\t']
+
+
+
 print(srPercent)
 
 metrics.append("```text\n")
-metrics.append(f"<1K SR:\t\t\t\t{srList[0]} points\t\t{srPercent[0]}\n")
-metrics.append(f"1 - 2K SR:\t\t\t{srCounts.get('1-2K SR')} points\t\t\n") # TODO: finish completing these
+
+
+for i in range(len(srList)):
+    metrics.append(f"{srLabelList[i]}{srList[i]} points\t\t{make_graph(srPercent[i])}\n")
+
+"""metrics.append(f"<1K SR:\t\t\t\t{srList[0]} points\t\t{make_graph(srPercent[0])}\n")
+metrics.append(f"1 - 2K SR:\t\t\t{srCounts.get('1-2K SR')} points\t\t{make_graph(srPercent[1])}\n") # TODO: finish completing these
 metrics.append(f"2 - 3K SR:\t\t\t{srCounts.get('2-3K SR')} points\t\t\n")
 metrics.append(f"3 - 4K SR:\t\t\t{srCounts.get('3-4K SR')} points\t\t\n")
 metrics.append(f"4 - 5K SR:\t\t\t{srCounts.get('4-5K SR')} points\t\t\n")
@@ -93,13 +122,13 @@ metrics.append(f"14 - 15K SR:\t\t{srCounts.get('14-15K SR')} points\t\t\n")
 metrics.append(f"15 - 16K SR:\t\t{srCounts.get('15-16K SR')} points\t\t\n")
 metrics.append(f"16 - 17K SR:\t\t{srCounts.get('16-17K SR')} points\t\t\n")
 metrics.append(f"17K+ SR:\t\t\t{srCounts.get('>17K SR')} points\t\t\n")
-
+"""
 
 metrics.append(f"\n")
 
-metrics.append(f"Training Data: {size}\n")
-metrics.append(f"Testing Data: {tSize}\n")
-metrics.append(f"All Data: {size+tSize}\n")
+metrics.append(f"Training Data:\t\t{size} points\t\t{make_graph((size/allData)*100)}\n")
+metrics.append(f"Testing Data:\t\t{tSize} points\t\t{make_graph((tSize/allData)*100)}\n")
+metrics.append(f"All Data:\t\t\t{allData} points\t\t{make_graph(100)}\n")
 
 metrics.append("```")
 
