@@ -10,10 +10,8 @@ import os
 # Create the Flask application instance
 app = Flask(__name__, static_folder='docs', template_folder='docs')
 
-if os.environ.get("RENDER", "false") == "true":
-    CORS(app, origins="https://johang727.github.io")
-else:
-    CORS(app)
+CORS(app, origins="https://johang727.github.io")
+
 
 # Load the trained model when the application starts
 # This is more efficient than loading it for every request
