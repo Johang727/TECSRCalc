@@ -126,5 +126,5 @@ def getMetrics():
 
 if __name__ == '__main__':
     # only runs when run locally
-    app.run(debug=True)
+    app.run(debug=os.environ.get("FLASK_DEBUG", "0") == "1")
 
