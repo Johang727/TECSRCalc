@@ -141,3 +141,7 @@ for meow in rd[secEnd-1:]:
 with open("README.md", "w") as readme:
     for meow in metrics:
         readme.write(f"{meow}")
+
+
+print("graph time :3")
+

@@ -1,3 +1,19 @@
+## About
+Small project I decided to start to determine estimated SR based off of APM and DPM. 
+
+There is a hidden timestamp value that, essentially, accounts for SR inflation.
+
+Data was collected from streams on twitch.tv and personal games, no personal data in disclosed, just SR, APM, and DPM.
+
+I aim to collect the following data to avoid unrepresentative data:
+ - Match ends in Phase 3 (high rank)
+ - Match lasts at least 3 minutes (low rank)
+    - Lower rating players typically don't make it to Phase 3
+ - <2K difference between players
+
+Note: Data contained in old_data or similar files might not reflect this.
+
+
 <!--START_SECTION:metrics-->
 ## Statistics:
  - Timestamp: **2025-08-26 02:55:54**

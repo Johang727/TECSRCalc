@@ -112,13 +112,27 @@ metrics = {
     'size': len(xTrain),
     'testSize': len(xTest),
     'timestamp': timestamp,
-    'srCounts': srCounts
+    'srCounts': srCounts,
+    'dataX': x,
+    'dataY': y
 }
 
 print("Saving model...")
 joblib.dump(metrics, "model.pkl")
 print("Saved as \"model.pkl\"")
 
-end = time.time()
 
+
+print("Generating graph..")
+
+
+
+
+
+
+
+
+
+end = time.time()
 print(f"Runtime: {end-start:.2f}s")
+
