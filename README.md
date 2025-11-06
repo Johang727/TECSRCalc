@@ -33,7 +33,7 @@ Tetris Effect: Connected only directly provides 5 metrics:
             <details>
             <summary>Image from the Enhance Discord </summary>
 
-            ![alt text](image-1.png)
+            ![alt text](docs/images/image-1.png)
             </details>
     - These situations are rare, but it's not uncommon to see lots of ZAPM fluctuation.
 - Score
@@ -95,4 +95,4 @@ All Data:			1046 points		██████████████████�
 
 | Speed (DPM) vs. SR | Attack (APM) vs. SR | Efficiency (APP) vs. SR |
 | :---: | :---: | :---: |
-| ![DPM vs SR](dpm.png) | ![APM vs SR](apm.png) | ![APP vs SR](app.png) |
+| ![DPM vs SR](graphs/dpm.png) | ![APM vs SR](graphs/apm.png) | ![APP vs SR](graphs/app.png) |

@@ -5,7 +5,6 @@ from flask_cors import CORS
 import datetime
 import numpy as np
 import re
-import os
 
 # Create the Flask application instance
 app = Flask(__name__, static_folder='docs', template_folder='docs')
@@ -127,4 +126,3 @@ def getMetrics():
 if __name__ == '__main__':
     # only runs when run locally
     app.run(debug=True)
-
