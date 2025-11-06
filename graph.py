@@ -59,7 +59,7 @@ fig, ax = plt.subplots(1, 1)
 ax.scatter(df["SR"], df["APP"], color="#83016B", alpha=0.3)
 ax.set_title("APP vs. SR", fontsize=12)
 ax.set_xlabel("Skill Rating (SR)")
-ax.set_ylabel("Attack Per Piece (APM)")
+ax.set_ylabel("Attack Per Piece (APP)")
 ax.grid(True, linestyle='--', alpha=0.6)
 
 # apparently this fits a line?

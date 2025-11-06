@@ -20,6 +20,38 @@ Aims to determine a player's estimated Skill Rating (SR) in Tetris Effect: Conne
 *Note: Data contains no usernames nor sources for anonymity.*
 </details>
 
+<details>
+<summary>Why only 2 (technically 3) features?</summary>
+
+Tetris Effect: Connected only directly provides 5 metrics:
+- Drops Per Minute (DPM); aka `Speed`
+- Attack Per Minute (APM); aka `Attack`
+- Zone Attack Per Minute (ZAPM)
+    - Zone attack is a weird metric, as much as I'd like to include it, zoning in Phase 1 (the longest and easiest phase to zone in) and then never again can result in an over-inflated value.
+    - Furthermore, since `ZAPM` only divides by time spent in zone, a zone can last a few frames, and as long as you scored just one line, you will have a `ZAPM` in the hundreds.
+        - See below for some images:
+            <details>
+            <summary>Image from the Enhance Discord </summary>
+
+            ![alt text](image-1.png)
+            </details>
+    - These situations are rare, but it's not uncommon to see lots of ZAPM fluctuation.
+- Score
+    - Score determines the phase of the game. Lower rating players typically don't reach Phase 3 (60k points), and higher rating players reach it in a minute or two.
+    - The reason this is not relevant is because efficiency is already dictated by APM/DPM.
+- Time
+    - No matter what rating you are, if you are against an evenly matched opponent, rounds can last 10 minutes or more. (The longest round I've had is 20 minutes, the shortest a few seconds)
+
+If we expand these, we get:
+- Attack Efficiency `(APP = APM/DPM)`
+    - This was not included because it is directly related to the two main features.
+- Score Efficiency `(Score/(DPM*Time))`
+    - Very similar to attack efficiency, therefore is not included in the dataset.
+    - Zone provides a higher boost in `Attack` than in `Score`, in a mode about trying to topout the other player, `Attack` is really what matters the most.
+
+
+</details>
+
 
 <!--START_SECTION:metrics-->
 ## Statistics:
