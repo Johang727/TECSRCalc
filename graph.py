@@ -32,7 +32,7 @@ print("Creating DPM graph...")
 fig, ax = plt.subplots(1, 1)
 
 # make dpm graph
-ax.scatter(df["SR"], df["DPM"], color="#FF5733", alpha=0.3)
+ax.scatter(df["SR"], df["DPM"], color="#FF5733", alpha=0.1)
 ax.set_title("DPM vs. SR", fontsize=12)
 ax.set_xlabel("Skill Rating (SR)")
 ax.set_ylabel("Drops Per Minute (DPM)")
@@ -52,7 +52,7 @@ print("Creating APM graph...")
 fig, ax = plt.subplots(1, 1)
 
 # make apm graph
-ax.scatter(df["SR"], df["APM"], color="#016583", alpha=0.3)
+ax.scatter(df["SR"], df["APM"], color="#016583", alpha=0.1)
 ax.set_title("APM vs. SR", fontsize=12)
 ax.set_xlabel("Skill Rating (SR)")
 ax.set_ylabel("Attack Per Minute (APM)")
@@ -74,7 +74,7 @@ print("Creating APP graph...")
 fig, ax = plt.subplots(1, 1)
 
 # make app graph 
-ax.scatter(df["SR"], df["APP"], color="#83016B", alpha=0.3)
+ax.scatter(df["SR"], df["APP"], color="#83016B", alpha=0.1)
 ax.set_title("APP vs. SR", fontsize=12)
 ax.set_xlabel("Skill Rating (SR)")
 ax.set_ylabel("Attack Per Piece (APP)")
