@@ -13,11 +13,11 @@ start = time.time()
 
 print("Merging CSV files together...")
 
-dataFolder = "data/"
 
 # variables
 
 # constants
+DATA_FOLDER = "data/SRCalc/"
 RANDOM_STATE:int = 136
 TEST_SIZE:float = 0.1
 TREE_AMOUNT:int = 200
@@ -32,9 +32,9 @@ r2:list[float] = []
 models:list = []
 
 # take all csvs from folder and combine them
-for fn in os.listdir(dataFolder):
+for fn in os.listdir(DATA_FOLDER):
     if fn.endswith(".csv"):
-        fp = os.path.join(dataFolder, fn)
+        fp = os.path.join(DATA_FOLDER, fn)
         df = pd.read_csv(fp, sep=";")
         dfList.append(df)
 masterDF:pd.DataFrame = pd.concat(dfList, ignore_index=True)
