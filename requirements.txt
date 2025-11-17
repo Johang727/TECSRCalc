@@ -4,3 +4,4 @@ joblib
 flask
 gunicorn
 flask-cors
+matplotlib

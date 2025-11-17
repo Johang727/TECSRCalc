@@ -8,6 +8,10 @@ import joblib
 import datetime
 import time
 import numpy as np
+import sys
+from scipy import stats
+
+
 
 start = time.time()
 
@@ -16,7 +20,6 @@ print("Merging CSV files together...")
 
 # variables
 
-# constants
 DATA_FOLDER = "data/SRCalc/"
 RANDOM_STATE:int = 136
 TEST_SIZE:float = 0.1
@@ -24,8 +27,6 @@ TREE_AMOUNT:int = 200
 SR_BINS:list[int] = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000]
 SR_LABELS:list[str] = ['<1K SR', '1-2K SR', '2-3K SR', '3-4K SR', '4-5K SR', '5-6K SR', '6-7K SR', '7-8K SR', '8-9K SR', '9-10K SR', '10-11K SR', '11-12K SR', '12-13K SR', '13-14K SR', '14-15K SR', '15-16K SR', '16-17K SR', '>17K SR']
 
-# normal
-# the goal is to have it in lists to compact it and make it easier to read.
 dfList:list[pd.DataFrame] = []
 mse:list[float] = []
 r2:list[float] = []
@@ -43,6 +44,60 @@ masterDF:pd.DataFrame = pd.concat(dfList, ignore_index=True)
 masterDF['SRBins'] = pd.cut(masterDF['SR'], bins=SR_BINS, labels=SR_LABELS, right=False)
 srCounts:dict[str,int] = masterDF['SRBins'].value_counts().sort_index().to_dict()
 
+print(srCounts)
+
+def printMinMax(masterDF) -> None:
+
+    MAX_SR = masterDF['SR'].max()
+    MIN_SR = masterDF['SR'].min()
+
+
+    print("SR Range:")
+    print(MIN_SR, MAX_SR)
+
+    MAX_DPM = masterDF["DPM"].max()
+    MIN_DPM = masterDF["DPM"].min()
+
+    print("DPM Range:")
+
+    print(MIN_DPM, MAX_DPM)
+
+
+    MAX_APM = masterDF["APM"].max()
+    MIN_APM = masterDF["APM"].min()
+
+    print("APM Range:")
+    print(MIN_APM, MAX_APM)
+
+printMinMax(masterDF)
+
+# stole this from stack overflow
+
+numeric_df = masterDF.select_dtypes(include=np.number)
+
+q1 = numeric_df.quantile(.25); q3 = numeric_df.quantile(.75)
+iqr = q3 - q1
+
+lower_bounds = q1 - 2.5 * iqr
+upper_bounds = q3 + 2.5 * iqr
+
+iqr_mask = ((numeric_df >= lower_bounds) & (numeric_df <= upper_bounds)).all(axis=1) & (masterDF["APM"] > 0.0)
+
+iqr_mask = iqr_mask
+masterDF = masterDF[iqr_mask]
+
+print("Apparently outliers are dropped?")
+
+printMinMax(masterDF)
+
+# count SR in each section
+masterDF['SRBins'] = pd.cut(masterDF['SR'], bins=SR_BINS, labels=SR_LABELS, right=False)
+srCounts:dict[str,int] = masterDF['SRBins'].value_counts().sort_index().to_dict()
+
+print(srCounts)
+
+sys.exit(0)
+
 # data amount
 print(f"Instances: {len(masterDF)}")
 print(f"Random state of {RANDOM_STATE} used.")
@@ -52,7 +107,7 @@ print("\nTraining started...\n")
 x = masterDF[["Date", "DPM", "APM"]]
 y = masterDF["SR"]
 
-xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size=TEST_SIZE, random_state=RANDOM_STATE)
+xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size=TEST_SIZE, random_state=RANDOM_STATE, stratify=masterDF["SR"])
 
 
 # print statistics for the SR column in the training set
@@ -102,12 +157,9 @@ print(f"R-squared: {r2[1]:.4f}")
 timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 metrics = {
-    'RFmodel': models[0],
-    'RF_mse': mse[0],
-    'RF_r2': r2[0],
-    'LRmodel': models[1],
-    'LR_mse': mse[1],
-    'LR_r2': r2[1],
+    'models':models,
+    'r2':r2,
+    'mse':mse,
     'size': len(xTrain),
     'testSize': len(xTest),
     'timestamp': timestamp,

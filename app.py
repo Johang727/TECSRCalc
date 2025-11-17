@@ -22,13 +22,13 @@ try:
     print("Attempting to load model...")
     model_mets = joblib.load(MODEL_PATH)
 
-    RFmodel = model_mets['RFmodel']
-    RF_mse = model_mets['RF_mse']
-    RF_r2 = model_mets['RF_r2']
+    RFmodel = model_mets['models'][0]
+    RF_mse = model_mets['mse'][0]
+    RF_r2 = model_mets['r2'][0]
 
-    LRmodel = model_mets['LRmodel']
-    LR_mse = model_mets['LR_mse']
-    LR_r2 = model_mets['LR_r2']
+    LRmodel = model_mets['models'][1]
+    LR_mse = model_mets['mse'][1]
+    LR_r2 = model_mets['r2'][1]
 
     size = model_mets['size']
     timestamp = model_mets['timestamp']
@@ -47,7 +47,7 @@ def home():
 def predict():
     # Handles prediction, renamed calculation later, since I liked that name better after testing
     # Check if the model was loaded successfully
-    if RFmodel is None and LRmodel:
+    if not RFmodel and not LRmodel:
         return jsonify({'error': 'Model file not found!'}), 500
     # From what I understand 500 errors are server-side; 400 are client-side
     # TODO, have it redirect to a new page with contact information
