@@ -10,7 +10,7 @@ import os
 # Create the Flask application instance
 app = Flask(__name__, static_folder='docs', template_folder='docs')
 
-CORS(app, origins="https://tecsrcalc.pages.dev/")
+CORS(app, origins="https://tecsrcalc.pages.dev")
 
 
 # Load the trained model when the application starts
