@@ -8,10 +8,12 @@ MODEL_PATH = 'model.pkl'
 try:
     model_mets = joblib.load(MODEL_PATH)
 
-    RF_mse = model_mets['RF_mse']
-    RF_r2 = model_mets['RF_r2']
-    LR_mse = model_mets['LR_mse']
-    LR_r2 = model_mets['LR_r2']
+    RF_mse = model_mets['mse'][0]
+    RF_r2 = model_mets['r2'][0]
+
+    LR_mse = model_mets['mse'][1]
+    LR_r2 = model_mets['r2'][1]
+
     size = model_mets['size']
     tSize = model_mets['testSize']
     ts = model_mets['timestamp']
