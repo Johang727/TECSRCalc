@@ -3,7 +3,9 @@ import os
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import mean_squared_error, r2_score
+from sklearn.neural_network import MLPRegressor
 import joblib
 import datetime
 import time
@@ -40,38 +42,7 @@ for fn in os.listdir(DATA_FOLDER):
         dfList.append(df)
 masterDF:pd.DataFrame = pd.concat(dfList, ignore_index=True)
 
-# count SR in each section
-masterDF['SRBins'] = pd.cut(masterDF['SR'], bins=SR_BINS, labels=SR_LABELS, right=False)
-srCounts:dict[str,int] = masterDF['SRBins'].value_counts().sort_index().to_dict()
-
-print(srCounts)
-
-def printMinMax(masterDF) -> None:
-
-    MAX_SR = masterDF['SR'].max()
-    MIN_SR = masterDF['SR'].min()
-
-
-    print("SR Range:")
-    print(MIN_SR, MAX_SR)
-
-    MAX_DPM = masterDF["DPM"].max()
-    MIN_DPM = masterDF["DPM"].min()
-
-    print("DPM Range:")
-
-    print(MIN_DPM, MAX_DPM)
-
-
-    MAX_APM = masterDF["APM"].max()
-    MIN_APM = masterDF["APM"].min()
-
-    print("APM Range:")
-    print(MIN_APM, MAX_APM)
-
-printMinMax(masterDF)
-
-# stole this from stack overflow
+old_instances:int = len(masterDF)
 
 numeric_df = masterDF.select_dtypes(include=np.number)
 
@@ -88,7 +59,9 @@ masterDF = masterDF[iqr_mask]
 
 print("Apparently outliers are dropped?")
 
-printMinMax(masterDF)
+# data amount
+print(f"Instances: {len(masterDF)}")
+print(f"Outliers Removed: {len(masterDF) - old_instances}")
 
 # count SR in each section
 masterDF['SRBins'] = pd.cut(masterDF['SR'], bins=SR_BINS, labels=SR_LABELS, right=False)
@@ -96,18 +69,12 @@ srCounts:dict[str,int] = masterDF['SRBins'].value_counts().sort_index().to_dict(
 
 print(srCounts)
 
-sys.exit(0)
-
-# data amount
-print(f"Instances: {len(masterDF)}")
-print(f"Random state of {RANDOM_STATE} used.")
-
 
 print("\nTraining started...\n")
 x = masterDF[["Date", "DPM", "APM"]]
 y = masterDF["SR"]
 
-xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size=TEST_SIZE, random_state=RANDOM_STATE, stratify=masterDF["SR"])
+xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size=TEST_SIZE, random_state=RANDOM_STATE, stratify=masterDF["SRBins"])
 
 
 # print statistics for the SR column in the training set
@@ -128,10 +95,14 @@ print("Training set size:", len(xTrain))
 print("Testing set size:", len(xTest))
 
 # create models
-models.append(RandomForestRegressor(n_estimators=TREE_AMOUNT, random_state=RANDOM_STATE))
+models.append(RandomForestRegressor(n_estimators=TREE_AMOUNT, random_state=RANDOM_STATE, n_jobs=-1))
 models[0].fit(xTrain, yTrain)
 models.append(LinearRegression())
 models[1].fit(xTrain, yTrain)
+models.append(GradientBoostingRegressor(n_estimators=TREE_AMOUNT, random_state=RANDOM_STATE))
+models[2].fit(xTrain, yTrain)
+
+
 
 # test models
 
@@ -152,6 +123,16 @@ r2.append(r2_score(yTest, yPred))
 print("\n----\nTesting Linear\n")
 print(f"Mean Squared Error: {mse[1]:.2f}")
 print(f"R-squared: {r2[1]:.4f}")
+
+# test Gradient Boosting Regressor
+yPred = models[2].predict(xTest)
+mse.append(mean_squared_error(yTest, yPred))
+r2.append(r2_score(yTest, yPred))
+
+print("\n----\nTesting Gradient Boosting\n")
+print(f"Mean Squared Error: {mse[2]:.2f}")
+print(f"R-squared: {r2[2]:.4f}")
+
 
 
 timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
