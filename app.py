@@ -9,7 +9,7 @@ import re
 # Create the Flask application instance
 app = Flask(__name__, static_folder='docs', template_folder='docs')
 
-CORS(app, origins="https://johang727.github.io")
+CORS(app, origins="https://tecsrcalc.pages.dev")
 
 
 # Load the trained model when the application starts
@@ -125,4 +125,5 @@ def getMetrics():
 
 if __name__ == '__main__':
     # only runs when run locally
-    app.run(debug=True)
+    app.run(debug=os.environ.get("FLASK_DEBUG", "0") == "1")
+
