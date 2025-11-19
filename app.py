@@ -96,7 +96,8 @@ def predict():
         calc = round(LRmodel.predict(inData)[0])
     elif modelChoice == "GradientBoosting":
         modelUsed = "Gradient Boosting"
-        calc = 0 # TODO: actually make it work
+        tp = [tree.predict(inData) for tree in GBmodel.estimators_]
+        calc = f"{round(np.mean(tp))} ± {round(np.std(tp))}"
     else:
         calc = 0
         modelUsed = "Error!"

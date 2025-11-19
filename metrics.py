@@ -14,6 +14,9 @@ try:
     LR_mse = model_mets['mse'][1]
     LR_r2 = model_mets['r2'][1]
 
+    GB_mse = model_mets['mse'][1]
+    GB_r2 = model_mets['r2'][1]
+
     size = model_mets['size']
     tSize = model_mets['testSize']
     ts = model_mets['timestamp']
@@ -59,6 +62,11 @@ metrics.append("\nLinear Model:")
 
 metrics.append(f"\n - MSE: **{LR_mse:.2f}**\n")
 metrics.append(f" - R2: **{LR_r2:.4f}**\n")
+
+metrics.append("\nGradient Boosting Model:")
+
+metrics.append(f"\n - MSE: **{GB_mse:.2f}**\n")
+metrics.append(f" - R2: **{GB_r2:.4f}**\n")
 
 
 metrics.append(f"\n## Data:\n")
