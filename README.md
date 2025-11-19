@@ -66,8 +66,8 @@ Linear Model:
  - R2: **0.8585**
 
 Gradient Boosting Model:
- - MSE: **1352763.06**
- - R2: **0.8585**
+ - MSE: **778410.62**
+ - R2: **0.9186**
 
 ## Data:
 ```text

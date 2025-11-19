@@ -14,8 +14,8 @@ try:
     LR_mse = model_mets['mse'][1]
     LR_r2 = model_mets['r2'][1]
 
-    GB_mse = model_mets['mse'][1]
-    GB_r2 = model_mets['r2'][1]
+    GB_mse = model_mets['mse'][2]
+    GB_r2 = model_mets['r2'][2]
 
     size = model_mets['size']
     tSize = model_mets['testSize']
