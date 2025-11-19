@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import joblib
 import pandas as pd
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import datetime
 import numpy as np
 import re, os, sys
@@ -55,12 +55,14 @@ DPM_MIN = x["DPM"].min()
 # webysite
 
 @app.route('/')
+@cross_origin(origins=is_allowed_origin, supports_credentials=True) # type: ignore
 def health_check():
     return jsonify({
         "status":"Running"
     })
 
 @app.route('/predict', methods=['POST'])
+@cross_origin(origins=is_allowed_origin, supports_credentials=True) # type: ignore
 def predict():
     # Check if the model was loaded successfully
     if not RFmodel and not LRmodel and not GBmodel:
@@ -119,7 +121,9 @@ def predict():
         })
 
 @app.route('/metrics')
+@cross_origin(origins=is_allowed_origin, supports_credentials=True) # type: ignore
 def getMetrics():
+    # change eventually so it actually looks decent
     try:
         with open("README.md", "r") as readme:
             rd = readme.read()
