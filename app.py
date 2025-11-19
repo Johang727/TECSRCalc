@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import joblib
 import pandas as pd
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 import datetime
 import numpy as np
 import re, os, sys
@@ -9,19 +9,8 @@ import re, os, sys
 # Create the Flask application instance
 app = Flask(__name__, static_folder='docs', template_folder='docs')
 
-# yea imma be honest, ai made this func. nobody understands regex
-def is_allowed_origin(origin):
-    if not origin:
-        return False
-    if origin == "https://tecsrcalc.pages.dev":
-        return True
-    if re.match(r'https:\/\/[a-zA-Z0-9-]+\.tecsrcalc\.pages\.dev', origin):
-        return True
-    return False
 
-
-
-CORS(app, origins=is_allowed_origin, supports_credentials=True) # type: ignore
+CORS(app, origins="https://tecsrcalc.pages.dev")
 
 
 # Load the trained model when the application starts
@@ -55,14 +44,12 @@ DPM_MIN = x["DPM"].min()
 # webysite
 
 @app.route('/')
-@cross_origin(origins=is_allowed_origin, supports_credentials=True) # type: ignore
 def health_check():
     return jsonify({
         "status":"Running"
     })
 
 @app.route('/predict', methods=['POST'])
-@cross_origin(origins=is_allowed_origin, supports_credentials=True) # type: ignore
 def predict():
     # Check if the model was loaded successfully
     if not RFmodel and not LRmodel and not GBmodel:
@@ -121,7 +108,6 @@ def predict():
         })
 
 @app.route('/metrics')
-@cross_origin(origins=is_allowed_origin, supports_credentials=True) # type: ignore
 def getMetrics():
     # change eventually so it actually looks decent
     try:
