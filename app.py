@@ -4,12 +4,24 @@ import pandas as pd
 from flask_cors import CORS
 import datetime
 import numpy as np
-import re
+import re, os, sys
 
 # Create the Flask application instance
 app = Flask(__name__, static_folder='docs', template_folder='docs')
 
-CORS(app, origins="https://tecsrcalc.pages.dev")
+# yea imma be honest, ai made this func. nobody understands regex
+def is_allowed_origin(origin):
+    if not origin:
+        return False
+    if origin == "https://tecsrcalc.pages.dev":
+        return True
+    if re.match(r'https:\/\/[a-zA-Z0-9-]+\.tecsrcalc\.pages\.dev', origin):
+        return True
+    return False
+
+
+
+CORS(app, origins=is_allowed_origin, supports_credentials=True) # type: ignore
 
 
 # Load the trained model when the application starts
@@ -23,32 +35,36 @@ try:
     model_mets = joblib.load(MODEL_PATH)
 
     RFmodel = model_mets['models'][0]
-    RF_mse = model_mets['mse'][0]
-    RF_r2 = model_mets['r2'][0]
 
     LRmodel = model_mets['models'][1]
-    LR_mse = model_mets['mse'][1]
-    LR_r2 = model_mets['r2'][1]
 
-    size = model_mets['size']
-    timestamp = model_mets['timestamp']
-    srCounts = model_mets['srCounts']
+    GBmodel = model_mets['models'][2]
+
+    x = model_mets['dataX']
+
     print("Model loaded successfully!")
 except FileNotFoundError:
     print(f"Error: Model file \"{MODEL_PATH}\" not found!")
     model = None
+    sys.exit(0)
+
+DPM_MIN = x["DPM"].min()
+
+# ------- #
+
+# webysite
 
 @app.route('/')
-def home():
-    # sets the home page
-    return render_template('index.html')
+def health_check():
+    return jsonify({
+        "status":"Running"
+    })
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    # Handles prediction, renamed calculation later, since I liked that name better after testing
     # Check if the model was loaded successfully
-    if not RFmodel and not LRmodel:
-        return jsonify({'error': 'Model file not found!'}), 500
+    if not RFmodel and not LRmodel and not GBmodel:
+        return jsonify({'error': 'One of the models is missing!'}), 500
     # From what I understand 500 errors are server-side; 400 are client-side
     # TODO, have it redirect to a new page with contact information
 
@@ -74,27 +90,27 @@ def predict():
     # The model expects the data in this format
     inData = pd.DataFrame([[dateInt, dpm, apm]], columns=['Date','DPM', 'APM'])
 
-    useLR = False
-
-    # Switch models to one that's better at extrapolating
-    if modelChoice == "Linear":
-        useLR = True
-    elif modelChoice == "RandomForest":
-        useLR = False
-    else:
+    if modelChoice == "Auto":
         if (dpm >= 155 or apm >= 140) or (dpm <= 35 or apm <= 10):
             useLR = True
+            modelChoice = "Linear"
         else:
-            useLR = False
+            modelChoice = "RandomForest"
 
-    if useLR:
-        modelUsed = "Linear"
-        calc = round(LRmodel.predict(inData)[0])
-    else:
+    if modelChoice == "RandomForest":
         modelUsed = "Random Forest"
         # to add an uncertainty after the SR
         tp = [tree.predict(inData) for tree in RFmodel.estimators_]
         calc = f"{round(np.mean(tp))} ± {round(np.std(tp))}"
+    elif modelChoice == "Linear":
+        modelUsed = "Linear"
+        calc = round(LRmodel.predict(inData)[0])
+    elif modelChoice == "GradientBoosting":
+        modelUsed = "Gradient Boosting"
+        calc = 0 # TODO: actually make it work
+    else:
+        calc = 0
+        modelUsed = "Error!"
 
 
     return jsonify({

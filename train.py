@@ -102,8 +102,6 @@ models[1].fit(xTrain, yTrain)
 models.append(GradientBoostingRegressor(n_estimators=TREE_AMOUNT, random_state=RANDOM_STATE))
 models[2].fit(xTrain, yTrain)
 
-
-
 # test models
 
 # test random forest
