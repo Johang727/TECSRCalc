@@ -112,12 +112,14 @@ print("Testing set size:", len(xTest))
 # --------------------------------
 
 print("Training many Random Forests to see which is best...")
-# essentially try a ton of things for our random forest and see which is besst
+# essentially try a ton of things for our random forest and see which is best
+
+# first run gave me depth:10, features:sqrt, min_samples_split: 2, n_estimators: 50
 param_grid = {
-    'n_estimators': [2, 5, 10, 15, 20, 25, 40, 50, 100, 150, 200, 300, 500],
-    'max_depth': [2, 5, 10, 20, None],
-    'min_samples_split': [1, 2, 5, 10, 20],
-    'max_features': ["sqrt", "log2", None]
+    'n_estimators': [x for x in range(1, 101, 1)],
+    'max_depth': [x for x in range(2, 21, 1)] + [(None)],
+    'min_samples_split': [x for x in range(2, 11, 1)],
+    'max_features': ["sqrt"]
 }
 
 rf = RandomForestRegressor(random_state=RANDOM_STATE, n_jobs=-1)
