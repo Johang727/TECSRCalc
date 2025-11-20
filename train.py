@@ -110,50 +110,95 @@ print("Testing set size:", len(xTest))
 
 # create Random Forest model:
 # --------------------------------
+if False:
+    print("Training many Random Forests to see which is best...")
+    # essentially try a ton of things for our random forest and see which is best
 
-print("Training many Random Forests to see which is best...")
-# essentially try a ton of things for our random forest and see which is best
+    # first run gave me depth:10, features:sqrt, min_samples_split: 2, n_estimators: 50
+    # second run which took 20m gave me depth: None, features, sqrt, min_samples: 3, estimators: 79
 
-# first run gave me depth:10, features:sqrt, min_samples_split: 2, n_estimators: 50
-param_grid = {
-    'n_estimators': [x for x in range(1, 101, 1)],
-    'max_depth': [x for x in range(2, 21, 1)] + [(None)],
-    'min_samples_split': [x for x in range(2, 11, 1)],
-    'max_features': ["sqrt"]
-}
+    # Best Parameters: {'max_depth': None, 'max_features': 'sqrt', 'min_samples_split': 3, 'n_estimators': 79}
 
-rf = RandomForestRegressor(random_state=RANDOM_STATE, n_jobs=-1)
+    param_grid = {
+        'n_estimators': [x for x in range(45, 86, 1)],
+        'max_depth': [10, 20, None],
+        'min_samples_split': [2,3,4],
+        'max_features': ["sqrt"]
+    }
 
-grid_search = GridSearchCV(
-    estimator=rf,
-    param_grid=param_grid,
-    scoring="neg_mean_squared_error",
-    n_jobs=-1,
-    verbose=3
-)
+    rf = RandomForestRegressor(random_state=RANDOM_STATE, n_jobs=-1)
 
-grid_search.fit(xTrain, yTrain)
+    grid_search = GridSearchCV(
+        estimator=rf,
+        param_grid=param_grid,
+        scoring="neg_mean_squared_error",
+        n_jobs=-1,
+        verbose=2
+    )
 
-best_params = grid_search.best_params_
-best_score = grid_search.best_score_
-best_rmse = np.sqrt(-best_score)
+    grid_search.fit(xTrain, yTrain)
 
-print(f"Best Parameters: {best_params}")
-print(f"Best RMSE: {best_rmse:.2f}")
+    best_params = grid_search.best_params_
 
-best_rf = grid_search.best_estimator_
+    print(f"Best Parameters: {best_params}")
 
-models.append(best_rf)
+    best_rf = grid_search.best_estimator_
+
+    models.append(best_rf)
+else:
+    models.append(RandomForestRegressor(n_jobs=-1, 
+                                        random_state=RANDOM_STATE, 
+                                        max_depth=None,
+                                        max_features="sqrt",
+                                        min_samples_split=3,
+                                        n_estimators=79
+                                        ))
+    models[0].fit(xTrain, yTrain)
 
 
-# create the rest:
+
+# create the Linear:
 # --------------------------------
 
-models.append(LinearRegression())
+models.append(LinearRegression(n_jobs=-1))
 models[1].fit(xTrain, yTrain)
 
-models.append(GradientBoostingRegressor(n_estimators=TREE_AMOUNT, random_state=RANDOM_STATE))
-models[2].fit(xTrain, yTrain)
+# create Gradient Boost model:
+# --------------------------------
+
+param_grid_gb = {
+    'learning_rate':[0.01, 0.05, 0.1, 0.2],
+    'n_estimators': [20, 50, 100, 250],
+    'max_depth': [2, 3, 7, 9, None],
+    'min_samples_split': [2, 3, 5],
+    'max_features': ["sqrt", None],
+    'min_purity_decrease':[0.0, 0.01, 0.05, 0.1, 1],
+    'loss':["squared_error", "absolute_error", "huber", "quantile"],
+    'subsample':[0.5, 1.0],
+    'alpha': [0.9]
+}
+
+gb = GradientBoostingRegressor(random_state=RANDOM_STATE)
+
+grid_search_gb = GridSearchCV(
+    estimator=gb,
+    param_grid=param_grid_gb,
+    scoring="neg_mean_squared_error",
+    n_jobs=-1,
+    verbose=2
+)
+
+grid_search_gb.fit(xTrain, yTrain)
+
+best_params = grid_search_gb.best_params_
+
+print(f"Best Parameters: {best_params}")
+
+best_gb = grid_search_gb.best_estimator_
+
+
+models.append(best_gb)
+
 # --------------------------------
 
 
