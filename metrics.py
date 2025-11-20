@@ -8,13 +8,13 @@ MODEL_PATH = 'model.pkl'
 try:
     model_mets = joblib.load(MODEL_PATH)
 
-    RF_mse = model_mets['mse'][0]
+    RF_rmse = model_mets['rmse'][0]
     RF_r2 = model_mets['r2'][0]
 
-    LR_mse = model_mets['mse'][1]
+    LR_rmse = model_mets['rmse'][1]
     LR_r2 = model_mets['r2'][1]
 
-    GB_mse = model_mets['mse'][2]
+    GB_rmse = model_mets['rmse'][2]
     GB_r2 = model_mets['r2'][2]
 
     size = model_mets['size']
@@ -55,17 +55,17 @@ metrics.append(f" - Timestamp: **{ts}**\n")
 
 metrics.append("\nRandom Forest Model:")
 
-metrics.append(f"\n - MSE: **{RF_mse:.2f}**\n")
+metrics.append(f"\n - RMSE: **{RF_rmse:.2f}**\n")
 metrics.append(f" - R2: **{RF_r2:.4f}**\n")
 
 metrics.append("\nLinear Model:")
 
-metrics.append(f"\n - MSE: **{LR_mse:.2f}**\n")
+metrics.append(f"\n - RMSE: **{LR_rmse:.2f}**\n")
 metrics.append(f" - R2: **{LR_r2:.4f}**\n")
 
 metrics.append("\nGradient Boosting Model:")
 
-metrics.append(f"\n - MSE: **{GB_mse:.2f}**\n")
+metrics.append(f"\n - RMSE: **{GB_rmse:.2f}**\n")
 metrics.append(f" - R2: **{GB_r2:.4f}**\n")
 
 
