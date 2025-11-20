@@ -1,11 +1,12 @@
 import pandas as pd
 import os, time, datetime, joblib, sys
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor, VotingRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import root_mean_squared_error, r2_score, mean_absolute_percentage_error, mean_squared_error
 import numpy as np
+import tensorflow as tf
 
 
 
@@ -28,6 +29,7 @@ rmse:list[float] = []
 r2:list[float] = []
 mape:list[float] = []
 models:list = []
+predictions:list = []
 # --------------------------------
 
 
@@ -153,7 +155,6 @@ else:
                                         min_samples_split=3,
                                         n_estimators=79
                                         ))
-    models[0].fit(xTrain, yTrain)
 
 
 
@@ -161,70 +162,141 @@ else:
 # --------------------------------
 
 models.append(LinearRegression(n_jobs=-1))
-models[1].fit(xTrain, yTrain)
+# --------------------------------
 
 # create Gradient Boost model:
 # --------------------------------
 
-# run 1
-# Best Parameters: {'alpha': 0.5, 'learning_rate': 0.01, 'loss': 'squared_error', 'max_depth': 10, 'max_features': 'sqrt', 'min_impurity_decrease': 1.0, 'min_samples_split': 3, 'n_estimators': 500, 'subsample': 0.8}
+if False:
 
-# run 2
-# Best Parameters: {'alpha': 0.5, 'learning_rate': 0.005, 'loss': 'squared_error', 'max_depth': 8, 'max_features': 'sqrt', 'min_impurity_decrease': 2.0, 'min_samples_split': 3, 'n_estimators': 1000, 'subsample': 0.5}
+    # run 1
+    # Best Parameters: {'alpha': 0.5, 'learning_rate': 0.01, 'loss': 'squared_error', 'max_depth': 10, 'max_features': 'sqrt', 'min_impurity_decrease': 1.0, 'min_samples_split': 3, 'n_estimators': 500, 'subsample': 0.8}
 
-param_grid_gb = {
-    'learning_rate':[0.004, 0.005, 0.006],
-    'n_estimators': [900, 1000, 1500],
-    'max_depth': [7, 8, 9],
-    'min_samples_split': [3],
-    'max_features': ["sqrt"],
-    'min_impurity_decrease':[1.75, 2.0, 3.0],
-    'loss':["squared_error", "quantile"],
-    'subsample':[0.35, 0.5, 0.75],
-    'alpha': [0.5]
-}
+    # run 2
+    # Best Parameters: {'alpha': 0.5, 'learning_rate': 0.005, 'loss': 'squared_error', 'max_depth': 8, 'max_features': 'sqrt', 'min_impurity_decrease': 2.0, 'min_samples_split': 3, 'n_estimators': 1000, 'subsample': 0.5}
 
-gb = GradientBoostingRegressor(random_state=RANDOM_STATE)
+    # run 3
+    # Best Parameters: {'learning_rate': 0.006, 'loss': 'squared_error', 'max_depth': 7, 'max_features': 'sqrt', 'min_impurity_decrease': 1.75, 'min_samples_split': 3, 'n_estimators': 900, 'subsample': 0.75}
+    # Root Mean Squared Error: 712.57
 
-grid_search_gb = GridSearchCV(
-    estimator=gb,
-    param_grid=param_grid_gb,
-    scoring="neg_mean_squared_error",
-    n_jobs=-1,
-    verbose=3
-)
+    param_grid_gb = {
+        'learning_rate':[0.0055, 0.006, 0.007],
+        'n_estimators': [850, 900, 950],
+        'max_depth': [6, 7, 8],
+        'min_samples_split': [3],
+        'max_features': ["sqrt"],
+        'min_impurity_decrease':[1.5, 1.75, 1.9],
+        'loss':["squared_error"],
+        'subsample':[0.6, 0.75, 0.8],
+    }
 
-try:
-    grid_search_gb.fit(xTrain, yTrain)
-except KeyboardInterrupt:
-    print("\n--- Search Interrupted (Ctrl+C) | Press again to force.---")
-    
-    if hasattr(grid_search_gb, 'cv_results_') and len(grid_search_gb.cv_results_['mean_test_score']) > 0:
+    gb = GradientBoostingRegressor(random_state=RANDOM_STATE)
+
+    grid_search_gb = GridSearchCV(
+        estimator=gb,
+        param_grid=param_grid_gb,
+        scoring="neg_mean_squared_error",
+        n_jobs=-1,
+        verbose=3
+    )
+
+    try:
+        grid_search_gb.fit(xTrain, yTrain)
+    except KeyboardInterrupt:
+        print("\n--- Search Interrupted (Ctrl+C) | Press again to force.---")
         
-        best_index = grid_search_gb.cv_results_['mean_test_score'].argmax()
-        
-        best_score_neg_mse = grid_search_gb.cv_results_['mean_test_score'][best_index]
-        best_params = grid_search_gb.cv_results_['params'][best_index]
-        best_rmse = np.sqrt(-best_score_neg_mse)
+        if hasattr(grid_search_gb, 'cv_results_') and len(grid_search_gb.cv_results_['mean_test_score']) > 0:
+            
+            best_index = grid_search_gb.cv_results_['mean_test_score'].argmax()
+            
+            best_score_neg_mse = grid_search_gb.cv_results_['mean_test_score'][best_index]
+            best_params = grid_search_gb.cv_results_['params'][best_index]
+            best_rmse = np.sqrt(-best_score_neg_mse)
 
-        print(f"Best RMSE (so far): {best_rmse:.2f}")
-        print(f"Best Parameters: {best_params}")
-    else:
-        print("No combinations were fully completed, LL")
-        sys.exit(1)
+            print(f"Best RMSE (so far): {best_rmse:.2f}")
+            print(f"Best Parameters: {best_params}")
+        else:
+            print("No combinations were fully completed, LL")
+            sys.exit(1)
 
-best_params = grid_search_gb.best_params_
+    best_params = grid_search_gb.best_params_
 
-print(f"Best Parameters: {best_params}")
+    print(f"Best Parameters: {best_params}")
 
-best_gb = grid_search_gb.best_estimator_
+    best_gb = grid_search_gb.best_estimator_
 
 
-models.append(best_gb)
+    models.append(best_gb)
+else:
+    models.append(GradientBoostingRegressor(
+        learning_rate=0.006,
+        loss="squared_error",
+        max_depth=7,
+        min_samples_split=3,
+        max_features="sqrt",
+        min_impurity_decrease=1.75,
+        n_estimators=900,
+        subsample=0.75,
+        random_state=RANDOM_STATE
+    ))
 
 # --------------------------------
 
+# create ensemble of all of the above for the funnies:
+# --------------------------------
 
+models.append(VotingRegressor(
+    estimators=[
+        ("rf", models[0]),
+        ("lr", models[1]),
+        ("gb", models[2])
+    ],
+    n_jobs=-1
+))
+
+# --------------------------------
+
+# Let's get into the funny TensorFlow ones now :p
+# --------------------------------
+
+# splitting training into validation
+# --------------------------------
+
+
+# GRU model buidling
+# --------------------------------
+tf.random.set_seed(RANDOM_STATE)
+
+gru_model = tf.keras.Sequential([
+    tf.keras.layers.GRU(32, return_sequences=True, input_shape=[None, 1]),
+    tf.keras.layers.GRU(32, return_sequences=True),
+    tf.keras.layers.GRU(32),
+    tf.keras.layers.Dense(1)
+])
+
+gru_model.compile(
+    loss="mse",
+    optimizer=tf.keras.optimizers.SGD(learning_rate=0.001, momentum=0.9),
+    metrics=["mse", "mape"]
+)
+
+models.append(gru_model)
+
+
+# fit the models
+# --------------------------------
+if not False: # this seems dumb, but False is the placeholder for a flag or something to re-search later
+        models[0].fit(xTrain, yTrain)
+        models[1].fit(xTrain, yTrain)
+        models[2].fit(xTrain, yTrain)
+        models[3].fit(xTrain, yTrain) # i dunno how imma do this one if i do the searching; something to figure out later.
+        models[4].fit(x=xTrain,
+                        y=yTrain,
+                        batch_size=16,
+                        epochs=20,
+                        verbose=2,
+                        validation_split=0.2
+                        )
 
 # test the models performance
 # --------------------------------
@@ -234,10 +306,11 @@ models.append(best_gb)
 
 print("\n----\nTesting Random Forest\n")
 
-yPred = models[0].predict(xTest)
-rmse.append(root_mean_squared_error(yTest, yPred))
-r2.append(r2_score(yTest, yPred))
-mape.append(mean_absolute_percentage_error(yTest, yPred))
+
+predictions.append(models[0].predict(xTest))
+rmse.append(root_mean_squared_error(yTest, predictions[0]))
+r2.append(r2_score(yTest, predictions[0]))
+mape.append(mean_absolute_percentage_error(yTest, predictions[0]))
 
 print(f"Root Mean Squared Error: {rmse[0]:.2f}")
 print(f"R-squared: {r2[0]:.4f}")
@@ -249,11 +322,11 @@ print(f"Mean Absolute Percentage Error: {mape[0]:.2f}")
 
 print("\n----\nTesting Linear\n")
 
+predictions.append(models[1].predict(xTest))
 
-yPred = models[1].predict(xTest)
-rmse.append(root_mean_squared_error(yTest, yPred))
-r2.append(r2_score(yTest, yPred))
-mape.append(mean_absolute_percentage_error(yTest, yPred))
+rmse.append(root_mean_squared_error(yTest, predictions[1]))
+r2.append(r2_score(yTest, predictions[1]))
+mape.append(mean_absolute_percentage_error(yTest, predictions[1]))
 
 print(f"Root Mean Squared Error: {rmse[1]:.2f}")
 print(f"R-squared: {r2[1]:.4f}")
@@ -264,10 +337,11 @@ print(f"Mean Absolute Percentage Error: {mape[1]:.2f}")
 
 print("\n----\nTesting Gradient Boosting\n")
 
-yPred = models[2].predict(xTest)
-rmse.append(root_mean_squared_error(yTest, yPred))
-r2.append(r2_score(yTest, yPred))
-mape.append(mean_absolute_percentage_error(yTest, yPred))
+predictions.append(models[2].predict(xTest))
+
+rmse.append(root_mean_squared_error(yTest, predictions[2]))
+r2.append(r2_score(yTest, predictions[2]))
+mape.append(mean_absolute_percentage_error(yTest, predictions[2]))
 
 
 print(f"Root Mean Squared Error: {rmse[2]:.2f}")
@@ -276,6 +350,35 @@ print(f"Mean Absolute Percentage Error: {mape[2]:.2f}")
 
 # --------------------------------
 
+# test All Ensemble
+# --------------------------------
+
+print("\n----\nTesting all together\n")
+
+predictions.append(models[3].predict(xTest))
+
+rmse.append(root_mean_squared_error(yTest, predictions[3]))
+r2.append(r2_score(yTest, predictions[3]))
+mape.append(mean_absolute_percentage_error(yTest, predictions[3]))
+
+
+print(f"Root Mean Squared Error: {rmse[3]:.2f}")
+print(f"R-squared: {r2[3]:.4f}")
+print(f"Mean Absolute Percentage Error: {mape[3]:.2f}")
+
+print("Linear might be throwing frfr")
+# --------------------------------
+
+# test GRU
+# --------------------------------
+
+print("\n----\nTesting GRU\n")
+
+print(models[4].evaluate(x=xTest, 
+                   y=yTest,
+                   batch_size=16))
+
+print("The small one is Mean Absolute Percentage Error, yikes")
 
 
 timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
