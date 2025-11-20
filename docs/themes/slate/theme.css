@@ -136,7 +136,7 @@ color:#B6B04D;
 }
 .ms-viewselect a:link{
 font-family:Verdana,Arial,Helvetica,sans-serif;
-color:#B6B04D;
+color:darkorange;
 }
 .ms-titlearea{
 font-family:Verdana,Arial,Helvetica,sans-serif;
@@ -431,7 +431,7 @@ font-family:verdana;
 font-size:8pt;
 }
 .ms-styleheader a:link, .ms-stylebody a:link{
-color:#B6B04D;
+color:darkorange;
 text-decoration:none;
 }
 .ms-styleheader a:visited, .ms-stylebody a:visited{
@@ -688,7 +688,7 @@ font-weight:normal;
 width:0px;
 }
 .ms-vh a, .ms-vh a:visited, .ms-vh2 a, .ms-vh2 a:visited, .ms-vh-left a, .ms-vh-right a{
-color:#B6B04D;
+color:orangered;
 text-decoration:none;
 }
 .ms-vh a:hover, .ms-vh2 a:hover{
@@ -727,11 +727,11 @@ color:#FEC803;
 text-decoration:underline;
 }
 .ms-vb a:visited, .ms-vb2 a:visited, .ms-GRStatusText a:visited, .ms-vb-user a:visited{
-color:#B6B04D;
+color:orangered;
 text-decoration:none;
 }
 .ms-vb a:visited:hover, .ms-vb2 a:visited:hover, .ms-vb-user a:visited:hover{
-color:#FEC803;
+color:orangered;
 text-decoration:underline;
 }
 .ms-vb2, .ms-vb-title, .ms-vb-icon, .ms-vb-user{
@@ -887,7 +887,7 @@ text-decoration:underline;
 color:#FFFFFF;
 }
 .ms-Vevt a:visited{
-color:#DFD664;
+color:orangered;
 }
 .ms-apptsingle{
 border-left:1px solid #343434;
@@ -1030,11 +1030,11 @@ font-weight:normal;
 font-family:Verdana,Arial,Helvetica,sans-serif;
 }
 .UserToolbarTextArea A:link{
-COLOR:#B6B04D;
+COLOR:darkorange;
 TEXT-DECORATION:none;
 }
 .UserToolbarTextArea A:visited{
-COLOR:#B6B04D;
+COLOR:orangered;
 TEXT-DECORATION:none;
 }
 .UserToolbarTextArea A:hover{
@@ -1203,7 +1203,7 @@ color:#FFFFFF;
 font-family:Verdana,Arial,Helvetica,sans-serif;
 }
 .ms-TPBody a:link, .ms-TPBody a:visited, .ms-TPBody a:hover{
-color:#B6B04D;
+color:orangered;
 text-decoration:none;
 cursor:hand;
 }
@@ -1285,7 +1285,7 @@ font-family:Verdana,Arial,Helvetica,sans-serif;
 .ms-WPBody table, .ms-TPBody table{
 }
 .ms-WPBody a:link, .ms-WPBody a:visited{
-color:#B6B04D;
+color:orangered;
 text-decoration:none;
 }
 .ms-WPBody A:hover{
@@ -1335,7 +1335,7 @@ font-family:Verdana,Arial,Helvetica,sans-serif;
 color:#b6b04d;
 }
 .ms-SPLink a:link, .ms-SPLink a:visited{
-color:#b6b04d;
+color:orangered;
 text-decoration:none;
 }
 .ms-SPButton{
@@ -1450,7 +1450,7 @@ padding-left:10px;
 color:#B6B04D;
 }
 .ms-tabinactive a:link, .ms-tabinactive a:hover, .ms-tabinactive a:visited{
-color:#B6B04D;
+color:orangered;
 text-decoration:none;
 }
 .ms-surveyVBarT{
@@ -1489,7 +1489,7 @@ color:#FFFFFF;
 text-decoration:none;
 }
 .ms-MWSInstantiated a:link, .ms-MWSInstantiated a:visited{
-color:#B6B04D;
+color:orangered;
 text-decoration:none;
 }
 .ms-MWSInstantiated a:hover{
@@ -1497,7 +1497,7 @@ color:#FEC803;
 text-decoration:underline;
 }
 .ms-MWSUninstantiated a:link, .ms-MWSUninstantiated a:visited{
-color:#B6B04D;
+color:orangered;
 text-decoration:none;
 }
 .ms-MWSUninstantiated a:hover{

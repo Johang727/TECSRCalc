@@ -28,3 +28,7 @@ Trying the same for Gradient Boosting, letting it run overnight since it's a LOT
     GBs are more complex, taking upwards of 10 seconds or more per test when compared to the RFs
 
 I don't think I can really adjust anything for linear.. it's just linear :p
+
+All of them together:
+ - I dunno, might do better for extrapolation, but I think it's better to combine the two forests?
+ - Decided to combine the two forests for auto, rather than all 3

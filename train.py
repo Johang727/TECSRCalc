@@ -6,7 +6,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.metrics import root_mean_squared_error, r2_score, mean_absolute_percentage_error, mean_squared_error
 import numpy as np
-import tensorflow as tf
+
 
 
 
@@ -242,13 +242,12 @@ else:
 
 # --------------------------------
 
-# create ensemble of all of the above for the funnies:
+# create ensemble of the two trees, these are really good at interpolation, not extra.
 # --------------------------------
 
 models.append(VotingRegressor(
     estimators=[
         ("rf", models[0]),
-        ("lr", models[1]),
         ("gb", models[2])
     ],
     n_jobs=-1
@@ -256,31 +255,6 @@ models.append(VotingRegressor(
 
 # --------------------------------
 
-# Let's get into the funny TensorFlow ones now :p
-# --------------------------------
-
-# splitting training into validation
-# --------------------------------
-
-
-# GRU model buidling
-# --------------------------------
-tf.random.set_seed(RANDOM_STATE)
-
-gru_model = tf.keras.Sequential([
-    tf.keras.layers.GRU(32, return_sequences=True, input_shape=[None, 1]),
-    tf.keras.layers.GRU(32, return_sequences=True),
-    tf.keras.layers.GRU(32),
-    tf.keras.layers.Dense(1)
-])
-
-gru_model.compile(
-    loss="mse",
-    optimizer=tf.keras.optimizers.SGD(learning_rate=0.001, momentum=0.9),
-    metrics=["mse", "mape"]
-)
-
-models.append(gru_model)
 
 
 # fit the models
@@ -290,13 +264,6 @@ if not False: # this seems dumb, but False is the placeholder for a flag or some
         models[1].fit(xTrain, yTrain)
         models[2].fit(xTrain, yTrain)
         models[3].fit(xTrain, yTrain) # i dunno how imma do this one if i do the searching; something to figure out later.
-        models[4].fit(x=xTrain,
-                        y=yTrain,
-                        batch_size=16,
-                        epochs=20,
-                        verbose=2,
-                        validation_split=0.2
-                        )
 
 # test the models performance
 # --------------------------------
@@ -353,7 +320,7 @@ print(f"Mean Absolute Percentage Error: {mape[2]:.2f}")
 # test All Ensemble
 # --------------------------------
 
-print("\n----\nTesting all together\n")
+print("\n----\nTesting RF + GB\n")
 
 predictions.append(models[3].predict(xTest))
 
@@ -366,19 +333,8 @@ print(f"Root Mean Squared Error: {rmse[3]:.2f}")
 print(f"R-squared: {r2[3]:.4f}")
 print(f"Mean Absolute Percentage Error: {mape[3]:.2f}")
 
-print("Linear might be throwing frfr")
 # --------------------------------
 
-# test GRU
-# --------------------------------
-
-print("\n----\nTesting GRU\n")
-
-print(models[4].evaluate(x=xTest, 
-                   y=yTest,
-                   batch_size=16))
-
-print("The small one is Mean Absolute Percentage Error, yikes")
 
 
 timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")

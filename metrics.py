@@ -17,6 +17,10 @@ try:
     GB_rmse = model_mets['rmse'][2]
     GB_r2 = model_mets['r2'][2]
 
+    RF_GB_rmse = model_mets['rmse'][3]
+    RF_GB_r2 = model_mets['r2'][3]
+
+
     size = model_mets['size']
     tSize = model_mets['testSize']
     ts = model_mets['timestamp']
@@ -53,20 +57,25 @@ metrics.append(f"## Statistics:\n")
 
 metrics.append(f" - Timestamp: **{ts}**\n")
 
-metrics.append("\nRandom Forest Model:")
-
-metrics.append(f"\n - RMSE: **{RF_rmse:.2f}**\n")
-metrics.append(f" - R2: **{RF_r2:.4f}**\n")
-
 metrics.append("\nLinear Model:")
 
 metrics.append(f"\n - RMSE: **{LR_rmse:.2f}**\n")
 metrics.append(f" - R2: **{LR_r2:.4f}**\n")
 
+metrics.append("\nRandom Forest Model:")
+
+metrics.append(f"\n - RMSE: **{RF_rmse:.2f}**\n")
+metrics.append(f" - R2: **{RF_r2:.4f}**\n")
+
 metrics.append("\nGradient Boosting Model:")
 
 metrics.append(f"\n - RMSE: **{GB_rmse:.2f}**\n")
 metrics.append(f" - R2: **{GB_r2:.4f}**\n")
+
+metrics.append("\nRandom Forest + Gradient Boosting:")
+
+metrics.append(f"\n - RMSE: **{RF_GB_rmse:.2f}**\n")
+metrics.append(f" - R2: **{RF_GB_r2:.4f}**\n")
 
 
 metrics.append(f"\n## Data:\n")
