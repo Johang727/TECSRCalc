@@ -173,14 +173,14 @@ models[1].fit(xTrain, yTrain)
 # Best Parameters: {'alpha': 0.5, 'learning_rate': 0.005, 'loss': 'squared_error', 'max_depth': 8, 'max_features': 'sqrt', 'min_impurity_decrease': 2.0, 'min_samples_split': 3, 'n_estimators': 1000, 'subsample': 0.5}
 
 param_grid_gb = {
-    'learning_rate':[0.0025, 0.005, 0.01, 0.02],
-    'n_estimators': [400, 500, 750, 1000, 2000, 3000],
-    'max_depth': [8, 10, 12],
-    'min_samples_split': [2, 3, 5],
-    'max_features': ["sqrt", "log2", None],
-    'min_impurity_decrease':[0.5, 0.75, 1.0, 1.5, 2.0],
+    'learning_rate':[0.004, 0.005, 0.006],
+    'n_estimators': [900, 1000, 1500],
+    'max_depth': [7, 8, 9],
+    'min_samples_split': [3],
+    'max_features': ["sqrt"],
+    'min_impurity_decrease':[1.75, 2.0, 3.0],
     'loss':["squared_error", "quantile"],
-    'subsample':[0.5, 0.8, 1.0],
+    'subsample':[0.35, 0.5, 0.75],
     'alpha': [0.5]
 }
 
