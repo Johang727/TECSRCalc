@@ -15,3 +15,16 @@ but the issue was:
 
 
 I did the IQR stuff, yet I feel like it still lacks and could be removing more from 11K.
+
+
+------
+
+GridSearchCV arc:
+
+Essentially, I just put a ton of broad numbers for Random Forest (see previous commits) then the range for a more specific one:
+    This resulted in a higher accuracy and lower error, so WW
+
+Trying the same for Gradient Boosting, letting it run overnight since it's a LOT of combos, even for the simple one.
+    GBs are more complex, taking upwards of 10 seconds or more per test when compared to the RFs
+
+I don't think I can really adjust anything for linear.. it's just linear :p

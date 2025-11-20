@@ -1,5 +1,5 @@
 import pandas as pd
-import os, time, datetime, joblib
+import os, time, datetime, joblib, sys
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
@@ -133,7 +133,7 @@ if False:
         param_grid=param_grid,
         scoring="neg_mean_squared_error",
         n_jobs=-1,
-        verbose=2
+        verbose=3
     )
 
     grid_search.fit(xTrain, yTrain)
@@ -168,14 +168,14 @@ models[1].fit(xTrain, yTrain)
 
 param_grid_gb = {
     'learning_rate':[0.01, 0.05, 0.1, 0.2],
-    'n_estimators': [20, 50, 100, 250],
-    'max_depth': [2, 3, 7, 9, None],
+    'n_estimators': [20, 50, 100, 250, 500],
+    'max_depth': [2, 3, 10, 20],
     'min_samples_split': [2, 3, 5],
     'max_features': ["sqrt", None],
-    'min_purity_decrease':[0.0, 0.01, 0.05, 0.1, 1],
-    'loss':["squared_error", "absolute_error", "huber", "quantile"],
-    'subsample':[0.5, 1.0],
-    'alpha': [0.9]
+    'min_impurity_decrease':[0.0, 1.0, 10.0],
+    'loss':["squared_error", "quantile"],
+    'subsample':[0.8, 1.0],
+    'alpha': [0.5]
 }
 
 gb = GradientBoostingRegressor(random_state=RANDOM_STATE)
@@ -185,10 +185,27 @@ grid_search_gb = GridSearchCV(
     param_grid=param_grid_gb,
     scoring="neg_mean_squared_error",
     n_jobs=-1,
-    verbose=2
+    verbose=3
 )
 
-grid_search_gb.fit(xTrain, yTrain)
+try:
+    grid_search_gb.fit(xTrain, yTrain)
+except KeyboardInterrupt:
+    print("\n--- Search Interrupted (Ctrl+C) | Press again to force.---")
+    
+    if hasattr(grid_search_gb, 'cv_results_') and len(grid_search_gb.cv_results_['mean_test_score']) > 0:
+        
+        best_index = grid_search_gb.cv_results_['mean_test_score'].argmax()
+        
+        best_score_neg_mse = grid_search_gb.cv_results_['mean_test_score'][best_index]
+        best_params = grid_search_gb.cv_results_['params'][best_index]
+        best_rmse = np.sqrt(-best_score_neg_mse)
+
+        print(f"Best RMSE (so far): {best_rmse:.2f}")
+        print(f"Best Parameters: {best_params}")
+    else:
+        print("No combinations were fully completed, LL")
+        sys.exit(1)
 
 best_params = grid_search_gb.best_params_
 
