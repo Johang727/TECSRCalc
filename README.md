@@ -15,9 +15,9 @@ Aims to determine a player's estimated Skill Rating (SR) in Tetris Effect: Conne
 <details>
 <summary>Where did this data come from?</summary>
 
-> Streams on twitch.tv, personal matches and friend matches.
+Streams on twitch.tv, personal matches and friend matches.
 
-*Note: Data contains no usernames nor sources for anonymity.*
+*Note: Data contains no usernames nor sources for anonymity. Even I cannot trace it back.*
 </details>
 
 <details>
@@ -54,47 +54,41 @@ If we expand these, we get:
 
 
 <!--START_SECTION:metrics-->
-## Statistics:
- - Timestamp: **2025-11-17 18:03:47**
+## Models:
 
-Random Forest Model:
- - MSE: **724943.11**
- - R2: **0.9241**
 
-Linear Model:
- - MSE: **1352763.06**
- - R2: **0.8585**
+*Last Update: 2025-11-20 13:35:36*
+### Linear (Auto):
+ - Root Mean Squared Error: 1163.08
+ - Mean Absolute Percentage Error: 11.28%
+ - R-Squared: 0.8585
 
-Gradient Boosting Model:
- - MSE: **778410.62**
- - R2: **0.9186**
+### Random Forest:
+ - Root Mean Squared Error: 721.56
+ - Mean Absolute Percentage Error: 5.83%
+ - R-Squared: 0.9455
+
+### Gradient Boosting:
+ - Root Mean Squared Error: 712.57
+ - Mean Absolute Percentage Error: 5.60%
+ - R-Squared: 0.9469
+
+### Random Forest + Gradient Boosting (Auto):
+ - Root Mean Squared Error: 713.31
+ - Mean Absolute Percentage Error: 5.68%
+ - R-Squared: 0.9468
+## Ranges:
+ - DPM: 29.6 - 159.2
+ - APM: 4.4 - 132.3
+ - SR: 1944 - 17894
 
 ## Data:
-```text
-<1K SR				0 points		░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-1 - 2K SR			7 points		░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-2 - 3K SR			19 points		█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-3 - 4K SR			48 points		██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-4 - 5K SR			70 points		████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-5 - 6K SR			31 points		██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-6 - 7K SR			59 points		███░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-7 - 8K SR			49 points		██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-8 - 9K SR			125 points		██████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-9 - 10K SR			116 points		██████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-10 - 11K SR			342 points		████████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-11 - 12K SR			50 points		██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-12 - 13K SR			31 points		██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-13 - 14K SR			43 points		██░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-14 - 15K SR			16 points		█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-15 - 16K SR			0 points		░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-16 - 17K SR			18 points		█░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-17K+ SR				15 points		░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+ - Training: 935 Points
+ - Testing: 104 Points
+ - All: 1039 Points
 
-Training Data:		935 points		█████████████████████████████████████████████░░░░░
-Testing Data:		104 points		█████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
-All Data:			1039 points		██████████████████████████████████████████████████
-```
 <!--END_SECTION:metrics-->
+![SR Counts](graphs/data.png)
 
 
 | Speed (DPM) vs. SR | Attack (APM) vs. SR | Efficiency (APP) vs. SR |

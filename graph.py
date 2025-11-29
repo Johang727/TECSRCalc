@@ -15,6 +15,27 @@ print(f"Attempting to load from {MODEL_PATH}")
 model_mets = joblib.load(MODEL_PATH)
 x = model_mets["dataX"]; y = model_mets["dataY"]
 
+sr_counts = model_mets['srCounts']
+
+sr_list:list[int] = [sr_counts.get('<1K SR'), sr_counts.get('1-2K SR'), sr_counts.get('2-3K SR'),
+                    sr_counts.get('3-4K SR'), sr_counts.get('4-5K SR'), sr_counts.get('5-6K SR'),
+                    sr_counts.get('6-7K SR'), sr_counts.get('7-8K SR'), sr_counts.get('8-9K SR'),
+                    sr_counts.get('9-10K SR'), sr_counts.get('10-11K SR'), sr_counts.get('11-12K SR'),
+                    sr_counts.get('12-13K SR'), sr_counts.get('13-14K SR'), sr_counts.get('14-15K SR'),
+                    sr_counts.get('15-16K SR'), sr_counts.get('16-17K SR'), sr_counts.get('>17K SR')]
+
+sr_percent:list[float] = [round((i/len(x))*100) for i in sr_list]
+
+sr_labels:list[str] = ['<1', '1', '2', '3',
+                        '4', '5', '6',
+                        '7', '8', '9', '10',
+                        '11','12', '13','14',
+                        '15','16','+17']
+
+print(sr_list)
+print(sr_percent)
+print(sr_labels)
+
 # format data
 df:pd.DataFrame = pd.DataFrame(x, columns=FEATURES); df["SR"] = y
 
@@ -22,9 +43,6 @@ df:pd.DataFrame = pd.DataFrame(x, columns=FEATURES); df["SR"] = y
 df["APP"] = df["APM"] / df["DPM"]
 
 print("Data loaded sucessfully\nNow drawing graph...")
-
-
-
 
 
 print("Creating DPM graph...")
@@ -90,6 +108,25 @@ ax.plot(SRrange, p(SRrange), "r", linewidth=2)
 
 # save app graph
 plt.savefig(f"{GRAPH_FOLDER}app.png", dpi=600)
+
+print("Creating SR graph...")
+
+fig, ax = plt.subplots(1, 1)
+
+fig.set_figwidth(8)
+
+ax.bar(sr_labels, sr_list, color="orange")
+
+ax.set_xlabel("SR Categories (in Ks)")
+ax.set_ylabel("SR Range")
+ax.set_title("SR Data")
+
+plt.savefig(f"{GRAPH_FOLDER}data.png", dpi=600)
+
+
+
+
+
 
 print("Finished creating graphs!")
 
