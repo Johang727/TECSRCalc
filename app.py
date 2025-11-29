@@ -5,13 +5,15 @@ from flask_cors import CORS
 import datetime
 import numpy as np
 import re, os, sys
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 # Create the Flask application instance
 app = Flask(__name__, static_folder='docs', template_folder='docs')
 
 
-CORS(app, origins="https://tecsrcalc.pages.dev")
+CORS(app, origins=["https://tecsrcalc.pages.dev", "https://tecsrcalc.org"])
 
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1)
 
 # Load the trained model when the application starts
 # This is more efficient than loading it for every request
