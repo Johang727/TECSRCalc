@@ -57,35 +57,35 @@ If we expand these, we get:
 ## Models:
 
 
-*Last Update: 2025-11-20 13:35:36*
+*Last Update: 2025-11-29 03:23:33*
 ### Linear (Auto):
- - Root Mean Squared Error: 1163.08
- - Mean Absolute Percentage Error: 11.28%
- - R-Squared: 0.8585
+ - Root Mean Squared Error: 898.48
+ - Mean Absolute Percentage Error: 10.09%
+ - R-Squared: 0.9180
 
 ### Random Forest:
- - Root Mean Squared Error: 721.56
- - Mean Absolute Percentage Error: 5.83%
- - R-Squared: 0.9455
+ - Root Mean Squared Error: 736.07
+ - Mean Absolute Percentage Error: 6.62%
+ - R-Squared: 0.9450
 
 ### Gradient Boosting:
- - Root Mean Squared Error: 712.57
- - Mean Absolute Percentage Error: 5.60%
- - R-Squared: 0.9469
+ - Root Mean Squared Error: 777.86
+ - Mean Absolute Percentage Error: 6.17%
+ - R-Squared: 0.9386
 
 ### Random Forest + Gradient Boosting (Auto):
- - Root Mean Squared Error: 713.31
- - Mean Absolute Percentage Error: 5.68%
- - R-Squared: 0.9468
+ - Root Mean Squared Error: 750.27
+ - Mean Absolute Percentage Error: 6.37%
+ - R-Squared: 0.9429
 ## Ranges:
  - DPM: 29.6 - 159.2
  - APM: 4.4 - 132.3
  - SR: 1944 - 17894
 
 ## Data:
- - Training: 935 Points
- - Testing: 104 Points
- - All: 1039 Points
+ - Training: 974 Points
+ - Testing: 109 Points
+ - All: 1083 Points
 
 <!--END_SECTION:metrics-->
 ![SR Counts](graphs/data.png)
