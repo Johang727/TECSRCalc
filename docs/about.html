@@ -26,10 +26,19 @@
     |&nbsp;&nbsp;&nbsp;&nbsp;- The closer to 1, the better<br>
     |&nbsp;&nbsp;&nbsp;&nbsp;- Despite my models having a high R2, this does not directly equate to it's accuracy. There are more factors that go into SR and the SR economy will always change. <br><br>
 
-    <b>Why two models?</b><br>
-    Initially, I only had the Random Forest model, which was good for what it's meant for: interpolation, guessing a value within the training data. However, going outside the SR range for my data resulted in no extrapolation, guessing a value outside of the training data.<br><br>
+    <b>The first two models...</b><br>
+    I only had the Random Forest model, which was good for what it's meant for: interpolation, guessing a value within the training data. However, going outside the SR range for my data resulted in no extrapolation, guessing a value outside of the training data.<br><br>
     This meant that the model was really good at returning accurate results for the 2K-17K range, but not good for anything outside of that. The model would never return values under 2K or above 17K. Therefore, I decided to introduce a model that can "guess" values outside the training data's range.<br><br>
-    Rather than replace the model, I decided to have two models instead, switching to the alternate model which supports extrapolation when needed.<br><br>
+    Rather than replace the model entirely, I decided to have two models instead, switching to the alternate model which supports extrapolation when needed.<br><br>
+
+    <b>...and the rest?</b><br>
+    The rest are experimental models, essentially made out of curiousity. Some of these are... less practical than others<br>
+
+    |&nbsp;&nbsp;&nbsp;&nbsp;- Gradient Boosting<br>
+    |&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- Similar to the Random Forest, but rather than each "tree" being independent, the trees learn from each other and improve based off of that.<br>
+    
+    
+
 </p>
 
 <hr align="left">
@@ -37,7 +46,7 @@
 
 <p>
     Font used: <a href="https://fonts.google.com/specimen/Space+Mono">Space Mono</a><br>
-    Created with Microsoft FrontPage 2003 :3
+    Created with Microsoft FrontPage 2003
 </p>
 
 <hr align="left">
@@ -51,12 +60,6 @@
 
 
 <hr align="left">
-<img src="images/paws.jpg" alt="Made with my own two front paws :3" title="Made with my own two front paws!">
-<img src="images/johang_paw.png" alt="Johang the Flareon" title="Flareon beans :3c">
-<img src="images/tetban.gif" alt="Tetris Logo" title="Tetris best game :D">
-<img src="images/linux.gif" alt="Linux Logo" title="Created on Linux">
-<img src="images/vscbutton.gif" alt="Visual Studio Code Logo" title="VSC best :3">
-
 
 
 <p align="left"><small>

@@ -10,8 +10,6 @@ on:
 jobs:
     retrain:
         runs-on: ubuntu-latest
-        permissions:
-            contents: write
 
         steps:
             - name: Checkout Repository
@@ -26,9 +24,6 @@ jobs:
               run: |
                 python -m pip install --upgrade pip
                 pip install -r requirements.txt
-            
-            - name: Retrain Script
-              run: python train.py
 
             - name: Update README.md
               run: python metrics.py
@@ -37,6 +32,5 @@ jobs:
               run: |
                 git config --global user.name 'github-actions[bot]'
                 git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-                git add model.pkl README.md
-                git commit -m "Retrain and Update Metrics" || echo "No changes to commit."
+                git commit -m "Update Metrics" || echo "No changes to commit."
                 git push

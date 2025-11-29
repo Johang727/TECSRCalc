@@ -28,18 +28,23 @@
     <table border="0" width="100%" cellpadding="5">
         <tr>
             <td width="330" style="border-style: none; border-width: medium" align="left" valign="top">
-            <b><font size="5">SR Calculator:</font></b><p><b>DPM :</b> <input type="text" id="dpm" name="Subject" size="40"></p>
+            <b><font size="5">SR Calculator:</font></b><p>                
+            <b>DPM :</b> <input type="text" id="dpm" name="Subject" size="40"></p>
+
             <p><b>APM :</b> <input type="text" id="apm" name="Subject0" size="40"><br>
             
             <p><b>Model :</b> 
                 <select name="Model" id="modelSelect">
-                    <option value="Auto">Auto (Default)</option>
-                    <option value="RandomForest">Random Forest</option>
+                    <option value="Auto">Auto (Recommended)</option>
                     <option value="Linear">Linear</option>
+                    <option value="RandomForest">Random Forest</option>
+                    <option value="GradientBoosting">Gradient Boosting</option>
+                    <option value="RF_GB_Ensemble">Random Forest + Gradient Boosting</option>
                 </select>
             </p>
 
-            <p>&nbsp;</p>
+
+
             <input type="button" value="Calculate SR!" name="calcSR" onclick="getPrediction()">
             <p><b>SR: <span id="result-container">Yet to run!</span></b>
             <p><b>Model Used: <span id="model-container">Yet to run!</span></b></td>
@@ -49,6 +54,35 @@
             <td width="330" style="border-style: none; border-width: medium" align="left" valign="top">
             <b><font size="5">Statistics: </font></b>
             <p id="metrics-content">Loading...</p>
+            <hr>
+            <b><font size="5">Model Usage: </font></b>
+            <p>
+                - <b>Auto:</b><br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- Use this for most cases.<br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- Selects <b>Linear</b> when out of training data range.<br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- Selects <b>Random Forest</b> + <b>Gradient Boosting</b> when within training data range.<br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- Will not provide an uncertainty range.<br>
+
+
+                - <b>Linear (Auto):</b><br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- Good for predicting outside of the training data range.<br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- Will not provide an uncertainty range.<br>
+
+                - <b>Random Forest:</b><br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- Good for predicting within of the training data range.<br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- Will provide an uncertainty range.<br>
+
+                - <b>Gradient Boosting:</b><br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- Similar to Random Forest: each tree learns from each other, rather than being seperate.<br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- Will not provide an uncertainty range.<br>
+
+
+                - <b>Random Forest + Gradient Boosting (Auto):</b><br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- Essentially takes the average of the two outputs.<br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- Will not provide an uncertainty range.<br>
+
+            </p>
+
             </td>
         </tr>
     </table>
@@ -59,7 +93,7 @@
 
 
 <script>
-    const API_URL = 'https://tecsrcalc.duckdns.org';
+    const API_URL = 'https://api.tecsrcalc.org/';
     //const API_URL = ''
 
     async function getPrediction() {
@@ -123,8 +157,7 @@
     document.addEventListener('DOMContentLoaded', getMetrics);
 </script>
 
-<p align="left"><small><small>Render hosts the backend for this website so please be patient on first run!</small></small></p>
-
+<p align="left"><small><small>Render no longer hosts the backend! Everything should be quicker now!</small></small></p>
 
 <!--msnavigation--></td></tr><!--msnavigation--></table><!--msnavigation--><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>
 

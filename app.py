@@ -4,14 +4,16 @@ import pandas as pd
 from flask_cors import CORS
 import datetime
 import numpy as np
-import re
-import os
+import re, os, sys
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 # Create the Flask application instance
 app = Flask(__name__, static_folder='docs', template_folder='docs')
 
-CORS(app, origins="https://tecsrcalc.pages.dev")
 
+CORS(app, origins=["https://tecsrcalc.pages.dev", "https://tecsrcalc.org"])
+
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1)
 
 # Load the trained model when the application starts
 # This is more efficient than loading it for every request
@@ -23,33 +25,60 @@ try:
     print("Attempting to load model...")
     model_mets = joblib.load(MODEL_PATH)
 
-    RFmodel = model_mets['RFmodel']
-    RF_mse = model_mets['RF_mse']
-    RF_r2 = model_mets['RF_r2']
+    RFmodel = model_mets['models'][0]
 
-    LRmodel = model_mets['LRmodel']
-    LR_mse = model_mets['LR_mse']
-    LR_r2 = model_mets['LR_r2']
+    LRmodel = model_mets['models'][1]
+
+    GBmodel = model_mets['models'][2]
+
+    RFGB_ensemble = model_mets['models'][3]
+
+    x = model_mets['dataX']
+    y = model_mets['dataY']
+
+    r2 = model_mets['r2']
+    rmse = model_mets['rmse']
+    mape = model_mets['mape']
 
     size = model_mets['size']
+    test_size = model_mets['testSize']
+
     timestamp = model_mets['timestamp']
-    srCounts = model_mets['srCounts']
+
+
+
     print("Model loaded successfully!")
 except FileNotFoundError:
     print(f"Error: Model file \"{MODEL_PATH}\" not found!")
     model = None
+    sys.exit(0)
+
+DPM_MIN = x["DPM"].min()
+DPM_MAX = x["DPM"].max()
+
+APM_MIN = x["APM"].min()
+APM_MAX = x["APM"].max()
+
+SR_MIN = y.min()
+SR_MAX = y.max()
+
+print(SR_MIN)
+
+# ------- #
+
+# webysite
 
 @app.route('/')
-def home():
-    # sets the home page
-    return render_template('index.html')
+def health_check():
+    return jsonify({
+        "status":"Running"
+    })
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    # Handles prediction, renamed calculation later, since I liked that name better after testing
     # Check if the model was loaded successfully
-    if RFmodel is None and LRmodel:
-        return jsonify({'error': 'Model file not found!'}), 500
+    if not RFmodel and not LRmodel and not GBmodel:
+        return jsonify({'error': 'One of the models is missing!'}), 500
     # From what I understand 500 errors are server-side; 400 are client-side
     # TODO, have it redirect to a new page with contact information
 
@@ -75,27 +104,30 @@ def predict():
     # The model expects the data in this format
     inData = pd.DataFrame([[dateInt, dpm, apm]], columns=['Date','DPM', 'APM'])
 
-    useLR = False
-
-    # Switch models to one that's better at extrapolating
-    if modelChoice == "Linear":
-        useLR = True
-    elif modelChoice == "RandomForest":
-        useLR = False
-    else:
-        if (dpm >= 155 or apm >= 140) or (dpm <= 35 or apm <= 10):
-            useLR = True
+    if modelChoice == "Auto":
+        if (dpm >= DPM_MAX or apm >= APM_MAX) or (dpm <= DPM_MIN or apm <= APM_MIN):
+            modelChoice = "Linear"
         else:
-            useLR = False
+            modelChoice = "RF_GB_Ensemble"
 
-    if useLR:
-        modelUsed = "Linear"
-        calc = round(LRmodel.predict(inData)[0])
-    else:
+
+    if modelChoice == "RandomForest":
         modelUsed = "Random Forest"
         # to add an uncertainty after the SR
         tp = [tree.predict(inData) for tree in RFmodel.estimators_]
         calc = f"{round(np.mean(tp))} ± {round(np.std(tp))}"
+    elif modelChoice == "Linear":
+        modelUsed = "Linear"
+        calc = round(LRmodel.predict(inData)[0])
+    elif modelChoice == "GradientBoosting":
+        modelUsed = "Gradient Boosting"
+        calc = round(GBmodel.predict(inData)[0])
+    elif modelChoice == "RF_GB_Ensemble":
+        modelUsed = "Random Forest + Gradient Boosting"
+        calc = round(RFGB_ensemble.predict(inData)[0])
+    else:
+        calc = 0
+        modelUsed = "Error!"
 
 
     return jsonify({
@@ -105,22 +137,56 @@ def predict():
 
 @app.route('/metrics')
 def getMetrics():
-    try:
-        with open("README.md", "r") as readme:
-            rd = readme.read()
-    except FileNotFoundError:
-        return "README.md not found!", 404
+
+    final_string:str = ""
+
+    metric_list:list[str] = []
     
-    secStart = "<!--START_SECTION:metrics-->"
-    secEnd = "<!--END_SECTION:metrics-->"
+    metric_list.append("Linear (Auto):\n")
 
-    match = re.search(f"{secStart}(.*?){secEnd}", rd, re.DOTALL)
+    metric_list.append(f"\t- Root Mean Squared Error: {rmse[1]:.2f}\n")
+    metric_list.append(f"\t- Mean Absolute Percentage Error: {mape[1]*100:.2f}%\n")
+    metric_list.append(f"\t- R-Squared: {r2[1]:.4f}\n")
 
-    if match:
-        section = match.group(1).strip()
-        return section, 200, {"Content-Type": "text/plain"}
-    else:
-        return "Metrics not found!", 404
+    metric_list.append("\nRandom Forest:\n")
+
+    metric_list.append(f"\t- Root Mean Squared Error: {rmse[0]:.2f}\n")
+    metric_list.append(f"\t- Mean Absolute Percentage Error: {mape[0]*100:.2f}%\n")
+    metric_list.append(f"\t- R-Squared: {r2[0]:.4f}\n")
+
+    metric_list.append("\nGradient Boosting:\n")
+
+    metric_list.append(f"\t- Root Mean Squared Error: {rmse[2]:.2f}\n")
+    metric_list.append(f"\t- Mean Absolute Percentage Error: {mape[2]*100:.2f}%\n")
+    metric_list.append(f"\t- R-Squared: {r2[2]:.4f}\n")
+
+    metric_list.append("\nRandom Forest + Gradient Boosting (Auto):\n")
+
+    metric_list.append(f"\t- Root Mean Squared Error: {rmse[3]:.2f}\n")
+    metric_list.append(f"\t- Mean Absolute Percentage Error: {mape[3]*100:.2f}%\n")
+    metric_list.append(f"\t- R-Squared: {r2[3]:.4f}\n")
+
+    metric_list.append("\n\nData:\n")
+    metric_list.append(f"\t- Training Instances: {size}\n")
+    metric_list.append(f"\t- Testing Instances: {test_size}\n")
+    metric_list.append(f"\t- Total Instances: {size+test_size}\n")
+
+    metric_list.append("\n\nRanges:\n")
+    metric_list.append(f"\t- DPM: {DPM_MIN} - {DPM_MAX}\n")
+    metric_list.append(f"\t- APM: {APM_MIN} - {APM_MAX}\n")
+    metric_list.append(f"\t- SR: {SR_MIN} - {SR_MAX}\n")
+
+    metric_list.append("\n\nLast Update:\n")
+    metric_list.append(f"{timestamp}\n")
+
+
+
+
+
+    for item in metric_list:
+        final_string += item
+
+    return final_string, 200, {"Content-Type": "text/plain"}
 
 
 
