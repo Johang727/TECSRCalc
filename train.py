@@ -24,7 +24,7 @@ TREE_AMOUNT:int = 200
 SR_BINS:list[int] = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000]
 SR_LABELS:list[str] = ['<1K SR', '1-2K SR', '2-3K SR', '3-4K SR', '4-5K SR', '5-6K SR', '6-7K SR', '7-8K SR', '8-9K SR', '9-10K SR', '10-11K SR', '11-12K SR', '12-13K SR', '13-14K SR', '14-15K SR', '15-16K SR', '16-17K SR', '>17K SR']
 
-dfList:list[pd.DataFrame] = []
+df_list:list[pd.DataFrame] = []
 rmse:list[float] = []
 r2:list[float] = []
 mape:list[float] = []
@@ -40,8 +40,8 @@ for fn in os.listdir(DATA_FOLDER):
     if fn.endswith(".csv"):
         fp = os.path.join(DATA_FOLDER, fn)
         df = pd.read_csv(fp, sep=";")
-        dfList.append(df)
-masterDF:pd.DataFrame = pd.concat(dfList, ignore_index=True)
+        df_list.append(df)
+master_df:pd.DataFrame = pd.concat(df_list, ignore_index=True)
 # --------------------------------
 
 
@@ -49,20 +49,11 @@ masterDF:pd.DataFrame = pd.concat(dfList, ignore_index=True)
 # TODO: could be better tbh, doesn't seem to remove some extreme variation in 11k games
 # --------------------------------
 
-old_instances:int = len(masterDF)
+old_instances:int = len(master_df)
 
-numeric_df = masterDF.select_dtypes(include=np.number)
+iqr_mask = (master_df["APM"] > 0.0) # turns out its literally just better to not do outliers
 
-q1 = numeric_df.quantile(.25); q3 = numeric_df.quantile(.75)
-iqr = q3 - q1
-
-lower_bounds = q1 - 2.5 * iqr
-upper_bounds = q3 + 2.5 * iqr
-
-iqr_mask = ((numeric_df >= lower_bounds) & (numeric_df <= upper_bounds)).all(axis=1) & (masterDF["APM"] > 0.0)
-
-iqr_mask = iqr_mask
-masterDF = masterDF[iqr_mask]
+master_df = master_df[iqr_mask]
 
 print("Apparently outliers are dropped?")
 # --------------------------------
@@ -71,43 +62,43 @@ print("Apparently outliers are dropped?")
 # data counting 
 # --------------------------------
 
-print(f"Instances: {len(masterDF)}")
-print(f"Outliers Removed: {len(masterDF) - old_instances}")
+print(f"Instances: {len(master_df)}")
+print(f"Outliers Removed: {len(master_df) - old_instances}")
 
 
 # count SR in each section
-masterDF['SRBins'] = pd.cut(masterDF['SR'], bins=SR_BINS, labels=SR_LABELS, right=False)
-srCounts:dict[str,int] = masterDF['SRBins'].value_counts().sort_index().to_dict()
+master_df['SRBins'] = pd.cut(master_df['SR'], bins=SR_BINS, labels=SR_LABELS, right=False)
+sr_counts:dict[str,int] = master_df['SRBins'].value_counts().sort_index().to_dict()
 
-print(srCounts)
+print(sr_counts)
 # --------------------------------
 
 
 # data splitting + prep
 # --------------------------------
 print("\nTraining started...\n")
-x = masterDF[["Date", "DPM", "APM"]]
-y = masterDF["SR"]
+x = master_df[["Date", "DPM", "APM"]]
+y = master_df["SR"]
 
-xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size=TEST_SIZE, random_state=RANDOM_STATE, stratify=masterDF["SRBins"])
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=TEST_SIZE, random_state=RANDOM_STATE, stratify=master_df["SRBins"])
 
 
-# print statistics for the SR column in the training set
-print("\nTraining set SR statistics:")
-print(f"  Min SR: {np.min(yTrain)}")
-print(f"  Max SR: {np.max(yTrain)}")
-print(f"  Mean SR: {np.mean(yTrain):.2f}")
-print("---")
+print("\nTraining SR:")
+print(f"  Min SR: {np.min(y_train)}")
+print(f"  Max SR: {np.max(y_train)}")
+print(f"  Mean SR: {np.mean(y_train):.2f}")
+print(f"  Median SR: {np.median(y_train):.2f}")
+print(f"{len(y_train)} instances.")
 
-# print statistics for the SR column in the testing set
-print("Testing set SR statistics:")
-print(f"  Min SR: {np.min(yTest)}")
-print(f"  Max SR: {np.max(yTest)}")
-print(f"  Mean SR: {np.mean(yTest):.2f}\n")
+print("----")
 
-# print instance sizes
-print("Training set size:", len(xTrain))
-print("Testing set size:", len(xTest))
+print("\nTesting SR SR:")
+print(f"  Min SR: {np.min(y_test)}")
+print(f"  Max SR: {np.max(y_test)}")
+print(f"  Mean SR: {np.mean(y_test):.2f}")
+print(f"  Median SR: {np.median(y_test)}")
+print(f"{len(y_test)} instances.")
+
 # --------------------------------
 
 # create Random Forest model:
@@ -138,7 +129,7 @@ if False:
         verbose=3
     )
 
-    grid_search.fit(xTrain, yTrain)
+    grid_search.fit(x_train, y_train)
 
     best_params = grid_search.best_params_
 
@@ -201,7 +192,7 @@ if False:
     )
 
     try:
-        grid_search_gb.fit(xTrain, yTrain)
+        grid_search_gb.fit(x_train, y_train)
     except KeyboardInterrupt:
         print("\n--- Search Interrupted (Ctrl+C) | Press again to force.---")
         
@@ -260,10 +251,10 @@ models.append(VotingRegressor(
 # fit the models
 # --------------------------------
 if not False: # this seems dumb, but False is the placeholder for a flag or something to re-search later
-        models[0].fit(xTrain, yTrain)
-        models[1].fit(xTrain, yTrain)
-        models[2].fit(xTrain, yTrain)
-        models[3].fit(xTrain, yTrain) # i dunno how imma do this one if i do the searching; something to figure out later.
+        models[0].fit(x_train, y_train)
+        models[1].fit(x_train, y_train)
+        models[2].fit(x_train, y_train)
+        models[3].fit(x_train, y_train) # i dunno how imma do this one if i do the searching; something to figure out later.
 
 # test the models performance
 # --------------------------------
@@ -274,14 +265,14 @@ if not False: # this seems dumb, but False is the placeholder for a flag or some
 print("\n----\nTesting Random Forest\n")
 
 
-predictions.append(models[0].predict(xTest))
-rmse.append(root_mean_squared_error(yTest, predictions[0]))
-r2.append(r2_score(yTest, predictions[0]))
-mape.append(mean_absolute_percentage_error(yTest, predictions[0]))
+predictions.append(models[0].predict(x_test))
+rmse.append(root_mean_squared_error(y_test, predictions[0]))
+r2.append(r2_score(y_test, predictions[0]))
+mape.append(mean_absolute_percentage_error(y_test, predictions[0]))
 
 print(f"Root Mean Squared Error: {rmse[0]:.2f}")
 print(f"R-squared: {r2[0]:.4f}")
-print(f"Mean Absolute Percentage Error: {mape[0]:.2f}")
+print(f"Mean Absolute Percentage Error: {mape[0]*100:.2f}%")
 # --------------------------------
 
 # test linear 
@@ -289,31 +280,31 @@ print(f"Mean Absolute Percentage Error: {mape[0]:.2f}")
 
 print("\n----\nTesting Linear\n")
 
-predictions.append(models[1].predict(xTest))
+predictions.append(models[1].predict(x_test))
 
-rmse.append(root_mean_squared_error(yTest, predictions[1]))
-r2.append(r2_score(yTest, predictions[1]))
-mape.append(mean_absolute_percentage_error(yTest, predictions[1]))
+rmse.append(root_mean_squared_error(y_test, predictions[1]))
+r2.append(r2_score(y_test, predictions[1]))
+mape.append(mean_absolute_percentage_error(y_test, predictions[1]))
 
 print(f"Root Mean Squared Error: {rmse[1]:.2f}")
 print(f"R-squared: {r2[1]:.4f}")
-print(f"Mean Absolute Percentage Error: {mape[1]:.2f}")
+print(f"Mean Absolute Percentage Error: {mape[1]*100:.2f}%")
 
 # test Gradient Boosting Regressor
-# --------------------------------
+# --------------------------------  
 
 print("\n----\nTesting Gradient Boosting\n")
 
-predictions.append(models[2].predict(xTest))
+predictions.append(models[2].predict(x_test))
 
-rmse.append(root_mean_squared_error(yTest, predictions[2]))
-r2.append(r2_score(yTest, predictions[2]))
-mape.append(mean_absolute_percentage_error(yTest, predictions[2]))
+rmse.append(root_mean_squared_error(y_test, predictions[2]))
+r2.append(r2_score(y_test, predictions[2]))
+mape.append(mean_absolute_percentage_error(y_test, predictions[2]))
 
 
 print(f"Root Mean Squared Error: {rmse[2]:.2f}")
 print(f"R-squared: {r2[2]:.4f}")
-print(f"Mean Absolute Percentage Error: {mape[2]:.2f}")
+print(f"Mean Absolute Percentage Error: {mape[2]*100:.2f}%")
 
 # --------------------------------
 
@@ -322,18 +313,16 @@ print(f"Mean Absolute Percentage Error: {mape[2]:.2f}")
 
 print("\n----\nTesting RF + GB\n")
 
-predictions.append(models[3].predict(xTest))
+predictions.append(models[3].predict(x_test))
 
-rmse.append(root_mean_squared_error(yTest, predictions[3]))
-r2.append(r2_score(yTest, predictions[3]))
-mape.append(mean_absolute_percentage_error(yTest, predictions[3]))
+rmse.append(root_mean_squared_error(y_test, predictions[3]))
+r2.append(r2_score(y_test, predictions[3]))
+mape.append(mean_absolute_percentage_error(y_test, predictions[3]))
 
 
 print(f"Root Mean Squared Error: {rmse[3]:.2f}")
 print(f"R-squared: {r2[3]:.4f}")
-print(f"Mean Absolute Percentage Error: {mape[3]:.2f}")
-
-# --------------------------------
+print(f"Mean Absolute Percentage Error: {mape[3]*100:.2f}%")
 
 
 
@@ -344,10 +333,10 @@ metrics = {
     'r2':r2,
     'rmse':rmse,
     'mape':mape,
-    'size': len(xTrain),
-    'testSize': len(xTest),
+    'size': len(x_train),
+    'testSize': len(x_test),
     'timestamp': timestamp,
-    'srCounts': srCounts,
+    'srCounts': sr_counts,
     'dataX': x,
     'dataY': y
 }
