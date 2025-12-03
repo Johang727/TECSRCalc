@@ -73,11 +73,17 @@ sr_counts:dict[str,int] = master_df['SRBins'].value_counts().sort_index().to_dic
 print(sr_counts)
 # --------------------------------
 
+# add APP too
+# --------------------------------
+
+master_df["APP"] = master_df["APM"] / master_df['DPM']
+
+print(master_df["APP"])
 
 # data splitting + prep
 # --------------------------------
 print("\nTraining started...\n")
-x = master_df[["Date", "DPM", "APM"]]
+x = master_df[["Date", "DPM", "APM", "APP"]]
 y = master_df["SR"]
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=TEST_SIZE, random_state=RANDOM_STATE, stratify=master_df["SRBins"])
