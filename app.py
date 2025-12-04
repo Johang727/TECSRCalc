@@ -1,10 +1,8 @@
 from flask import Flask, render_template, request, jsonify
-import joblib
+import joblib, os, sys, datetime
 import pandas as pd
 from flask_cors import CORS
-import datetime
 import numpy as np
-import re, os, sys
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 # Create the Flask application instance
@@ -32,6 +30,8 @@ try:
     GBmodel = model_mets['models'][2]
 
     RFGB_ensemble = model_mets['models'][3]
+
+    AllModel = model_mets['models'][4]
 
     x = model_mets['dataX']
     y = model_mets['dataY']
@@ -62,7 +62,6 @@ APM_MAX = x["APM"].max()
 SR_MIN = y.min()
 SR_MAX = y.max()
 
-print(SR_MIN)
 
 # ------- #
 
@@ -77,7 +76,7 @@ def health_check():
 @app.route('/predict', methods=['POST'])
 def predict():
     # Check if the model was loaded successfully
-    if not RFmodel and not LRmodel and not GBmodel:
+    if not RFmodel and not LRmodel and not GBmodel and not AllModel:
         return jsonify({'error': 'One of the models is missing!'}), 500
     # From what I understand 500 errors are server-side; 400 are client-side
     # TODO, have it redirect to a new page with contact information
@@ -125,6 +124,9 @@ def predict():
     elif modelChoice == "RF_GB_Ensemble":
         modelUsed = "Random Forest + Gradient Boosting"
         calc = round(RFGB_ensemble.predict(inData)[0])
+    elif modelChoice == "All":
+        modelUsed = "All"
+        calc = round(AllModel.predict(inData)[0])
     else:
         calc = 0
         modelUsed = "Error!"
@@ -132,11 +134,16 @@ def predict():
 
     return jsonify({
         'sr': calc,
-        'model':modelUsed
+        'model':modelUsed,
+        'app':apm/dpm
         })
 
 @app.route('/metrics')
 def getMetrics():
+
+    excel_start = datetime.date(1900, 1, 1)
+    today = datetime.date.today()
+    date = (today - excel_start).days + 2
 
     final_string:str = ""
 
@@ -166,6 +173,13 @@ def getMetrics():
     metric_list.append(f"\t- Mean Absolute Percentage Error: {mape[3]*100:.2f}%\n")
     metric_list.append(f"\t- R-Squared: {r2[3]:.4f}\n")
 
+    metric_list.append("\nAll:\n")
+
+    metric_list.append(f"\t- Root Mean Squared Error: {rmse[4]:.2f}\n")
+    metric_list.append(f"\t- Mean Absolute Percentage Error: {mape[4]*100:.2f}%\n")
+    metric_list.append(f"\t- R-Squared: {r2[4]:.4f}\n")
+
+
     metric_list.append("\n\nData:\n")
     metric_list.append(f"\t- Training Instances: {size}\n")
     metric_list.append(f"\t- Testing Instances: {test_size}\n")
@@ -186,7 +200,10 @@ def getMetrics():
     for item in metric_list:
         final_string += item
 
-    return final_string, 200, {"Content-Type": "text/plain"}
+    return jsonify({
+        'metrics': final_string,
+        'date':date
+        })
 
 
 

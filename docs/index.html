@@ -29,9 +29,14 @@
         <tr>
             <td width="330" style="border-style: none; border-width: medium" align="left" valign="top">
             <b><font size="5">SR Calculator:</font></b><p>                
-            <b>DPM :</b> <input type="text" id="dpm" name="Subject" size="40"></p>
+            
+            <p><b>Date :</b> <span id="date-container">...</span></p>
+
+            <p><b>DPM :</b> <input type="text" id="dpm" name="Subject" size="40"></p>
 
             <p><b>APM :</b> <input type="text" id="apm" name="Subject0" size="40"><br>
+
+            <p><b>APP :</b> <span id="efish-container">Enter data + run...</span></p>
             
             <p><b>Model :</b> 
                 <select name="Model" id="modelSelect">
@@ -40,6 +45,7 @@
                     <option value="RandomForest">Random Forest</option>
                     <option value="GradientBoosting">Gradient Boosting</option>
                     <option value="RF_GB_Ensemble">Random Forest + Gradient Boosting</option>
+                    <option value="All">All Models</option>
                 </select>
             </p>
 
@@ -81,6 +87,10 @@
                 |&nbsp;&nbsp;&nbsp;&nbsp;- Essentially takes the average of the two outputs.<br>
                 |&nbsp;&nbsp;&nbsp;&nbsp;- Will not provide an uncertainty range.<br>
 
+                - <b>All:</b><br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- Run them all and take the average.<br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- I mean, this has proven to be the best with my tests.<br>
+                |&nbsp;&nbsp;&nbsp;&nbsp;- Will not provide an uncertainty range.<br>
             </p>
 
             </td>
@@ -102,6 +112,7 @@
         const modelSelect = document.getElementById('modelSelect').value;
         const resultContainer = document.getElementById('result-container');
         const modelContainer = document.getElementById('model-container');
+        const efishContainer = document.getElementById("efish-container");
 
         if (dpm === "" || apm === "") {
             resultContainer.innerText = "Please enter both DPM and APM.";
@@ -130,6 +141,7 @@
             } else {
                 resultContainer.innerHTML = `${data.sr}`;
                 modelContainer.innerHTML = `${data.model}`;
+                efishContainer.innerHTML = `${data.app}`;
             }
 
         } catch (error) {
@@ -140,18 +152,24 @@
 
     async function getMetrics() {
         const metricsContainer = document.getElementById('metrics-content');
+        const dateContainer = document.getElementById("date-container");
         try {
             const response = await fetch(`${API_URL}/metrics`);
             const data = await response.text();
 
             if (response.ok) {
-                metricsContainer.innerHTML = `<pre>${data}</pre>`;
+                metricsContainer.innerHTML = `<pre>${data.metrics}</pre>`;
+                metricsContainer.innerHTML = `${data.date}`;
             } else {
-                metricsContainer.innerHTML = `Error ${data}`;
+                console.error("Metrics fetch failed:", error);
+                metricsContainer.innerText = "Failed to load metrics!";
+                dateContainer.innerText = "Failed to load.";
             }
+
         } catch (error) {
             console.error("Metrics fetch failed:", error);
             metricsContainer.innerText = "Failed to load metrics!";
+            dateContainer.innerText = "Failed to load.";
         }
     }
     document.addEventListener('DOMContentLoaded', getMetrics);
