@@ -155,7 +155,7 @@
         const dateContainer = document.getElementById("date-container");
         try {
             const response = await fetch(`${API_URL}/metrics`);
-            const data = await response.text();
+            const data = await response.json();
 
             if (response.ok) {
                 metricsContainer.innerHTML = `${data.metrics}`;
