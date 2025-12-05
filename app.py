@@ -93,6 +93,7 @@ def predict():
     try:
         dpm = float(dpm)
         apm = float(apm)
+        app = apm/dpm
         excel_start = datetime.date(1900, 1, 1)
         today = datetime.date.today()
         dateInt = (today - excel_start).days + 2
@@ -101,7 +102,7 @@ def predict():
 
     # Create a pandas DataFrame for the prediction
     # The model expects the data in this format
-    inData = pd.DataFrame([[dateInt, dpm, apm]], columns=['Date','DPM', 'APM'])
+    inData = pd.DataFrame([[dateInt, dpm, apm, app]], columns=['Date','DPM', 'APM', 'APP'])
 
     if modelChoice == "Auto":
         if (dpm >= DPM_MAX or apm >= APM_MAX) or (dpm <= DPM_MIN or apm <= APM_MIN):

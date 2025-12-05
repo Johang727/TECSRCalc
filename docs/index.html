@@ -103,7 +103,7 @@
 
 
 <script>
-    const API_URL = 'https://api.tecsrcalc.org/';
+    const API_URL = 'https://api.tecsrcalc.org';
     //const API_URL = ''
 
     async function getPrediction() {
@@ -158,8 +158,8 @@
             const data = await response.text();
 
             if (response.ok) {
-                metricsContainer.innerHTML = `<pre>${data.metrics}</pre>`;
-                metricsContainer.innerHTML = `${data.date}`;
+                metricsContainer.innerHTML = `${data.metrics}`;
+                dateContainer.innerHTML = `${data.date}`;
             } else {
                 console.error("Metrics fetch failed:", error);
                 metricsContainer.innerText = "Failed to load metrics!";
