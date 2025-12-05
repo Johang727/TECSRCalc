@@ -374,7 +374,9 @@ metrics = {
     'timestamp': timestamp,
     'srCounts': sr_counts,
     'dataX': x,
-    'dataY': y
+    'dataY': y,
+    'predictions': predictions,
+    'predictions_actual': y_test
 }
 
 print("\n----\nSaving model...")
