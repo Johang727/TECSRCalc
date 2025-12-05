@@ -6,6 +6,7 @@ import numpy as np
 from werkzeug.middleware.proxy_fix import ProxyFix
 import database as db
 from functools import wraps
+from dotenv import load_dotenv
 
 # Create the Flask application instance
 app = Flask(__name__, static_folder='docs', template_folder='docs')
@@ -18,6 +19,8 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1)
 # Load the trained model when the application starts
 # This is more efficient than loading it for every request
 MODEL_PATH:str = 'model.pkl'
+
+load_dotenv()
 
 TOKEN_KEY = os.environ.get("TOKEN_KEY", "None")
 
