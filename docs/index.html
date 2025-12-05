@@ -158,7 +158,7 @@
             const data = await response.json();
 
             if (response.ok) {
-                metricsContainer.innerHTML = `${data.metrics}`;
+                metricsContainer.innerHTML = `<pre>${data.metrics}</pre>`;
                 dateContainer.innerHTML = `${data.date}`;
             } else {
                 console.error("Metrics fetch failed:", error);

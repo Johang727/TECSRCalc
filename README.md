@@ -57,26 +57,32 @@ If we expand these, we get:
 ## Models:
 
 
-*Last Update: 2025-12-02 14:40:01*
+*Last Update: 2025-12-04 20:30:54*
 ### Linear (Auto):
- - Root Mean Squared Error: 970.75
- - Mean Absolute Percentage Error: 11.05%
- - R-Squared: 0.9084
+ - Root Mean Squared Error: 949.43
+ - Mean Absolute Percentage Error: 10.34%
+ - R-Squared: 0.9108
 
 ### Random Forest:
- - Root Mean Squared Error: 757.75
- - Mean Absolute Percentage Error: 7.64%
- - R-Squared: 0.9442
+ - Root Mean Squared Error: 851.49
+ - Mean Absolute Percentage Error: 7.73%
+ - R-Squared: 0.9283
 
 ### Gradient Boosting:
- - Root Mean Squared Error: 752.12
- - Mean Absolute Percentage Error: 7.26%
- - R-Squared: 0.9450
+ - Root Mean Squared Error: 878.01
+ - Mean Absolute Percentage Error: 7.51%
+ - R-Squared: 0.9237
 
 ### Random Forest + Gradient Boosting (Auto):
- - Root Mean Squared Error: 752.21
- - Mean Absolute Percentage Error: 7.38%
- - R-Squared: 0.9450
+ - Root Mean Squared Error: 859.68
+ - Mean Absolute Percentage Error: 7.59%
+ - R-Squared: 0.9269
+
+### All:
+ - Root Mean Squared Error: 831.76
+ - Mean Absolute Percentage Error: 8.23%
+ - R-Squared: 0.9315
+
 ## Ranges:
  - DPM: 29.6 - 162.3
  - APM: 4.4 - 142.4

@@ -82,7 +82,13 @@ metrics.append(f" - Mean Absolute Percentage Error: {mape[3]*100:.2f}%\n")
 metrics.append(f" - R-Squared: {r2[3]:.4f}\n")
 
 
-metrics.append("## Ranges:\n")
+metrics.append("\n### All:\n")
+
+metrics.append(f" - Root Mean Squared Error: {rmse[4]:.2f}\n")
+metrics.append(f" - Mean Absolute Percentage Error: {mape[4]*100:.2f}%\n")
+metrics.append(f" - R-Squared: {r2[4]:.4f}\n")
+
+metrics.append("\n## Ranges:\n")
 metrics.append(f" - DPM: {DPM_MIN} - {DPM_MAX}\n")
 metrics.append(f" - APM: {APM_MIN} - {APM_MAX}\n")
 metrics.append(f" - SR: {SR_MIN} - {SR_MAX}\n")
