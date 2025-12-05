@@ -158,7 +158,7 @@ fig, ax = plt.subplots(1, 1)
 
 # make prediction graph
 ax.scatter(predictions_actual, predictions[1], color="#016583", alpha=0.1)
-ax.set_title("Random Forest Predictions", fontsize=12)
+ax.set_title("Linear Predictions", fontsize=12)
 ax.set_xlabel("Actual Values")
 ax.set_ylabel("Predicted Values")
 ax.grid(True, linestyle='--', alpha=0.6)
@@ -178,7 +178,7 @@ fig, ax = plt.subplots(1, 1)
 
 # make prediction graph
 ax.scatter(predictions_actual, predictions[2], color="#016583", alpha=0.1)
-ax.set_title("Random Forest Predictions", fontsize=12)
+ax.set_title("Gradient Boosting Predictions", fontsize=12)
 ax.set_xlabel("Actual Values")
 ax.set_ylabel("Predicted Values")
 ax.grid(True, linestyle='--', alpha=0.6)
@@ -198,7 +198,7 @@ fig, ax = plt.subplots(1, 1)
 
 # make prediction graph
 ax.scatter(predictions_actual, predictions[3], color="#016583", alpha=0.1)
-ax.set_title("Random Forest Predictions", fontsize=12)
+ax.set_title("RF + GB Predictions", fontsize=12)
 ax.set_xlabel("Actual Values")
 ax.set_ylabel("Predicted Values")
 ax.grid(True, linestyle='--', alpha=0.6)
@@ -218,7 +218,7 @@ fig, ax = plt.subplots(1, 1)
 
 # make prediction graph
 ax.scatter(predictions_actual, predictions[4], color="#016583", alpha=0.1)
-ax.set_title("Random Forest Predictions", fontsize=12)
+ax.set_title("All Models' Predictions", fontsize=12)
 ax.set_xlabel("Actual Values")
 ax.set_ylabel("Predicted Values")
 ax.grid(True, linestyle='--', alpha=0.6)
