@@ -62,36 +62,36 @@
             <p id="metrics-content">Loading...</p>
             <hr>
             <b><font size="5">Model Usage: </font></b>
-            <p>
-                - <b>Auto:</b><br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- Use this for most cases.<br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- Selects <b>Linear</b> when out of training data range.<br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- Selects <b>Random Forest</b> + <b>Gradient Boosting</b> when within training data range.<br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- Will not provide an uncertainty range.<br>
+            <pre>
+- <b>Auto:</b><br>
+    - Use this for most cases.<br>
+    - Selects <b>Linear</b> when out of training data range.<br>
+    - Selects <b>Random Forest</b> + <b>Gradient Boosting</b> when within training data range.<br>
+    - Will not provide an uncertainty range.<br>
 
 
-                - <b>Linear (Auto):</b><br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- Good for predicting outside of the training data range.<br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- Will not provide an uncertainty range.<br>
+- <b>Linear (Auto):</b><br>
+    - Good for predicting outside of the training data range.<br>
+    - Will not provide an uncertainty range.<br>
 
-                - <b>Random Forest:</b><br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- Good for predicting within of the training data range.<br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- Will provide an uncertainty range.<br>
+- <b>Random Forest:</b><br>
+    - Good for predicting within of the training data range.<br>
+    - Will provide an uncertainty range.<br>
 
-                - <b>Gradient Boosting:</b><br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- Similar to Random Forest: each tree learns from each other, rather than being seperate.<br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- Will not provide an uncertainty range.<br>
+- <b>Gradient Boosting:</b><br>
+    - Similar to Random Forest: each tree learns from each other, rather than being seperate.<br>
+    - Will not provide an uncertainty range.<br>
 
 
-                - <b>Random Forest + Gradient Boosting (Auto):</b><br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- Essentially takes the average of the two outputs.<br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- Will not provide an uncertainty range.<br>
+- <b>Random Forest + Gradient Boosting (Auto):</b><br>
+    - Essentially takes the average of the two outputs.<br>
+    - Will not provide an uncertainty range.<br>
 
-                - <b>All:</b><br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- Run them all and take the average.<br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- I mean, this has proven to be the best with my tests.<br>
-                |&nbsp;&nbsp;&nbsp;&nbsp;- Will not provide an uncertainty range.<br>
-            </p>
+- <b>All:</b><br>
+    - Run them all and take the average.<br>
+    - I mean, this has proven to be the best with my tests.<br>
+    - Will not provide an uncertainty range.<br>
+            </pre>
 
             </td>
         </tr>
