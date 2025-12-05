@@ -118,7 +118,7 @@ fig.set_figwidth(8)
 ax.bar(sr_labels, sr_list, color="orange")
 
 ax.set_xlabel("SR Categories (in Ks)")
-ax.set_ylabel("SR Range")
+ax.set_ylabel("SR Count")
 ax.set_title("SR Data")
 
 plt.savefig(f"{GRAPH_FOLDER}data.png", dpi=600)

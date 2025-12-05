@@ -382,9 +382,6 @@ joblib.dump(metrics, "model.pkl")
 print("Saved as \"model.pkl\"")
 
 
-print("Generating graph..")
-
-
 end = time.time()
 print(f"Runtime: {end-start:.2f}s")
 
