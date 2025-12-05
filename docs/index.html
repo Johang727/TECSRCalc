@@ -32,20 +32,20 @@
             
             <p><b>Date :</b> <span id="date-container">...</span></p>
 
-            <p><b>DPM :</b> <input type="text" id="dpm" name="Subject" size="40"></p>
+            <p><b>DPM :</b> <input type="text" id="dpm" name="DPM" size="40"></p>
 
-            <p><b>APM :</b> <input type="text" id="apm" name="Subject0" size="40"><br>
+            <p><b>APM :</b> <input type="text" id="apm" name="APM" size="40"><br>
 
             <p><b>APP :</b> <span id="efish-container">Enter data + run...</span></p>
             
             <p><b>Model :</b> 
                 <select name="Model" id="modelSelect">
-                    <option value="Auto">Auto (Recommended)</option>
+                    <option value="All">All Models (Recommended)</option>
+                    <option value="Auto">Auto (Legacy)</option>
                     <option value="Linear">Linear</option>
                     <option value="RandomForest">Random Forest</option>
                     <option value="GradientBoosting">Gradient Boosting</option>
                     <option value="RF_GB_Ensemble">Random Forest + Gradient Boosting</option>
-                    <option value="All">All Models</option>
                 </select>
             </p>
 
@@ -63,8 +63,15 @@
             <hr>
             <b><font size="5">Model Usage: </font></b>
             <pre>
+
+- <b>All:</b><br>
+    - Run them all and take the average.<br>
+    - Has proven to be the best with my tests.
+        - This works because the Linear model tends to undershoot and the others tend to overshoot, leading to a pretty accurate SR.<br>
+    - Will not provide an uncertainty range.<br>
+
 - <b>Auto:</b><br>
-    - Use this for most cases.<br>
+    - Old default, here just in-case you want to use it.<br>
     - Selects <b>Linear</b> when out of training data range.<br>
     - Selects <b>Random Forest</b> + <b>Gradient Boosting</b> when within training data range.<br>
     - Will not provide an uncertainty range.<br>
@@ -87,10 +94,7 @@
     - Essentially takes the average of the two outputs.<br>
     - Will not provide an uncertainty range.<br>
 
-- <b>All:</b><br>
-    - Run them all and take the average.<br>
-    - I mean, this has proven to be the best with my tests.<br>
-    - Will not provide an uncertainty range.<br>
+
             </pre>
 
             </td>
