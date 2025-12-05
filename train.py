@@ -73,11 +73,17 @@ sr_counts:dict[str,int] = master_df['SRBins'].value_counts().sort_index().to_dic
 print(sr_counts)
 # --------------------------------
 
+# add APP too
+# --------------------------------
+
+master_df["APP"] = master_df["APM"] / master_df['DPM']
+
+print(master_df["APP"])
 
 # data splitting + prep
 # --------------------------------
 print("\nTraining started...\n")
-x = master_df[["Date", "DPM", "APM"]]
+x = master_df[["Date", "DPM", "APM", "APP"]]
 y = master_df["SR"]
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=TEST_SIZE, random_state=RANDOM_STATE, stratify=master_df["SRBins"])
@@ -246,6 +252,17 @@ models.append(VotingRegressor(
 
 # --------------------------------
 
+# create ensemble of everything, what happens?
+
+models.append(VotingRegressor(
+    estimators=[
+        ("rf", models[0]),
+        ("l", models[1]),
+        ("gb", models[2])
+    ],
+    n_jobs=-1
+))
+# --------------------------------
 
 
 # fit the models
@@ -255,6 +272,8 @@ if not False: # this seems dumb, but False is the placeholder for a flag or some
         models[1].fit(x_train, y_train)
         models[2].fit(x_train, y_train)
         models[3].fit(x_train, y_train) # i dunno how imma do this one if i do the searching; something to figure out later.
+        models[4].fit(x_train, y_train) # all of them
+
 
 # test the models performance
 # --------------------------------
@@ -308,7 +327,7 @@ print(f"Mean Absolute Percentage Error: {mape[2]*100:.2f}%")
 
 # --------------------------------
 
-# test All Ensemble
+# test RF+GB Ensemble
 # --------------------------------
 
 print("\n----\nTesting RF + GB\n")
@@ -324,6 +343,23 @@ print(f"Root Mean Squared Error: {rmse[3]:.2f}")
 print(f"R-squared: {r2[3]:.4f}")
 print(f"Mean Absolute Percentage Error: {mape[3]*100:.2f}%")
 
+# test all ensemble
+# --------------------------------
+
+print("\n----\nTesting All\n")
+
+predictions.append(models[4].predict(x_test))
+
+rmse.append(root_mean_squared_error(y_test, predictions[4]))
+r2.append(r2_score(y_test, predictions[4]))
+mape.append(mean_absolute_percentage_error(y_test, predictions[4]))
+
+
+print(f"Root Mean Squared Error: {rmse[4]:.2f}")
+print(f"R-squared: {r2[4]:.4f}")
+print(f"Mean Absolute Percentage Error: {mape[4]*100:.2f}%")
+
+# --------------------------------
 
 
 timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
