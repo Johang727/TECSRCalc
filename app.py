@@ -1,9 +1,11 @@
 from flask import Flask, render_template, request, jsonify
-import joblib, os, sys, datetime
+import joblib, os, sys, datetime, secrets, jwt, re
 import pandas as pd
 from flask_cors import CORS
 import numpy as np
 from werkzeug.middleware.proxy_fix import ProxyFix
+import database as db
+from functools import wraps
 
 # Create the Flask application instance
 app = Flask(__name__, static_folder='docs', template_folder='docs')
@@ -17,6 +19,11 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1)
 # This is more efficient than loading it for every request
 MODEL_PATH:str = 'model.pkl'
 
+TOKEN_KEY = os.environ.get("TOKEN_KEY", "None")
+
+if TOKEN_KEY == "None":
+    print("Check .env! No token key found!")
+    sys.exit(1)
 
 try:
     # fetch and store variables from the packaged model
@@ -66,6 +73,45 @@ SR_MAX = y.max()
 # ------- #
 
 # webysite
+
+def tkn_req(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get("Authorization")
+
+        if not token:
+            return jsonify({'message': 'Authorization token is missing!'}), 401
+
+        try:
+            token_string = token.split(' ')[1]
+        except IndexError:
+            token_string = token
+
+        usr_id = db.verify_token(token_string)
+
+        if usr_id == -1:
+            return jsonify({'message': 'Token is invalid or expired.'}), 403
+        
+        return f(usr_id, *args, **kwargs)
+    return decorated
+
+def prms_req(min_lvl):
+    def decorator(f):
+        @wraps(f)
+        def decorated_function(usr_id, *args, **kwargs):
+            usr_perms = db.get_usr_perms(usr_id)
+
+            if usr_perms < min_lvl:
+                return jsonify({
+                    "message":"Insufficient permissions.",
+                    "required": min_lvl,
+                    "current": usr_perms
+                }), 403
+            
+            return f(usr_id, *args, **kwargs)
+        return decorated_function
+    return decorator
+
 
 @app.route('/')
 def health_check():
@@ -205,6 +251,61 @@ def getMetrics():
         'metrics': final_string,
         'date':date
         })
+
+@app.route("/login", methods=["POST"])
+def handle_login():
+    data = request.get_json(force=True)
+    username = data.get('username')
+    password = data.get('password')
+
+    usr_id = db.verify_login(username, password)
+
+
+    if usr_id != -1:
+        token = db.gen_token(usr_id)
+        return jsonify({
+            "status": "success",
+            "token":token
+        })
+    else:
+        return jsonify({
+            "status": "error",
+            "message": "Username or password invalid, try again."
+        })
+
+@app.route("/register", methods=["POST"])
+def handle_registration():
+    data = request.get_json()
+    usr = data.get("username")
+
+    usr = usr.strip()
+
+    if not 3 <= len(usr) <= 20:
+        return jsonify({
+            "status": "error",
+            "message": "Username must be between 3 and 20 characters long."
+        })
+
+    if not re.fullmatch(r'^[a-zA-Z0-9_-]+$', usr):
+        return jsonify({
+            "status": "error",
+            "message": "Username can only contain letters, numbers, hyphens, and underscores."
+        })
+    
+    if usr.lower() in ["admin", "root", "api", "tecsrcalc", "guest"]:
+        return jsonify({
+            "status": "error",
+            "message": "Username invalid."
+        })
+    
+    result = db.register_user(usr)
+
+    if result["status"] == "error":
+        return jsonify(result), 409
+    
+    return jsonify(result), 201
+    
+    
 
 
 

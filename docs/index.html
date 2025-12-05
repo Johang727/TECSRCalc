@@ -123,6 +123,12 @@
             return;
         }
 
+
+        if (dpm == 0 || apm == 0) {
+            resultContainer.innerText = "Please enter both DPM and APM.";
+            return;
+        }
+
         resultContainer.innerText = "Calculating... First run might take a while...";
 
         try {
