@@ -103,4 +103,4 @@ If we expand these, we get:
 
 | Linear Predicted vs Real | Random Forest Predicted vs Real | Gradient Boosting Predicted vs Real | RF + GF Predicted vs Real | All Models' Predicted vs Real |
 | :---: | :---: | :---: | :---: | :---: |
-| ![Linear Predicted vs Real](graphs/lr.png) | | ![Random Forest Predicted vs Real](graphs/rf.png) | | ![Gradient Boosting Predicted vs Real](graphs/gb.png) | | ![RF + GB Predicted vs Real](graphs/rfgb.png) | | ![All Models' Predicted vs Real](graphs/lr.png) | 
+| ![Linear Predicted vs Real](graphs/lr.png) | ![Random Forest Predicted vs Real](graphs/rf.png) | ![Gradient Boosting Predicted vs Real](graphs/gb.png) | ![RF + GB Predicted vs Real](graphs/rfgb.png) | ![All Models' Predicted vs Real](graphs/lr.png) | 
