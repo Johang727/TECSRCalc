@@ -1,3 +1,7 @@
+This branch is for testing an account system for easy uploading of images to contribute if you'd like. By default, you will be able to contribute without making an account.
+
+There's not much made rn.
+
 ## TEC: SR Calculator
 Aims to determine a player's estimated Skill Rating (SR) in Tetris Effect: Connected based on Attack Per Minute (APM) and Drops Per Minute (DPM). 
 
