@@ -279,8 +279,8 @@ def handle_login():
 
 @app.route("/register", methods=["POST"])
 def handle_registration():
-    data = request.get_json()
-    usr = data.get("username")
+    data = request.get_json(force=True)
+    usr = data.get("usr")
 
     usr = usr.strip()
 
