@@ -22,7 +22,8 @@ MODEL_PATH:str = 'model.pkl'
 
 load_dotenv()
 
-TOKEN_KEY = os.environ.get("TOKEN_KEY", "None")
+TOKEN_KEY = os.getenv("TOKEN_KEY", "None")
+
 
 if TOKEN_KEY == "None":
     print("Check .env! No token key found!")

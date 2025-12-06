@@ -1,10 +1,14 @@
 import sqlite3, os, bcrypt, secrets, time, datetime, jwt, sys
 from random import randint
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 DB_FILE = "/var/lib/tecsrcalc/data.db"
 DB_DIR = os.path.dirname(DB_FILE)
 
-TOKEN_KEY = os.environ.get("TOKEN_KEY", "None")
+TOKEN_KEY = os.getenv("TOKEN_KEY", "None")
 
 if TOKEN_KEY == "None":
     print("Check .env! No token key found!")
