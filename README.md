@@ -21,18 +21,17 @@ Streams on twitch.tv, personal matches and friend matches.
 </details>
 
 <details>
-<summary>Why only 2 (technically 3) features?</summary>
+<summary>Why only 4 features?</summary>
 
 Tetris Effect: Connected only directly provides 5 metrics:
 - Drops Per Minute (DPM); aka `Speed`
+    - Also known as Pieces Per Second (PPS) in some games. Multiply this value by 60 to get DPM.
 - Attack Per Minute (APM); aka `Attack`
 - Zone Attack Per Minute (ZAPM)
     - Zone attack is a weird metric, as much as I'd like to include it, zoning in Phase 1 (the longest and easiest phase to zone in) and then never again can result in an over-inflated value.
-    - Furthermore, since `ZAPM` only divides by time spent in zone, a zone can last a few frames, and as long as you scored just one line, you will have a `ZAPM` in the hundreds.
-        - See below for some images:
+    - Furthermore, since `ZAPM` only divides by time spent in zone, a zone can last a few frames, therefore, it is easy have a `ZAPM` in the thousands.
             <details>
             <summary>Image from the Enhance Discord </summary>
-
             ![alt text](docs/images/image-1.png)
             </details>
     - These situations are rare, but it's not uncommon to see lots of ZAPM fluctuation.
@@ -44,11 +43,18 @@ Tetris Effect: Connected only directly provides 5 metrics:
 
 If we expand these, we get:
 - Attack Efficiency `(APP = APM/DPM)`
-    - This was not included because it is directly related to the two main features.
 - Score Efficiency `(Score/(DPM*Time))`
     - Very similar to attack efficiency, therefore is not included in the dataset.
-    - Zone provides a higher boost in `Attack` than in `Score`, in a mode about trying to topout the other player, `Attack` is really what matters the most.
+    - Zone provides a higher boost in `Attack` than in `Score`, in a mode about trying to eliminate the other player, `Attack` is really what matters the most.
 
+Therefore, from there, I decided the most important features are:
+- Speed (DPM)
+- Attack (APM)
+- Efficiency
+    - Initially, I didn't include this one, but decided to after realizing it was overawarding speed.
+    - Despite only influencing the model's outcome by 10% *(according to the random forest)*, 10% can make the difference of a few hundred SR. 
+- Date
+    - I included this for SR creep, but the game has died down, so it's not as useful.
 
 </details>
 
