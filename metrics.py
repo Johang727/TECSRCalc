@@ -1,5 +1,6 @@
 import joblib
-import sys 
+import sys
+import pandas as pd
 
 metrics:list[str] = [] # this will be the output txt file
 
@@ -20,6 +21,7 @@ try:
 
     x = model_mets['dataX']
     y = model_mets['dataY']
+    models = model_mets['models']
 
 
 except FileNotFoundError: 
@@ -87,6 +89,18 @@ metrics.append("\n### All:\n")
 metrics.append(f" - Root Mean Squared Error: {rmse[4]:.2f}\n")
 metrics.append(f" - Mean Absolute Percentage Error: {mape[4]*100:.2f}%\n")
 metrics.append(f" - R-Squared: {r2[4]:.4f}\n")
+
+metrics.append(f"\n## Feature Importance:\n")
+
+# random forest importance
+importances = models[0].feature_importances_
+feature_imp_df = pd.DataFrame({"Feature": ["Date", "DPM", "APM", "APP"],
+                               "Gini Importance": importances}).sort_values("Gini Importance",ascending=False)
+
+feature_imp_df["Gini Importance"] = (feature_imp_df["Gini Importance"] * 100).round(2)
+feature_imp_df["Gini Importance"] = feature_imp_df["Gini Importance"].astype(str) + '%'
+
+metrics.append(feature_imp_df.to_markdown(index=False))
 
 metrics.append("\n## Ranges:\n")
 metrics.append(f" - DPM: {DPM_MIN} - {DPM_MAX}\n")

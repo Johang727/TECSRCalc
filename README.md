@@ -63,41 +63,48 @@ Therefore, from there, I decided the most important features are:
 ## Models:
 
 
-*Last Update: 2025-12-05 10:47:58*
+*Last Update: 2025-12-24 17:37:17*
 ### Linear (Auto):
- - Root Mean Squared Error: 859.16
- - Mean Absolute Percentage Error: 8.53%
- - R-Squared: 0.9358
+ - Root Mean Squared Error: 968.57
+ - Mean Absolute Percentage Error: 11.55%
+ - R-Squared: 0.9194
 
 ### Random Forest:
- - Root Mean Squared Error: 848.89
- - Mean Absolute Percentage Error: 7.11%
- - R-Squared: 0.9373
+ - Root Mean Squared Error: 799.71
+ - Mean Absolute Percentage Error: 8.76%
+ - R-Squared: 0.9450
 
 ### Gradient Boosting:
- - Root Mean Squared Error: 844.09
- - Mean Absolute Percentage Error: 7.04%
- - R-Squared: 0.9380
+ - Root Mean Squared Error: 784.52
+ - Mean Absolute Percentage Error: 8.35%
+ - R-Squared: 0.9471
 
 ### Random Forest + Gradient Boosting (Auto):
- - Root Mean Squared Error: 841.56
- - Mean Absolute Percentage Error: 7.00%
- - R-Squared: 0.9384
+ - Root Mean Squared Error: 786.69
+ - Mean Absolute Percentage Error: 8.53%
+ - R-Squared: 0.9468
 
 ### All:
- - Root Mean Squared Error: 816.81
- - Mean Absolute Percentage Error: 7.25%
- - R-Squared: 0.9420
+ - Root Mean Squared Error: 803.45
+ - Mean Absolute Percentage Error: 9.11%
+ - R-Squared: 0.9445
 
+## Feature Importance:
+| Feature   | Gini Importance   |
+|:----------|:------------------|
+| APM       | 45.66%            |
+| DPM       | 37.62%            |
+| APP       | 12.27%            |
+| Date      | 4.46%             |
 ## Ranges:
  - DPM: 27.2 - 162.3
  - APM: 2.1 - 142.4
  - SR: 1431 - 17894
 
 ## Data:
- - Training: 1022 Points
- - Testing: 114 Points
- - All: 1136 Points
+ - Training: 1033 Points
+ - Testing: 115 Points
+ - All: 1148 Points
 
 <!--END_SECTION:metrics-->
 ![SR Counts](graphs/data.png)

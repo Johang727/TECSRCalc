@@ -232,7 +232,6 @@ ax.plot(predictions[4], p(predictions[4]), "r", linewidth=2)
 plt.savefig(f"{GRAPH_FOLDER}all.png", dpi=600)
 
 
-
 print("Finished creating graphs!")
 
 
