@@ -87,6 +87,8 @@ def predict():
     apm = data.get('apm')
     modelChoice = data.get('modelSelect')
 
+    print(f"[DEBUG] Calculation Request Recieved: DPM = {dpm}; APM = {apm}; Model = {modelChoice}")
+
     # Basic input validation
     if dpm is None or apm is None:
         return jsonify({'error': 'Missing DPM or APM values.'}), 400
@@ -98,6 +100,7 @@ def predict():
         today = datetime.date.today()
         dateInt = (today - excel_start).days + 2
     except ValueError:
+        print("[ERROR] Something triggered a ValueError.")
         return jsonify({'error': 'Invalid input. Please provide numbers.'}), 400
 
     # Create a pandas DataFrame for the prediction
@@ -131,8 +134,9 @@ def predict():
     else:
         calc = 0
         modelUsed = "Error!"
+        print("[ERROR] Model invalid!")
 
-
+    print(f"[DEBUG] {modelUsed} calculated an SR of {calc} with the user's data!")
     return jsonify({
         'sr': calc,
         'model':modelUsed,
