@@ -3,7 +3,7 @@
 <html lang="en">
 
     <head>
-        <meta charset="utf-8"
+        <meta charset="utf-8">
         <meta name="viewport" content="width = device-width, initial-scale = 1">
 
 
@@ -76,7 +76,7 @@
 
                     <!-- metrics + how to use section -->
                     <p>
-                        <details>
+                        <details id="model-usage">
                             <summary><i>Which model should I use?</i></summary>
 
                             <ul>
@@ -93,8 +93,8 @@
                     </p>
 
                     <p>
-                        <details>
-                            <summary><i>"All" Model Accuracy</i></summary>
+                        <details id="model-accuracy">
+                            <summary><i>How accurate is the model?</i></summary>
                             <p><strong>Section Under Construction!</strong></p>
                             <p>
                                 <table>
@@ -104,26 +104,33 @@
                                     </tr>
                                     <tr>
                                         <td>Beginner (-4K)</td>
-                                        <td><span id = "beginner-error">uuh, something</span></td>
+                                        <td><span id = "beginner-error">Loading...</span></td>
                                     </tr>
                                     <tr>
                                         <td>Intermediate (4K-8K)</td>
-                                        <td><span id = "intermediate-error">uuh, something</span></td>
+                                        <td><span id = "intermediate-error">Loading...</span></td>
                                     </tr>
                                     <tr>
                                         <td>Advanced (8K-12K)</td>
-                                        <td><span id = "advanced-error">uuh, something</span></td>
+                                        <td><span id = "advanced-error">Loading...</span></td>
                                     </tr>
                                     <tr>
                                         <td>Expert (12K-16K)</td>
-                                        <td><span id = "expert-error">uuh, something</span></td>
+                                        <td><span id = "expert-error">Loading...</span></td>
                                     </tr>
                                     <tr>
                                         <td>Master (16K+)</td>
-                                        <td><span id = "master-error">uuh, something</span></td>
+                                        <td><span id = "master-error">Loading...</span></td>
                                     </tr>
                                 </table>
-                                <p><i><a href="">Click here for different models' performance and more metrics!</a></i></p>
+                                <p><i>This table shows the accuracy of the "All" model.</i></p>
+                                <p><i><a href="metrics.html">Click here for different models' performance and more metrics!</a></i></p>
+
+                                <i><b>Why is the error so high?</b></i>
+                                <ul>
+                                    <li>There are more factors in SR than what the game presents in its results screen, therefore the model will never be able to determine SR 100% accurately based only on that.</li>
+                                    <li>See more in the <i><a href="#feature-details">"Why only two inputs?"</a></i> section.</li>
+                                </ul>
                             </p>
                         </details>
                     </p>
@@ -132,7 +139,7 @@
 
                     <!-- misc. information section -->
                     <p>
-                        <details>
+                        <details id="data-collection">
                             <summary><i>How/where is data collected?</i></summary>
 
                             <ul>
@@ -161,8 +168,8 @@
                     
 
                     <p>
-                        <details>
-                            <summary><i>Why only two (technically 4) features?</i></summary>
+                        <details id="feature-details">
+                            <summary><i>Why only two inputs?</i></summary>
                             <p><b><u>Tetris Effect: Connected only directly provides 5 metrics:</u></b></p>
                             <ul>
                                 <li><b>Drops Per Minute (DPM) / Speed</b></li>
@@ -212,7 +219,10 @@
                                 <li><b>Date</b></li>
                                 <ul>
                                     <li>Included for SR creep, however, this game isn't as active as before.</li>
-                                    <li>It would be good if I wanted to predict pre-crossplay ratings, but I don't think it'd work well. There's hardly any low ranking data for pre-crossplay anyways.</li>
+                                    <li>It would be good if I wanted to predict pre-crossplay ratings, due to the lack of pre-crossplay ranking data and metrics.</li>
+                                    <ul>
+                                        <li><i>Although, it would be cool to see if SR could go below 1000!</i></li>
+                                    </ul>
                                 </ul>
                             </ul>
 
@@ -233,94 +243,13 @@
 
         </div>
 
-        <script src = "theme.js"></script>
+        <script src = "scripts/theme.js"></script>
 
     </body>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
-    <script>
-        const API_URL = "https://api.tecsrcalc.org";
-
-        async function get_prediction() {
-            const DPM = document.getElementById("dpm").value;
-            const APM = document.getElementById("apm").value;
-            const MODEL_SELECTION = document.getElementById("model-select").value;
-
-            const EFISH_CONTAINER = document.getElementById("efish-container");
-            const RESULTS_CONTAINER = document.getElementById("result-container");
-            const MODEL_CONTAINER = document.getElementById("model-container");
-            
-            RESULTS_CONTAINER.innerText = "Calculating..."
-
-            try {
-                const RESPONSE = await fetch(`${API_URL}/predict`, {
-                    method: "POST",
-                    headers: {"Content-Type": "application/json"},
-                    body: JSON.stringify({DPM, APM, MODEL_SELECTION})
-                });
-
-                if (!RESPONSE.ok) {
-                    throw new Error(`Server Error: ${RESPONSE.status}`);
-                }
-
-                const DATA = await RESPONSE.json();
-
-                if (DATA.error) {
-                    RESULTS_CONTAINER.innerText = `Error: ${DATA.error}`;
-                } else {
-                    RESULTS_CONTAINER.innerText = DATA.sr;
-                    MODEL_CONTAINER.innerText = DATA.model;
-                    EFISH_CONTAINER.innerText = DATA.app;
-                }
-            } catch (error) {
-                console.error("Calculation Failed:", error);
-                RESULTS_CONTAINER.innerText = "Failed to calculate SR!";
-                MODEL_CONTAINER.innerText = `Error: ${DATA.error}`
-            }
-        }
-
-        async function get_metrics() {
-            // This is the index metrics, therefore they will be simple_metrics
-            const DATE_CONTAINER = document.getElementById("date-container");
-
-            // Model Usage Metrics
-            const LOWER_SR_BOUNDS = document.getElementById("lower-sr-bounds");
-            const UPPER_SR_BOUNDS = document.getElementById("upper-sr-bounds");
-            
-            // Table Elements
-            const BEGIN_CONT = document.getElementById("beginner-error");
-            const INTER_CONT = document.getElementById("intermediate-error");
-            const ADV_CONT = document.getElementById("advanced-error");
-            const EXP_CONT = document.getElementById("expert-error");
-            const MAST_CONT = document.getElementById("master-error");
-
-            try {
-                const RESPONSE = await fetch(`${API_URL}/simple_metrics`);
-                const DATA = await RESPONSE.json();
-
-                if (RESPONSE.ok) {
-                    DATE_CONTAINER.innerText = DATA.date;
-
-                    BEGIN_CONT.innerText = `±${DATA.b_err} SR`;
-                    INTER_CONT.innerText = `±${DATA.i_err} SR`;
-                    ADV_CONT.innerText = `±${DATA.a_err} SR`;
-                    EXP_CONT.innerText = `±${DATA.e_err} SR`;
-                    MAST_CONT.innerText = `±${DATA.m_err} SR`;
-
-                    LOWER_SR_BOUNDS.innerText = DATA.lower;
-                    UPPER_SR_BOUNDS.innerText = DATA.upper;
-                } else {
-                    console.error("Simple Metrics Fetch Failed!", error);
-                    DATE_CONTAINER.innerText = "Failed to load, try again later!";
-                }
-            } catch (error) {
-                console.error("Simple Metrics Fetch Failed!", error);
-                DATE_CONTAINER.innerText = "Failed to load, try again later!";
-            }
-        }
-        document.addEventListener("DOMContentLoaded", get_metrics);
-    </script>
+    <script src = "scripts/main.js"></script>
 
 </html>
