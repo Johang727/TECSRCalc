@@ -83,9 +83,9 @@ def predict():
 
     # Get the data sent from the web page
     data = request.get_json(force=True)
-    dpm = data.get('dpm')
-    apm = data.get('apm')
-    modelChoice = data.get('modelSelect')
+    dpm = data.get('DPM')
+    apm = data.get('APM')
+    modelChoice = data.get('MODEL_SELECTION')
 
     print(f"[DEBUG] Calculation Request Recieved: DPM = {dpm}; APM = {apm}; Model = {modelChoice}")
 
