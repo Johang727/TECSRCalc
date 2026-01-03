@@ -45,7 +45,7 @@ try:
 
     timestamp = model_mets['timestamp']
 
-
+    areas_error:dict = model_mets["areas_error"]
 
     print("Model loaded successfully!")
 except FileNotFoundError:
@@ -206,7 +206,28 @@ def getMetrics():
         'date':date
         })
 
+@app.route('/simple_metrics')
+def get_simple_metrics():
+    excel_start = datetime.date(1900, 1, 1)
+    today = datetime.date.today()
+    date = (today - excel_start).days + 2
 
+    b_err = str(areas_error.get("Beginner_all", "No data."))
+    i_err = str(areas_error.get("Intermediate_all", "No data."))
+    a_err = str(areas_error.get("Advanced_all", "No data."))
+    e_err = str(areas_error.get("Expert_all", "No data."))
+    m_err = str(areas_error.get("Master_all", "No data."))
+
+    return jsonify({
+        "date": date,
+        "b_err": b_err,
+        "i_err": i_err,
+        "a_err": a_err,
+        "e_err": e_err,
+        "m_err": m_err,
+        "lower": SR_MIN,
+        "upper": SR_MAX
+    })
 
 if __name__ == '__main__':
     # only runs when run locally

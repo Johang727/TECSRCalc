@@ -1,0 +1,71 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta http-equiv="Content-Language" content="en-us">
+<title>About</title>
+<!--mstheme--><link rel="stylesheet" type="text/css" href="themes/slate/slat1011.css"><meta name="Microsoft Theme" content="slate 1011">
+<meta name="Microsoft Border" content="tlb, default">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
+</head>
+
+<body><!--msnavigation--><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>
+
+
+
+<p>&nbsp;</p>
+
+<p>
+    <b>What do the statistics mean?</b><br><br>
+
+    <b>M</b>ean <b>S</b>quared <b>E</b>rror: The average squared difference between actual and predicted values<br>
+    |&nbsp;&nbsp;&nbsp;&nbsp;- The higher the value, the less accurate the model is.<br>
+    <b>R2</b> (R-Squared): How well the regression tree fits the data.<br>
+    |&nbsp;&nbsp;&nbsp;&nbsp;- The closer to 1, the better<br>
+    |&nbsp;&nbsp;&nbsp;&nbsp;- Despite my models having a high R2, this does not directly equate to it's accuracy. There are more factors that go into SR and the SR economy will always change. <br><br>
+
+    <b>The first two models...</b><br>
+    I only had the Random Forest model, which was good for what it's meant for: interpolation, guessing a value within the training data. However, going outside the SR range for my data resulted in no extrapolation, guessing a value outside of the training data.<br><br>
+    This meant that the model was really good at returning accurate results for the 2K-17K range, but not good for anything outside of that. The model would never return values under 2K or above 17K. Therefore, I decided to introduce a model that can "guess" values outside the training data's range.<br><br>
+    Rather than replace the model entirely, I decided to have two models instead, switching to the alternate model which supports extrapolation when needed.<br><br>
+
+    <b>...and the rest?</b><br>
+    The rest are experimental models, essentially made out of curiousity. Some of these are... less practical than others<br>
+
+    |&nbsp;&nbsp;&nbsp;&nbsp;- Gradient Boosting<br>
+    |&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;- Similar to the Random Forest, but rather than each "tree" being independent, the trees learn from each other and improve based off of that.<br>
+    
+    
+
+</p>
+
+<hr align="left">
+
+
+<p>
+    Font used: <a href="https://fonts.google.com/specimen/Space+Mono">Space Mono</a><br>
+    Created with Microsoft FrontPage 2003
+</p>
+
+<hr align="left">
+
+
+<a href="https://github.com/Johang727/TECSRCalc">GitHub Repository</a> || <nobr>Discord: @Johang727</nobr>
+
+
+
+<!--msnavigation--></td></tr><!--msnavigation--></table><!--msnavigation--><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>
+
+
+<hr align="left">
+
+
+<p align="left"><small>
+<nobr><A HREF="index.html" TARGET="" STYLE="text-decoration: none;">Home</A></nobr> ||  <nobr>About</nobr>
+
+
+</td></tr><!--msnavigation--></table></body>
+
+</html>

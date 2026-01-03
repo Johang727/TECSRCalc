@@ -4,24 +4,26 @@ import pandas as pd
 
 metrics:list[str] = [] # this will be the output txt file
 
-MODEL_PATH = 'model.pkl'
+MODEL_PATH = "model.pkl"
 
 try:
     model_mets = joblib.load(MODEL_PATH)
 
-    r2 = model_mets['r2']
-    rmse = model_mets['rmse']
-    mape = model_mets['mape']
+    r2 = model_mets["r2"]
+    rmse = model_mets["rmse"]
+    mape = model_mets["mape"]
+    med_abs_err = model_mets["med_abs_err"]
 
 
-    size = model_mets['size']
-    test_size = model_mets['testSize']
-    ts = model_mets['timestamp']
-    srCounts = model_mets['srCounts']
+    size = model_mets["size"]
+    test_size = model_mets["testSize"]
+    ts = model_mets["timestamp"]
+    srCounts = model_mets["srCounts"]
 
-    x = model_mets['dataX']
-    y = model_mets['dataY']
-    models = model_mets['models']
+    x = model_mets["dataX"]
+    y = model_mets["dataY"]
+
+    models = model_mets["models"]
 
 
 except FileNotFoundError: 
@@ -98,7 +100,7 @@ feature_imp_df = pd.DataFrame({"Feature": ["Date", "DPM", "APM", "APP"],
                                "Gini Importance": importances}).sort_values("Gini Importance",ascending=False)
 
 feature_imp_df["Gini Importance"] = (feature_imp_df["Gini Importance"] * 100).round(2)
-feature_imp_df["Gini Importance"] = feature_imp_df["Gini Importance"].astype(str) + '%'
+feature_imp_df["Gini Importance"] = feature_imp_df["Gini Importance"].astype(str) + "%"
 
 metrics.append(feature_imp_df.to_markdown(index=False))
 
