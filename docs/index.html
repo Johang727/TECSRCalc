@@ -38,7 +38,7 @@
                 </button>
                 
             </div>
-            <p style="color:rgb(255, 46, 23)"><i>Website is currently under construction, core functions work, however some links may lead nowhere!.</i></p>
+            <p style="color:rgb(255, 46, 23)"><i>Website is currently under construction, core functions work, however some links may lead nowhere!</i></p>
             <hr class = "hr-bold">
 
             <div class = "row">
@@ -80,13 +80,14 @@
                             <summary><i>Which model should I use?</i></summary>
 
                             <ul>
-                                <li><b>To get an uncertainty range within <i><span id = "lower-sr-bounds">...</span> SR</i> and <i><span id = "upper-sr-bounds">...</span> SR</i></b></li>
-                                <ul>
-                                    <li>Use <b>Random Forest</b>.</li>
-                                </ul>
                                 <li><b>For overall better accuracy</b></li>
                                 <ul>
                                     <li>Use <b>All</b>.</li>
+                                </ul>
+                                <li><b>To get an uncertainty range alongside your calculation <i>(ex: 3120 ± 500)</i></b></li>
+                                <ul>
+                                    <li>Use <b>Random Forest</b>.</li>
+                                    <li>This works best when the SR is estimated to be within <i><span id = "lower-sr-bounds">...</span> SR</i> and <i><span id = "upper-sr-bounds">...</span> SR</i> by the <b>All</b> model.</li>
                                 </ul>
                             </ul>
                         </details>
