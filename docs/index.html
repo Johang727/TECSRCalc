@@ -256,8 +256,8 @@
 
             try {
                 const RESPONSE = await fetch(`${API_URL}/predict`, {
-                    method:"POST",
-                    headers: {"Content Type": "application/json"},
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({DPM, APM, MODEL_SELECTION})
                 });
 
