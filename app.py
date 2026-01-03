@@ -219,14 +219,14 @@ def get_simple_metrics():
     m_err = str(areas_error.get("Master_all", "No data."))
 
     return jsonify({
-        "date": date,
+        "date": int(date),
         "b_err": b_err,
         "i_err": i_err,
         "a_err": a_err,
         "e_err": e_err,
         "m_err": m_err,
-        "lower": SR_MIN,
-        "upper": SR_MAX
+        "lower": int(SR_MIN),
+        "upper": int(SR_MAX)
     })
 
 if __name__ == '__main__':

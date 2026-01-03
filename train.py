@@ -394,13 +394,18 @@ for mdl_type in ["rf", "lr", "gb", "rf_gb", "all"]:
 
     # append to dictionary each area's error
     for group in group_labels:
-        area_error[f"{group}_{mdl_type}"] = str(test_results[test_results["groups"] == group][f"abs_err_{mdl_type}"].median())
+        area_error[f"{group}_{mdl_type}"] = str(round(test_results[test_results["groups"] == group][f"abs_err_{mdl_type}"].median()))
         print(f"{group} : {area_error[f"{group}_{mdl_type}"]}")
 
     # do the same for the sr bins
     for group in SR_LABELS:
-        area_error[f"{group}_{mdl_type}"] = str(test_results[test_results["SR_Bins"] == group][f"abs_err_{mdl_type}"].median())
-        print(f"{group} : {area_error[f"{group}_{mdl_type}"]}")
+        if group != "<1K SR":
+            area_error[f"{group}_{mdl_type}"] = str(round(test_results[test_results["SR_Bins"] == group][f"abs_err_{mdl_type}"].median()))
+            print(f"{group} : {area_error[f"{group}_{mdl_type}"]}")
+        else:
+            # we love hard-coding :3
+            area_error[f"{group}_{mdl_type}"] = "No Data"
+            print(f"{group} : {area_error[f"{group}_{mdl_type}"]}")
 
 
 
