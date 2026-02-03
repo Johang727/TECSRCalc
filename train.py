@@ -17,12 +17,14 @@ print("Merging CSV files together...")
 # variables
 # --------------------------------
 
-DATA_FOLDER = "data/SRCalc/"
+DATA_FOLDER:str = "data/SRCalc/"
 RANDOM_STATE:int = 136
 TEST_SIZE:float = 0.1
 TREE_AMOUNT:int = 200
 SR_BINS:list[int] = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 25000]
 SR_LABELS:list[str] = ["<1K SR", "1-2K SR", "2-3K SR", "3-4K SR", "4-5K SR", "5-6K SR", "6-7K SR", "7-8K SR", "8-9K SR", "9-10K SR", "10-11K SR", "11-12K SR", "12-13K SR", "13-14K SR", "14-15K SR", "15-16K SR", "16-17K SR", ">17K SR"]
+SEARCH_FOR_PARAMS:bool = False
+
 
 df_list:list[pd.DataFrame] = []
 rmse:list[float] = []
@@ -74,7 +76,7 @@ sr_counts:dict[str,int] = master_df["SRBins"].value_counts().sort_index().to_dic
 print(sr_counts)
 # --------------------------------
 
-# add APP too
+# make APP column
 # --------------------------------
 
 master_df["APP"] = master_df["APM"] / master_df["DPM"]
@@ -110,7 +112,7 @@ print(f"{len(y_test)} instances.")
 
 # create Random Forest model:
 # --------------------------------
-if False:
+if SEARCH_FOR_PARAMS:
     print("Training many Random Forests to see which is best...")
     # essentially try a ton of things for our random forest and see which is best
 
@@ -165,7 +167,7 @@ models.append(LinearRegression(n_jobs=-1))
 # create Gradient Boost model:
 # --------------------------------
 
-if False:
+if SEARCH_FOR_PARAMS:
 
     # run 1
     # Best Parameters: {"alpha": 0.5, "learning_rate": 0.01, "loss": "squared_error", "max_depth": 10, "max_features": "sqrt", "min_impurity_decrease": 1.0, "min_samples_split": 3, "n_estimators": 500, "subsample": 0.8}
@@ -268,12 +270,11 @@ models.append(VotingRegressor(
 
 # fit the models
 # --------------------------------
-if not False: # this seems dumb, but False is the placeholder for a flag or something to re-search later
-        models[0].fit(x_train, y_train)
-        models[1].fit(x_train, y_train)
-        models[2].fit(x_train, y_train)
-        models[3].fit(x_train, y_train) # i dunno how imma do this one if i do the searching; something to figure out later.
-        models[4].fit(x_train, y_train) # all of them
+models[0].fit(x_train, y_train) # Linear 
+models[1].fit(x_train, y_train) # Random Forest
+models[2].fit(x_train, y_train) # Gradient Forest
+models[3].fit(x_train, y_train) # RF + GF
+models[4].fit(x_train, y_train) # All
 
 
 # test the models performance
