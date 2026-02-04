@@ -1,196 +1,338 @@
-<html>
+<!DOCTYPE html>
 
-<head>
-    <meta name="description" content="Machine Learning project made to determine Skill Rating in Tetris Effect: Connected.">
-    <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-    <meta http-equiv="Content-Language" content="en-us">
-    <title>Tetris Effect: Connected Skill Rating Calculator</title>
-    <link rel="stylesheet" type="text/css" href="themes/slate/slat1011.css"><meta name="Microsoft Theme" content="slate 1011">
-    <meta name="Microsoft Border" content="tlb, default">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
-    <link rel="icon" href="images/icon.png">
-</head>
+<html lang="en">
 
-<body>
-<p>&nbsp;</p>
-
-<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width = device-width, initial-scale = 1">
 
 
-</td></tr></table><table dir="ltr" border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td valign="top" width="1%">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Space+Mono&display=swap" rel="stylesheet">
 
 
-</td><td valign="top" width="24"></td><td valign="top">
+        <script>
+                (function() {
+                    const savedTheme = localStorage.getItem('theme');
+                    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                        document.body.classList.add('dark-mode');
+                    }
+                })();
+        </script>
 
-<div align="center">
-    <center>
-    <table border="0" width="100%" cellpadding="5">
-        <tr>
-            <td width="330" style="border-style: none; border-width: medium" align="left" valign="top">
-            <b><font size="5">Tetris Effect: Connected Skill Rating Calculator</font></b><p>                
+        <title>Zone Battle Skill Rating Calculator</title>
+        <meta name="description" content="Estimate your Zone Battle Skill Rating for Tetris Effect: Connected!">
+        <link rel="icon" href="images/icon.png">
+    </head>
+
+    <body>
+        <div class = "container mt-4">
+            <div class = "d-flex justify-content-between">
+                <h2>Zone Battle Skill Rating Calculator</h2>
+
+                <button id = "theme-toggle" onclick = "toggle_theme" class = "btn btn-secondary">
+                    Toggle Dark/Light Mode
+                </button>
+                
+            </div>
+            <p style="color:rgb(255, 46, 23)"><i>Website is currently under construction, core functions work, however some links may lead nowhere!</i></p>
+            <hr class = "hr-bold">
+
+            <div class = "row">
+                <div class = "col ms-3">
+                    <p><b>Date: </b> <span id = "date-container">...</span></p>
+                    <p><b>Drops Per Minute (DPM): </b> <input type = "number" id = "dpm" name = "DPM" size = "7"></p>
+                    <p><b>Attack Per Minute (APM): </b> <input type = "number" id = "apm" name = "APM" size = "7"></p>
+                    <p><b>Attack Per Piece (APP): </b> <span id = "efish-container">Enter data + run...</span></p>
+                    <p>
+                        <b>Model :</b> 
+                        <select name="Model" id="model-select" size="1">
+                            <option value="All">All (Recommended)</option>
+                            <option value="Auto">Auto (Legacy)</option>
+                            <option value="Linear">Linear</option>
+                            <option value="RandomForest">Random Forest</option>
+                            <option value="GradientBoosting">Gradient Boosting</option>
+                            <option value="RF_GB_Ensemble">Random Forest + Gradient Boosting</option>
+                        </select>
+                    </p>
+
+                    <p><input type = "button" value = "Calculate SR!" name = "CalcSR" onclick = "get_prediction()"></p>
+                    <hr>
+
+
+                    <p><b>Skill Rating (SR): </b> <span id = "result-container">Yet to run...</span></p>
+                    <p><b>Model Used: </b> <span id = "model-container">Yet to run...</span></p>
+                </div>
+                
+            </div>
+
+            <hr  class = "hr-bold">
+
+            <div class = "row">
+                <div class = "col ms-3" title="About Section" id="about">
+
+                    <!-- metrics + how to use section -->
+                    <p>
+                        <details id="model-usage">
+                            <summary><i>Which model should I use?</i></summary>
+
+                            <ul>
+                                <li><b>For overall better accuracy</b></li>
+                                <ul>
+                                    <li>Use <b>All</b>.</li>
+                                </ul>
+                                <li><b>To get an uncertainty range alongside your calculation <i>(ex: 3120 ± 500)</i></b></li>
+                                <ul>
+                                    <li>Use <b>Random Forest</b>.</li>
+                                    <li>This works best when the SR is estimated to be within <b><span id = "lower-sr-bounds">...</span> SR</b> and <b><span id = "upper-sr-bounds">...</span> SR</b> by the <b>All</b> model.</li>
+                                </ul>
+                            </ul>
+                        </details>
+                    </p>
+
+                    <p>
+                        <details id="model-accuracy">
+                            <summary><i>How accurate is the model?</i></summary>
+                            <p><strong>Section Under Construction!</strong></p>
+                            <p>
+                                <table>
+                                    <tr>
+                                        <th>Skill Group</th>
+                                        <th>Average Error</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Beginner (-4K)</td>
+                                        <td><span id = "beginner-error">Loading...</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Intermediate (4K-8K)</td>
+                                        <td><span id = "intermediate-error">Loading...</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Advanced (8K-12K)</td>
+                                        <td><span id = "advanced-error">Loading...</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Expert (12K-16K)</td>
+                                        <td><span id = "expert-error">Loading...</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Master (16K+)</td>
+                                        <td><span id = "master-error">Loading...</span></td>
+                                    </tr>
+                                </table>
+                                <p><i>This table shows the accuracy of the "All" model.</i></p>
+                                <p><i><a href="metrics.html">Click here for different models' performance and more metrics!</a></i></p>
+
+                                <i><b>Why is the error so high?</b></i>
+                                <ul>
+                                    <li>There are more factors in SR than what the game presents in its results screen, therefore the model will never be able to determine SR 100% accurately based only on that.</li>
+                                    <li>See more in the <i><a href="#feature-details">"Why only two inputs?"</a></i> section.</li>
+                                </ul>
+                            </p>
+                        </details>
+                    </p>
+
+                    <p>
+                        <details id="bot-skill">
+                            <summary><i>What the rating of each bot?</i></summary>
+                            <p><strong>Section Under Construction!</strong></p>
+                            <p>
+                                <table>
+                                    <tr>
+                                        <th>Bot Level</th>
+                                        <th>Estimated SR</th>
+                                        <th>Speed (DPM)</th>
+                                        <th>Attack (APM)</th>
+                                    </tr>
+                                    <tr>
+                                        <td>1 Beginner</td>
+                                        <td>800 SR</td>
+                                        <td>13.1 DPM</td>
+                                        <td>1.0 APM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2 Novice</td>
+                                        <td>XX SR</td>
+                                        <td>XX DPM</td>
+                                        <td>XX APM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3 Decent</td>
+                                        <td>XX SR</td>
+                                        <td>XX DPM</td>
+                                        <td>XX APM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>4 Average</td>
+                                        <td>XX SR</td>
+                                        <td>XX DPM</td>
+                                        <td>XX APM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>5 Good</td>
+                                        <td>2640 SR</td>
+                                        <td>30.8 DPM</td>
+                                        <td>11.2 APM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>6 Skilled</td>
+                                        <td>2902 SR</td>
+                                        <td>35.1 DPM</td>
+                                        <td>14.2 APM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>7 Veteran</td>
+                                        <td>3227 SR</td>
+                                        <td>38.8 DPM</td>
+                                        <td>15.8 APM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>8 Expert</td>
+                                        <td>5183 SR</td>
+                                        <td>49.8 DPM</td>
+                                        <td>28.9 APM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>9 Pro</td>
+                                        <td>6496 SR</td>
+                                        <td>63.0 DPM</td>
+                                        <td>33.9 APM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10 Master</td>
+                                        <td>9605 SR</td>
+                                        <td>91.1 DPM</td>
+                                        <td>53.5 APM</td>
+                                    </tr>
+                                    <tr>
+                                        <td>10+1 Master Buff 1</td>
+                                        <td>10871 SR</td>
+                                        <td>91.1 DPM</td>
+                                        <td>74.6 APM</td>
+                                    </tr>
+                                </table>
+                            </p>
+                        </details>
+                    </p>
+
+                    <hr>
+                    <!-- misc. information section -->
+                    <p>
+                        <details id="data-collection">
+                            <summary><i>How/where is data collected?</i></summary>
+
+                            <ul>
+                                <li><b>The match completes one of the following:</b></li>
+                                <ul>
+                                    <li>Ends in Phase 3 (60K+ Score)</li>
+                                    <li>Lasts more than three minutes</li>
+                                </ul>
+
+                                <li><b>A match is not recorded for training data if:</b></li>
+                                <ul>
+                                    <li>One player has Green SR</li>
+                                    <li>Losing player did not lose rating for the match</li>
+                                    <li>There's more than a 1000 SR difference between players</li>
+                                </ul>
+
+                                <li><b>Where do the matches come from?</b></li>
+                                <ul>
+                                    <li>Personal, Friend, and Twitch / Youtube ranked matches.</li>
+                                    <li>Data contains no usernames nor sources for anonymity.</li>
+                                </ul>
+                            </ul>
+                        </details>
+                    </p>
+
+                    
+
+                    <p>
+                        <details id="feature-details">
+                            <summary><i>Why only two inputs?</i></summary>
+                            <p><b><u>Tetris Effect: Connected only directly provides 5 metrics:</u></b></p>
+                            <ul>
+                                <li><b>Drops Per Minute (DPM) / Speed</b></li>
+                                <ul>
+                                    <li>Multiply Pieces Per Second by 60 to get this value <i>(for the TETR.IO players)</i></li>
+                                </ul>
+                                <li><b>Attack Per Minute (APM) / Attack</b></li>
+                                <li><b>Zone Attack Per Minute (ZAPM) / Zone Attack</b></li>
+                                <ul>
+                                    <li>Zone Attack is an interesting metric. Sometimes, lower players don't even attempt a zone, leading to 0 ZAPM. However, they might also only zone in Phase 1, <i>(the longest, easiest phase to zone in)</i>, leading to an over-infalted zone.</li>
+                                    <li>ZAPM also only divides by time spent in zone, therefore, it's completely possible to have a ZAPM in the thousands and an APM of 10.</li>
+                                    <ul>
+                                        <li>This could throw off the model and return an unresonably high SR.</li>
+                                    </ul>
+                                </ul>
+                                <li><b>Score</b></li>
+                                <ul>
+                                    <li>Score determines the phase of the game. Lower rating players typically don't reach Phase 3, <i>(60K points)</i>, and higher rating players reach it in a minute or two.</li>
+                                    <li>This metric really isn't relevent because efficiency is already shown by Attack/Speed</li>
+                                </ul>
+                                <li><b>Time</b></li>
+                                <ul>
+                                    <li>No mater what rating you are, <i>(well, maybe not 1K)</i>, if you are against an evenly matched opponent, rounds can last 5+ minutes. <i>The longest one I've had was around 20 minutes.</i></li>
+
+                                </ul>
+
+                            </ul>
+                            <p><b><u>If we expand these, we get:</u></b></p>
+                            <ul>
+                                <li><b>Attack Efficiency (APP = APM/DPM)</b></li>
+                                <li><b>Score Efficiency ( Score / (DPM * Time) )</b></li>
+                                <ul>
+                                    <li>Very similar to attack efficiency, therefore, it would be redundant.</li>
+                                    <li>Zone provides a higher boost in Attack when compared to Score. In a mode where the objective is topping out the other player, Attack is what matters the most.</li>
+
+                                </ul>
+                            </ul>
+
+                            <p><b><u>Therefore, I decided the most important features are:</u></b></p>
+                            <ul>
+                                <li><b>Speed (DPM)</b></li>
+                                <li><b>Attack (APM)</b></li>
+                                <li><b>Efficiency (APP = APM/DPM)</b></li>
+                                <ul>
+                                    <li>Initially, I didn't include this one, however, the models were over-rewarding speed + poor efficiency.</li>
+                                </ul>
+                                <li><b>Date</b></li>
+                                <ul>
+                                    <li>Included for SR creep, however, this game isn't as active as before.</li>
+                                    <li>It would be good if I wanted to predict pre-crossplay ratings, due to the lack of pre-crossplay ranking data and metrics.</li>
+                                    <ul>
+                                        <li><i>Although, it would be cool to see if SR could go below 1000!</i></li>
+                                    </ul>
+                                </ul>
+                            </ul>
+
+
+                        </details>
+
+
+                    </p>
+
+
+                </div>
+
+            </div>
             
-            <p><b>Date :</b> <span id="date-container">...</span></p>
+            <!-- navigation buttons -->
+            <hr class = "hr-bold">
+            <p>| <b>Home</b> | | <a href="https://github.com/Johang727/TECSRCalc">GitHub Repository</a> | | <a href="https://discord.gg/EH8zFZ2wSG">Discord</a></p>
 
-            <p><b>DPM :</b> <input type="text" id="dpm" name="DPM" size="40"></p>
+        </div>
 
-            <p><b>APM :</b> <input type="text" id="apm" name="APM" size="40"><br>
+        <script src = "scripts/theme.js"></script>
 
-            <p><b>APP :</b> <span id="efish-container">Enter data + run...</span></p>
-            
-            <p><b>Model :</b> 
-                <select name="Model" id="modelSelect">
-                    <option value="All">All Models (Recommended)</option>
-                    <option value="Auto">Auto (Legacy)</option>
-                    <option value="Linear">Linear</option>
-                    <option value="RandomForest">Random Forest</option>
-                    <option value="GradientBoosting">Gradient Boosting</option>
-                    <option value="RF_GB_Ensemble">Random Forest + Gradient Boosting</option>
-                </select>
-            </p>
+    </body>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
-            <input type="button" value="Calculate SR!" name="calcSR" onclick="getPrediction()">
-            <p><b>SR: <span id="result-container">Yet to run!</span></b>
-            <p><b>Model Used: <span id="model-container">Yet to run!</span></b></td>
-
-            <td width="10" style="border-style: none; border-width: medium">
-            </td>
-            <td width="330" style="border-style: none; border-width: medium" align="left" valign="top">
-            <b><font size="5">Statistics: </font></b>
-            <p id="metrics-content">Loading...</p>
-            <hr>
-            <b><font size="5">Model Usage: </font></b>
-            <pre>
-
-- <b>All:</b><br>
-    - Run them all and take the average.<br>
-    - Has proven to be the best with my tests.
-        - This works because the Linear model tends to undershoot and the others tend to overshoot, leading to a pretty accurate SR.<br>
-    - Will not provide an uncertainty range.<br>
-
-- <b>Auto:</b><br>
-    - Old default, here just in-case you want to use it.<br>
-    - Selects <b>Linear</b> when out of training data range.<br>
-    - Selects <b>Random Forest</b> + <b>Gradient Boosting</b> when within training data range.<br>
-    - Will not provide an uncertainty range.<br>
-
-
-- <b>Linear (Auto):</b><br>
-    - Good for predicting outside of the training data range.<br>
-    - Will not provide an uncertainty range.<br>
-
-- <b>Random Forest:</b><br>
-    - Good for predicting within of the training data range.<br>
-    - Will provide an uncertainty range.<br>
-
-- <b>Gradient Boosting:</b><br>
-    - Similar to Random Forest: each tree learns from each other, rather than being seperate.<br>
-    - Will not provide an uncertainty range.<br>
-
-
-- <b>Random Forest + Gradient Boosting (Auto):</b><br>
-    - Essentially takes the average of the two outputs.<br>
-    - Will not provide an uncertainty range.<br>
-
-
-            </pre>
-
-            </td>
-        </tr>
-    </table>
-    </center></div>
-<div align="center">
-    <center></center></div>
-
-
-
-<script>
-    const API_URL = 'https://api.tecsrcalc.org';
-    //const API_URL = ''
-
-    async function getPrediction() {
-        const dpm = document.getElementById('dpm').value;
-        const apm = document.getElementById('apm').value;
-        const modelSelect = document.getElementById('modelSelect').value;
-        const resultContainer = document.getElementById('result-container');
-        const modelContainer = document.getElementById('model-container');
-        const efishContainer = document.getElementById("efish-container");
-
-        if (dpm === "" || apm === "") {
-            resultContainer.innerText = "Please enter both DPM and APM.";
-            return;
-        }
-
-        resultContainer.innerText = "Calculating... First run might take a while...";
-
-        try {
-            const response = await fetch(`${API_URL}/predict`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ dpm, apm , modelSelect})
-            });
-
-            if (!response.ok) {
-                throw new Error(`Server error: ${response.status}`);
-            }
-
-            const data = await response.json();
-            
-            if (data.error) {
-                resultContainer.innerText = `Error: ${data.error}`;
-            } else {
-                resultContainer.innerHTML = `${data.sr}`;
-                modelContainer.innerHTML = `${data.model}`;
-                efishContainer.innerHTML = `${data.app}`;
-            }
-
-        } catch (error) {
-            console.error("Calculation failed:", error);
-            resultContainer.innerText = "Failed to calculate SR! Check the console for details.";
-        }
-    }
-
-    async function getMetrics() {
-        const metricsContainer = document.getElementById('metrics-content');
-        const dateContainer = document.getElementById("date-container");
-        try {
-            const response = await fetch(`${API_URL}/metrics`);
-            const data = await response.json();
-
-            if (response.ok) {
-                metricsContainer.innerHTML = `<pre>${data.metrics}</pre>`;
-                dateContainer.innerHTML = `${data.date}`;
-            } else {
-                console.error("Metrics fetch failed:", error);
-                metricsContainer.innerText = "Failed to load metrics!";
-                dateContainer.innerText = "Failed to load.";
-            }
-
-        } catch (error) {
-            console.error("Metrics fetch failed:", error);
-            metricsContainer.innerText = "Failed to load metrics!";
-            dateContainer.innerText = "Failed to load.";
-        }
-    }
-    document.addEventListener('DOMContentLoaded', getMetrics);
-</script>
-
-<p align="left"><small><small>Render no longer hosts the backend! Everything should be quicker now!</small></small></p>
-
-</td></tr></table><table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>
-
-
-<p>&nbsp;</p>
-<hr align="left">
-
-<p align="left"><small>
-<nobr>Home</nobr> ||  <nobr><A HREF="about.html" TARGET="" STYLE="text-decoration: none;">About</A></nobr>
-</small></p>
-</td></tr></table></body>
+    <script src = "scripts/main.js"></script>
 
 </html>

@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.ensemble import RandomForestRegressor, VotingRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import GradientBoostingRegressor
-from sklearn.metrics import root_mean_squared_error, r2_score, mean_absolute_percentage_error, mean_squared_error
+from sklearn.metrics import root_mean_squared_error, r2_score, mean_absolute_percentage_error, median_absolute_error
 import numpy as np
 
 
@@ -17,17 +17,20 @@ print("Merging CSV files together...")
 # variables
 # --------------------------------
 
-DATA_FOLDER = "data/SRCalc/"
+DATA_FOLDER:str = "data/SRCalc/"
 RANDOM_STATE:int = 136
 TEST_SIZE:float = 0.1
 TREE_AMOUNT:int = 200
-SR_BINS:list[int] = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 18000]
-SR_LABELS:list[str] = ['<1K SR', '1-2K SR', '2-3K SR', '3-4K SR', '4-5K SR', '5-6K SR', '6-7K SR', '7-8K SR', '8-9K SR', '9-10K SR', '10-11K SR', '11-12K SR', '12-13K SR', '13-14K SR', '14-15K SR', '15-16K SR', '16-17K SR', '>17K SR']
+SR_BINS:list[int] = [0, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000, 16000, 17000, 25000]
+SR_LABELS:list[str] = ["<1K SR", "1-2K SR", "2-3K SR", "3-4K SR", "4-5K SR", "5-6K SR", "6-7K SR", "7-8K SR", "8-9K SR", "9-10K SR", "10-11K SR", "11-12K SR", "12-13K SR", "13-14K SR", "14-15K SR", "15-16K SR", "16-17K SR", ">17K SR"]
+SEARCH_FOR_PARAMS:bool = False
+
 
 df_list:list[pd.DataFrame] = []
 rmse:list[float] = []
 r2:list[float] = []
 mape:list[float] = []
+med_abs_err:list[float] = []
 models:list = []
 predictions:list = []
 # --------------------------------
@@ -46,7 +49,7 @@ master_df:pd.DataFrame = pd.concat(df_list, ignore_index=True)
 
 
 # dropping outliers 
-# TODO: could be better tbh, doesn't seem to remove some extreme variation in 11k games
+# TODO: could be better tbh, doesn"t seem to remove some extreme variation in 11k games
 # --------------------------------
 
 old_instances:int = len(master_df)
@@ -67,16 +70,16 @@ print(f"Outliers Removed: {len(master_df) - old_instances}")
 
 
 # count SR in each section
-master_df['SRBins'] = pd.cut(master_df['SR'], bins=SR_BINS, labels=SR_LABELS, right=False)
-sr_counts:dict[str,int] = master_df['SRBins'].value_counts().sort_index().to_dict()
+master_df["SRBins"] = pd.cut(master_df["SR"], bins=SR_BINS, labels=SR_LABELS, right=False)
+sr_counts:dict[str,int] = master_df["SRBins"].value_counts().sort_index().to_dict()
 
 print(sr_counts)
 # --------------------------------
 
-# add APP too
+# make APP column
 # --------------------------------
 
-master_df["APP"] = master_df["APM"] / master_df['DPM']
+master_df["APP"] = master_df["APM"] / master_df["DPM"]
 
 print(master_df["APP"])
 
@@ -109,20 +112,20 @@ print(f"{len(y_test)} instances.")
 
 # create Random Forest model:
 # --------------------------------
-if False:
+if SEARCH_FOR_PARAMS:
     print("Training many Random Forests to see which is best...")
     # essentially try a ton of things for our random forest and see which is best
 
     # first run gave me depth:10, features:sqrt, min_samples_split: 2, n_estimators: 50
     # second run which took 20m gave me depth: None, features, sqrt, min_samples: 3, estimators: 79
 
-    # Best Parameters: {'max_depth': None, 'max_features': 'sqrt', 'min_samples_split': 3, 'n_estimators': 79}
+    # Best Parameters: {"max_depth": None, "max_features": "sqrt", "min_samples_split": 3, "n_estimators": 79}
 
     param_grid = {
-        'n_estimators': [x for x in range(45, 86, 1)],
-        'max_depth': [10, 20, None],
-        'min_samples_split': [2,3,4],
-        'max_features': ["sqrt"]
+        "n_estimators": [x for x in range(45, 86, 1)],
+        "max_depth": [10, 20, None],
+        "min_samples_split": [2,3,4],
+        "max_features": ["sqrt"]
     }
 
     rf = RandomForestRegressor(random_state=RANDOM_STATE, n_jobs=-1)
@@ -164,27 +167,27 @@ models.append(LinearRegression(n_jobs=-1))
 # create Gradient Boost model:
 # --------------------------------
 
-if False:
+if SEARCH_FOR_PARAMS:
 
     # run 1
-    # Best Parameters: {'alpha': 0.5, 'learning_rate': 0.01, 'loss': 'squared_error', 'max_depth': 10, 'max_features': 'sqrt', 'min_impurity_decrease': 1.0, 'min_samples_split': 3, 'n_estimators': 500, 'subsample': 0.8}
+    # Best Parameters: {"alpha": 0.5, "learning_rate": 0.01, "loss": "squared_error", "max_depth": 10, "max_features": "sqrt", "min_impurity_decrease": 1.0, "min_samples_split": 3, "n_estimators": 500, "subsample": 0.8}
 
     # run 2
-    # Best Parameters: {'alpha': 0.5, 'learning_rate': 0.005, 'loss': 'squared_error', 'max_depth': 8, 'max_features': 'sqrt', 'min_impurity_decrease': 2.0, 'min_samples_split': 3, 'n_estimators': 1000, 'subsample': 0.5}
+    # Best Parameters: {"alpha": 0.5, "learning_rate": 0.005, "loss": "squared_error", "max_depth": 8, "max_features": "sqrt", "min_impurity_decrease": 2.0, "min_samples_split": 3, "n_estimators": 1000, "subsample": 0.5}
 
     # run 3
-    # Best Parameters: {'learning_rate': 0.006, 'loss': 'squared_error', 'max_depth': 7, 'max_features': 'sqrt', 'min_impurity_decrease': 1.75, 'min_samples_split': 3, 'n_estimators': 900, 'subsample': 0.75}
+    # Best Parameters: {"learning_rate": 0.006, "loss": "squared_error", "max_depth": 7, "max_features": "sqrt", "min_impurity_decrease": 1.75, "min_samples_split": 3, "n_estimators": 900, "subsample": 0.75}
     # Root Mean Squared Error: 712.57
 
     param_grid_gb = {
-        'learning_rate':[0.0055, 0.006, 0.007],
-        'n_estimators': [850, 900, 950],
-        'max_depth': [6, 7, 8],
-        'min_samples_split': [3],
-        'max_features': ["sqrt"],
-        'min_impurity_decrease':[1.5, 1.75, 1.9],
-        'loss':["squared_error"],
-        'subsample':[0.6, 0.75, 0.8],
+        "learning_rate":[0.0055, 0.006, 0.007],
+        "n_estimators": [850, 900, 950],
+        "max_depth": [6, 7, 8],
+        "min_samples_split": [3],
+        "max_features": ["sqrt"],
+        "min_impurity_decrease":[1.5, 1.75, 1.9],
+        "loss":["squared_error"],
+        "subsample":[0.6, 0.75, 0.8],
     }
 
     gb = GradientBoostingRegressor(random_state=RANDOM_STATE)
@@ -202,12 +205,12 @@ if False:
     except KeyboardInterrupt:
         print("\n--- Search Interrupted (Ctrl+C) | Press again to force.---")
         
-        if hasattr(grid_search_gb, 'cv_results_') and len(grid_search_gb.cv_results_['mean_test_score']) > 0:
+        if hasattr(grid_search_gb, "cv_results_") and len(grid_search_gb.cv_results_["mean_test_score"]) > 0:
             
-            best_index = grid_search_gb.cv_results_['mean_test_score'].argmax()
+            best_index = grid_search_gb.cv_results_["mean_test_score"].argmax()
             
-            best_score_neg_mse = grid_search_gb.cv_results_['mean_test_score'][best_index]
-            best_params = grid_search_gb.cv_results_['params'][best_index]
+            best_score_neg_mse = grid_search_gb.cv_results_["mean_test_score"][best_index]
+            best_params = grid_search_gb.cv_results_["params"][best_index]
             best_rmse = np.sqrt(-best_score_neg_mse)
 
             print(f"Best RMSE (so far): {best_rmse:.2f}")
@@ -267,12 +270,11 @@ models.append(VotingRegressor(
 
 # fit the models
 # --------------------------------
-if not False: # this seems dumb, but False is the placeholder for a flag or something to re-search later
-        models[0].fit(x_train, y_train)
-        models[1].fit(x_train, y_train)
-        models[2].fit(x_train, y_train)
-        models[3].fit(x_train, y_train) # i dunno how imma do this one if i do the searching; something to figure out later.
-        models[4].fit(x_train, y_train) # all of them
+models[0].fit(x_train, y_train) # Linear 
+models[1].fit(x_train, y_train) # Random Forest
+models[2].fit(x_train, y_train) # Gradient Forest
+models[3].fit(x_train, y_train) # RF + GF
+models[4].fit(x_train, y_train) # All
 
 
 # test the models performance
@@ -288,6 +290,7 @@ predictions.append(models[0].predict(x_test))
 rmse.append(root_mean_squared_error(y_test, predictions[0]))
 r2.append(r2_score(y_test, predictions[0]))
 mape.append(mean_absolute_percentage_error(y_test, predictions[0]))
+med_abs_err.append(median_absolute_error(y_test, predictions[0]))
 
 print(f"Root Mean Squared Error: {rmse[0]:.2f}")
 print(f"R-squared: {r2[0]:.4f}")
@@ -304,6 +307,7 @@ predictions.append(models[1].predict(x_test))
 rmse.append(root_mean_squared_error(y_test, predictions[1]))
 r2.append(r2_score(y_test, predictions[1]))
 mape.append(mean_absolute_percentage_error(y_test, predictions[1]))
+med_abs_err.append(median_absolute_error(y_test, predictions[1]))
 
 print(f"Root Mean Squared Error: {rmse[1]:.2f}")
 print(f"R-squared: {r2[1]:.4f}")
@@ -319,6 +323,7 @@ predictions.append(models[2].predict(x_test))
 rmse.append(root_mean_squared_error(y_test, predictions[2]))
 r2.append(r2_score(y_test, predictions[2]))
 mape.append(mean_absolute_percentage_error(y_test, predictions[2]))
+med_abs_err.append(median_absolute_error(y_test, predictions[2]))
 
 
 print(f"Root Mean Squared Error: {rmse[2]:.2f}")
@@ -337,6 +342,7 @@ predictions.append(models[3].predict(x_test))
 rmse.append(root_mean_squared_error(y_test, predictions[3]))
 r2.append(r2_score(y_test, predictions[3]))
 mape.append(mean_absolute_percentage_error(y_test, predictions[3]))
+med_abs_err.append(median_absolute_error(y_test, predictions[3]))
 
 
 print(f"Root Mean Squared Error: {rmse[3]:.2f}")
@@ -353,6 +359,7 @@ predictions.append(models[4].predict(x_test))
 rmse.append(root_mean_squared_error(y_test, predictions[4]))
 r2.append(r2_score(y_test, predictions[4]))
 mape.append(mean_absolute_percentage_error(y_test, predictions[4]))
+med_abs_err.append(median_absolute_error(y_test, predictions[4]))
 
 
 print(f"Root Mean Squared Error: {rmse[4]:.2f}")
@@ -361,22 +368,68 @@ print(f"Mean Absolute Percentage Error: {mape[4]*100:.2f}%")
 
 # --------------------------------
 
+test_results = pd.DataFrame({
+    "actual": y_test,
+    "predicted_rf": predictions[0],
+    "predicted_lr": predictions[1],
+    "predicted_gb": predictions[2],
+    "predicted_rf_gb": predictions[3],
+    "predicted_all": predictions[4]
+})
+
+area_error = {}
+
+# Cut the Bins into simple groups for Index and use the previous "SR_BINS" for a seperate page with more info
+group_bins = [0, 4000, 8000, 12000, 16000, 25000]
+group_labels = ["Beginner", "Intermediate", "Advanced", "Expert", "Master"]
+
+test_results["groups"] = pd.cut(test_results["actual"], bins=group_bins, labels=group_labels, right=False)
+test_results["SR_Bins"] = pd.cut(test_results["actual"], bins=SR_BINS, labels=SR_LABELS, right=False)
+
+
+
+# calculate for each independant model
+for mdl_type in ["rf", "lr", "gb", "rf_gb", "all"]:
+    print(mdl_type)
+    test_results[f"abs_err_{mdl_type}"] = (abs(test_results["actual"] - test_results[f"predicted_{mdl_type}"]))
+
+    # append to dictionary each area's error
+    for group in group_labels:
+        area_error[f"{group}_{mdl_type}"] = str(round(test_results[test_results["groups"] == group][f"abs_err_{mdl_type}"].median()))
+        print(f"{group} : {area_error[f"{group}_{mdl_type}"]}")
+
+    # do the same for the sr bins
+    for group in SR_LABELS:
+        if group != "<1K SR":
+            area_error[f"{group}_{mdl_type}"] = str(round(test_results[test_results["SR_Bins"] == group][f"abs_err_{mdl_type}"].median()))
+            print(f"{group} : {area_error[f"{group}_{mdl_type}"]}")
+        else:
+            # we love hard-coding :3
+            area_error[f"{group}_{mdl_type}"] = "No Data"
+            print(f"{group} : {area_error[f"{group}_{mdl_type}"]}")
+
+
+
+
+
 
 timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 metrics = {
-    'models':models,
-    'r2':r2,
-    'rmse':rmse,
-    'mape':mape,
-    'size': len(x_train),
-    'testSize': len(x_test),
-    'timestamp': timestamp,
-    'srCounts': sr_counts,
-    'dataX': x,
-    'dataY': y,
-    'predictions': predictions,
-    'predictions_actual': y_test
+    "models":models,
+    "r2":r2,
+    "rmse":rmse,
+    "mape":mape,
+    "med_abs_err":med_abs_err,
+    "size": len(x_train),
+    "testSize": len(x_test),
+    "timestamp": timestamp,
+    "srCounts": sr_counts,
+    "dataX": x,
+    "dataY": y,
+    "predictions": predictions,
+    "predictions_actual": y_test,
+    "areas_error": area_error
 }
 
 print("\n----\nSaving model...")
@@ -384,6 +437,10 @@ joblib.dump(metrics, "model.pkl")
 print("Saved as \"model.pkl\"")
 
 
+
+
+
+
+
 end = time.time()
 print(f"Runtime: {end-start:.2f}s")
-

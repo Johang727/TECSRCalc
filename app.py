@@ -6,7 +6,7 @@ import numpy as np
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 # Create the Flask application instance
-app = Flask(__name__, static_folder='docs', template_folder='docs')
+app = Flask(__name__, static_folder="docs", template_folder="docs")
 
 
 CORS(app, origins=["https://tecsrcalc.pages.dev", "https://tecsrcalc.org"])
@@ -15,7 +15,7 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1)
 
 # Load the trained model when the application starts
 # This is more efficient than loading it for every request
-MODEL_PATH:str = 'model.pkl'
+MODEL_PATH:str = "model.pkl"
 
 
 try:
@@ -23,29 +23,29 @@ try:
     print("Attempting to load model...")
     model_mets = joblib.load(MODEL_PATH)
 
-    RFmodel = model_mets['models'][0]
+    RFmodel = model_mets["models"][0]
 
-    LRmodel = model_mets['models'][1]
+    LRmodel = model_mets["models"][1]
 
-    GBmodel = model_mets['models'][2]
+    GBmodel = model_mets["models"][2]
 
-    RFGB_ensemble = model_mets['models'][3]
+    RFGB_ensemble = model_mets["models"][3]
 
-    AllModel = model_mets['models'][4]
+    AllModel = model_mets["models"][4]
 
-    x = model_mets['dataX']
-    y = model_mets['dataY']
+    x = model_mets["dataX"]
+    y = model_mets["dataY"]
 
-    r2 = model_mets['r2']
-    rmse = model_mets['rmse']
-    mape = model_mets['mape']
+    r2 = model_mets["r2"]
+    rmse = model_mets["rmse"]
+    mape = model_mets["mape"]
 
-    size = model_mets['size']
-    test_size = model_mets['testSize']
+    size = model_mets["size"]
+    test_size = model_mets["testSize"]
 
-    timestamp = model_mets['timestamp']
+    timestamp = model_mets["timestamp"]
 
-
+    areas_error:dict = model_mets["areas_error"]
 
     print("Model loaded successfully!")
 except FileNotFoundError:
@@ -67,29 +67,31 @@ SR_MAX = y.max()
 
 # webysite
 
-@app.route('/')
+@app.route("/")
 def health_check():
     return jsonify({
         "status":"Running"
     })
 
-@app.route('/predict', methods=['POST'])
+@app.route("/predict", methods=["POST"])
 def predict():
     # Check if the model was loaded successfully
     if not RFmodel and not LRmodel and not GBmodel and not AllModel:
-        return jsonify({'error': 'One of the models is missing!'}), 500
+        return jsonify({"error": "One of the models is missing!"}), 500
     # From what I understand 500 errors are server-side; 400 are client-side
     # TODO, have it redirect to a new page with contact information
 
     # Get the data sent from the web page
     data = request.get_json(force=True)
-    dpm = data.get('dpm')
-    apm = data.get('apm')
-    modelChoice = data.get('modelSelect')
+    dpm = data.get("DPM")
+    apm = data.get("APM")
+    modelChoice = data.get("MODEL_SELECTION")
 
-    # Basic input validation
+    print(f"[DEBUG] Calculation Request Recieved: DPM = {dpm}; APM = {apm}; Model = {modelChoice}")
+
+    # basic input validation
     if dpm is None or apm is None:
-        return jsonify({'error': 'Missing DPM or APM values.'}), 400
+        return jsonify({"error": "Missing DPM or APM values."}), 400
     try:
         dpm = float(dpm)
         apm = float(apm)
@@ -98,11 +100,12 @@ def predict():
         today = datetime.date.today()
         dateInt = (today - excel_start).days + 2
     except ValueError:
-        return jsonify({'error': 'Invalid input. Please provide numbers.'}), 400
+        print("[ERROR] Something triggered a ValueError.")
+        return jsonify({"error": "Invalid input. Please provide numbers."}), 400
 
     # Create a pandas DataFrame for the prediction
     # The model expects the data in this format
-    inData = pd.DataFrame([[dateInt, dpm, apm, app]], columns=['Date','DPM', 'APM', 'APP'])
+    inData = pd.DataFrame([[dateInt, dpm, apm, app]], columns=["Date","DPM", "APM", "APP"])
 
     if modelChoice == "Auto":
         if (dpm >= DPM_MAX or apm >= APM_MAX) or (dpm <= DPM_MIN or apm <= APM_MIN):
@@ -131,84 +134,40 @@ def predict():
     else:
         calc = 0
         modelUsed = "Error!"
+        print("[ERROR] Model invalid!")
 
-
+    print(f"[DEBUG] {modelUsed} calculated an SR of {calc} with the user's data!")
     return jsonify({
-        'sr': calc,
-        'model':modelUsed,
-        'app':apm/dpm
+        "sr": calc,
+        "model":modelUsed,
+        "app":apm/dpm
         })
 
-@app.route('/metrics')
-def getMetrics():
 
+@app.route("/simple_metrics")
+def get_simple_metrics():
     excel_start = datetime.date(1900, 1, 1)
     today = datetime.date.today()
     date = (today - excel_start).days + 2
 
-    final_string:str = ""
-
-    metric_list:list[str] = []
-    
-    metric_list.append("Linear (Auto):\n")
-
-    metric_list.append(f"\t- Root Mean Squared Error: {rmse[1]:.2f}\n")
-    metric_list.append(f"\t- Mean Absolute Percentage Error: {mape[1]*100:.2f}%\n")
-    metric_list.append(f"\t- R-Squared: {r2[1]:.4f}\n")
-
-    metric_list.append("\nRandom Forest:\n")
-
-    metric_list.append(f"\t- Root Mean Squared Error: {rmse[0]:.2f}\n")
-    metric_list.append(f"\t- Mean Absolute Percentage Error: {mape[0]*100:.2f}%\n")
-    metric_list.append(f"\t- R-Squared: {r2[0]:.4f}\n")
-
-    metric_list.append("\nGradient Boosting:\n")
-
-    metric_list.append(f"\t- Root Mean Squared Error: {rmse[2]:.2f}\n")
-    metric_list.append(f"\t- Mean Absolute Percentage Error: {mape[2]*100:.2f}%\n")
-    metric_list.append(f"\t- R-Squared: {r2[2]:.4f}\n")
-
-    metric_list.append("\nRandom Forest + Gradient Boosting (Auto):\n")
-
-    metric_list.append(f"\t- Root Mean Squared Error: {rmse[3]:.2f}\n")
-    metric_list.append(f"\t- Mean Absolute Percentage Error: {mape[3]*100:.2f}%\n")
-    metric_list.append(f"\t- R-Squared: {r2[3]:.4f}\n")
-
-    metric_list.append("\nAll:\n")
-
-    metric_list.append(f"\t- Root Mean Squared Error: {rmse[4]:.2f}\n")
-    metric_list.append(f"\t- Mean Absolute Percentage Error: {mape[4]*100:.2f}%\n")
-    metric_list.append(f"\t- R-Squared: {r2[4]:.4f}\n")
-
-
-    metric_list.append("\n\nData:\n")
-    metric_list.append(f"\t- Training Instances: {size}\n")
-    metric_list.append(f"\t- Testing Instances: {test_size}\n")
-    metric_list.append(f"\t- Total Instances: {size+test_size}\n")
-
-    metric_list.append("\n\nRanges:\n")
-    metric_list.append(f"\t- DPM: {DPM_MIN} - {DPM_MAX}\n")
-    metric_list.append(f"\t- APM: {APM_MIN} - {APM_MAX}\n")
-    metric_list.append(f"\t- SR: {SR_MIN} - {SR_MAX}\n")
-
-    metric_list.append("\n\nLast Update:\n")
-    metric_list.append(f"{timestamp}\n")
-
-
-
-
-
-    for item in metric_list:
-        final_string += item
+    b_err = str(areas_error.get("Beginner_all", "No data."))
+    i_err = str(areas_error.get("Intermediate_all", "No data."))
+    a_err = str(areas_error.get("Advanced_all", "No data."))
+    e_err = str(areas_error.get("Expert_all", "No data."))
+    m_err = str(areas_error.get("Master_all", "No data."))
 
     return jsonify({
-        'metrics': final_string,
-        'date':date
-        })
+        "date": int(date),
+        "b_err": b_err,
+        "i_err": i_err,
+        "a_err": a_err,
+        "e_err": e_err,
+        "m_err": m_err,
+        "lower": int(SR_MIN),
+        "upper": int(SR_MAX)
+    })
 
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     # only runs when run locally
     app.run(debug=os.environ.get("FLASK_DEBUG", "0") == "1")
 
