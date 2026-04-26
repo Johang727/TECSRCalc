@@ -9,7 +9,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 app = Flask(__name__, static_folder="docs", template_folder="docs")
 
 
-CORS(app, origins=["https://tecsrcalc.pages.dev", "https://tecsrcalc.org"])
+CORS(app, origins=["https://tecsrcalc.pages.dev", "https://tecsrcalc.org", "https://tec.johang.dev"])
 
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_host=1)
 
