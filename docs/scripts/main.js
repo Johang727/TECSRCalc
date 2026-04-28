@@ -1,4 +1,4 @@
-const API_URL = "https://api.tecsrcalc.org";
+const API_URL = "https://tec-api.johang.dev";
 
 async function get_prediction() {
     const DPM = document.getElementById("dpm").value;
